@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+
+# Environment variables (contains API keys!)
+.env
+
+# Data directory (user-specific persistence)
+data/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Tests
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Large files / video assets (to be added via GitHub Release)
+docs/demo.mp4
+docs/poster.png
+
+# Temp / probe / error files
+err.txt
+tmp_*.py
+probe_*.py
+$null

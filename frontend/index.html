@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hy3 Research Studio · 深度研究工作台</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  <link rel="stylesheet" href="/styles.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- ============ 左侧功能栏 ============ -->
+    <nav class="sidenav">
+      <div class="nav-brand">
+        <div class="logo">Hy3</div>
+        <div class="brand-text">
+          <div class="brand-title">Research Studio</div>
+          <div class="brand-sub">深度研究工作台</div>
+        </div>
+      </div>
+
+      <div class="nav-scroll">
+        <div class="nav-group">
+          <div class="nav-label">历史</div>
+          <button class="nav-item" data-view="history">
+            <svg viewBox="0 0 24 24" class="ic"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            <span>历史动态</span>
+          </button>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-label">研究</div>
+          <button class="nav-item active" data-view="research">
+            <svg viewBox="0 0 24 24" class="ic"><path d="M4 5h16M4 12h10M4 19h7"/></svg>
+            <span>深度研究</span>
+          </button>
+          <button class="nav-item" data-view="search">
+            <svg viewBox="0 0 24 24" class="ic"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+            <span>文献检索</span>
+          </button>
+          <button class="nav-item" data-view="paper">
+            <svg viewBox="0 0 24 24" class="ic"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg>
+            <span>论文研讨</span>
+          </button>
+          <button class="nav-item" data-view="studio">
+            <svg viewBox="0 0 24 24" class="ic"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+            <span>写作助手</span>
+          </button>
+          <button class="nav-item" data-view="advisor">
+            <svg viewBox="0 0 24 24" class="ic"><path d="M12 3l8 4v5c0 4.4-3.4 8.2-8 9-4.6-.8-8-4.6-8-9V7l8-4Z"/><path d="M9 12l2 2 4-4"/></svg>
+            <span>思路提炼</span>
+          </button>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-label">创造</div>
+          <button class="nav-item" data-view="forge">
+            <svg viewBox="0 0 24 24" class="ic"><path d="M14 3a1 1 0 0 0-1 1v2h-2V4a1 1 0 0 0-2 0v2H7a2 2 0 0 0-2 2v3h2a1 1 0 1 1 0 2H5v3a2 2 0 0 0 2 2h3v-2a1 1 0 1 1 2 0v2h3a2 2 0 0 0 2-2v-3h-2a1 1 0 1 1 0-2h2V7a2 2 0 0 0-2-2h-3v2a1 1 0 0 0 2 0Z"/></svg>
+            <span>创造工坊</span>
+          </button>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-label">社区</div>
+          <button class="nav-item" data-view="feedback">
+            <svg viewBox="0 0 24 24" class="ic"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg>
+            <span>反馈看板</span>
+          </button>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-label">资料</div>
+          <button class="nav-item" data-view="library">
+            <svg viewBox="0 0 24 24" class="ic"><path d="M4 4h6v16H4zM14 4h6v16h-6z"/><path d="M7 8h0M17 8h0"/></svg>
+            <span>我的文库</span>
+          </button>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-label">系统</div>
+          <button class="nav-item" data-view="profile">
+            <svg viewBox="0 0 24 24" class="ic"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+            <span>个人主页</span>
+          </button>
+          <button class="nav-item" data-view="settings">
+            <svg viewBox="0 0 24 24" class="ic"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.4-2.3 1a7 7 0 0 0-1.7-1l-.3-2.6h-4l-.3 2.6a7 7 0 0 0-1.7 1l-2.3-1-2 3.4 2 1.5a7 7 0 0 0 0 2l-2 1.5 2 3.4 2.3-1a7 7 0 0 0 1.7 1l.3 2.6h4l.3-2.6a7 7 0 0 0 1.7-1l2.3 1 2-3.4-2-1.5a7 7 0 0 0 .1-1Z"/></svg>
+            <span>设置</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="nav-bottom">
+        <span class="author-line">作者：Xtdzs</span>
+      </div>
+    </nav>
+
+    <!-- ============ 右侧内容区 ============ -->
+    <main class="content">
+      <!-- 深度研究 -->
+      <section id="view-research" class="view">
+        <div class="page-head research-top">
+          <div>
+            <h2>深度研究</h2>
+            <p>输入研究主题或上传资料，Hy3 将自动完成：<b>研究规划 → 多源检索 → 证据压缩 → 长文报告 → 引用对齐</b>。</p>
+          </div>
+        </div>
+
+        <!-- 首页：空状态 + 下方推荐/历史（填充留白） -->
+        <div id="researchHome" class="research-home">
+          <div id="researchEmpty" class="research-empty">
+            <div class="empty-card">
+              <div class="ec-emoji">🔬</div>
+              <h3>开始一项新的深度研究</h3>
+              <p>输入研究主题，或上传资料作为上下文。系统会自动规划、检索、压缩并生成带引用的长文报告。</p>
+              <button id="researchEmptyBtn" class="btn-primary">＋ 新建研究</button>
+            </div>
+          </div>
+
+          <div class="research-bottom">
+            <section class="home-block">
+              <div class="home-head">
+                <span class="home-title">💡 推荐研究</span>
+                <span class="home-sub">点击卡片，直接开始该研究</span>
+              </div>
+              <div id="guessGrid" class="guess-grid"></div>
+            </section>
+            <section class="home-block">
+              <div class="home-head">
+                <span class="home-title">🕘 最近的研究</span>
+                <span id="recentCount" class="home-count"></span>
+                <span class="home-sub">点任意一项，继续或复盘</span>
+              </div>
+              <div id="recentResearch" class="recent-research"></div>
+            </section>
+          </div>
+        </div>
+
+        <!-- 设置区（默认在弹窗中打开） -->
+        <div id="researchSetup" class="research-setup hidden">
+          <div class="setup-card">
+            <textarea id="queryInput" class="query-input" rows="3"
+              placeholder="例如：面向 RAG 的长上下文压缩方法综述与研究空白分析"></textarea>
+
+            <div class="examples">
+              <span class="ex-label">猜你想搜</span>
+              <div id="guessWrap" class="guess-wrap">
+                <span class="chip ex" data-ex="面向 RAG 的长上下文压缩方法综述与研究空白分析">长上下文压缩</span>
+                <span class="chip ex" data-ex="多模态检索增强生成（Multimodal RAG）的方法分类与评测现状">多模态 RAG</span>
+                <span class="chip ex" data-ex="大语言模型代码智能体（Code Agent）的任务规划方法综述">Code Agent 规划</span>
+              </div>
+            </div>
+            <div id="recentWrap" class="recent-wrap hidden">
+              <span class="ex-label">最近搜索</span>
+              <div id="recentList" class="recent-list"></div>
+            </div>
+            <div id="intentBanner" class="intent-banner hidden"></div>
+
+            <details class="acc" open>
+              <summary>研究选项（任务类型 / 风格 / 语言 / 深度）</summary>
+              <div class="options">
+                <label class="opt"><span>任务类型</span>
+                  <select id="taskType">
+                    <option value="literature_review">文献综述</option>
+                    <option value="tech_survey">技术调研</option>
+                    <option value="proposal">开题汇报</option>
+                    <option value="plan_report">项目方案 / 申报</option>
+                  </select></label>
+                <label class="opt"><span>写作风格</span>
+                  <select id="style">
+                    <option value="academic">学术综述</option>
+                    <option value="advisor">导师汇报</option>
+                    <option value="technical">技术方案</option>
+                    <option value="concise">简洁版</option>
+                  </select></label>
+                <label class="opt"><span>语言</span>
+                  <select id="language">
+                    <option value="zh">中文</option>
+                    <option value="en">English</option>
+                  </select></label>
+                <label class="opt"><span>深度</span>
+                  <select id="depth">
+                    <option value="quick">Quick（~1min）</option>
+                    <option value="standard" selected>Standard（2-4min）</option>
+                    <option value="max">Max（更深入）</option>
+                  </select></label>
+                <label class="opt"><span>引用文献数量</span>
+                  <input id="citeCount" type="number" min="0" max="80" step="1" value="0" class="cite-input" /></label>
+              </div>
+            </details>
+
+            <details class="acc">
+              <summary>关注点 & 上传资料（可选）</summary>
+              <div class="options">
+                <label class="opt grow"><span>关注点（可选）</span>
+                  <input id="focus" type="text" placeholder="例如：更关注方法局限与可落地的研究空白" /></label>
+                <div class="opt"><span>上传资料（PDF/txt/md）</span>
+                  <label class="file-btn" for="fileInput">📎 选择文件</label>
+                  <input id="fileInput" type="file" accept=".pdf,.txt,.md" multiple hidden /></div>
+              </div>
+            </details>
+            <div id="uploadList" class="upload-list"></div>
+            <div id="pendingBox" class="pending-box hidden"></div>
+
+            <div class="setup-footer">
+              <div class="depth-hint" id="depthHint">预计：4 子问题 · ~24 篇候选 · 分阶段流式返回</div>
+              <button id="startBtn" class="btn-primary">开始研究 →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 工作区 -->
+        <div id="researchWorkspace" class="workspace hidden">
+          <aside class="col col-left">
+            <div class="col-head">研究计划</div>
+            <div id="goalCard" class="card muted">等待生成研究计划…</div>
+            <div class="section-label">子问题</div>
+            <div id="subqList" class="subq-list"></div>
+            <div class="section-label">报告提纲</div>
+            <ol id="outlineList" class="outline-list"></ol>
+          </aside>
+
+          <div class="col col-mid">
+            <div class="col-head">工作流</div>
+            <div class="stages">
+              <div class="stage" data-stage="planning"><i></i><span>研究规划</span></div>
+              <div class="stage" data-stage="searching"><i></i><span>多源检索</span></div>
+              <div class="stage" data-stage="compressing"><i></i><span>证据压缩</span></div>
+              <div class="stage" data-stage="hypothesizing"><i></i><span>研究假设</span></div>
+              <div class="stage" data-stage="graphing"><i></i><span>证据图谱</span></div>
+              <div class="stage" data-stage="gapping"><i></i><span>研究空白</span></div>
+              <div class="stage" data-stage="experimenting"><i></i><span>实验设计</span></div>
+              <div class="stage" data-stage="writing"><i></i><span>报告生成</span></div>
+              <div class="stage" data-stage="done"><i></i><span>完成</span></div>
+            </div>
+            <div class="metrics" id="metrics">
+              <div class="metric"><span class="m-val" id="mTtfp">–</span><span class="m-lab">首个计划(s)</span></div>
+              <div class="metric"><span class="m-val" id="mTtfe">–</span><span class="m-lab">首批证据(s)</span></div>
+              <div class="metric"><span class="m-val" id="mTtfr">–</span><span class="m-lab">首节报告(s)</span></div>
+              <div class="metric"><span class="m-val" id="mSources">0</span><span class="m-lab">来源</span></div>
+              <div class="metric"><span class="m-val" id="mCites">–</span><span class="m-lab">引用文献</span></div>
+              <div class="metric"><span class="m-val" id="mPackets">0</span><span class="m-lab">证据包</span></div>
+              <div class="metric"><span class="m-val" id="mRatio">–</span><span class="m-lab">压缩比</span></div>
+              <div class="metric"><span class="m-val" id="mTokens">0</span><span class="m-lab">总 Token</span></div>
+            </div>
+            <div class="log" id="log"></div>
+            <button id="newResearchBtn" class="btn-ghost">＋ 新建研究</button>
+          </div>
+
+          <div class="col col-right">
+            <div class="tabs">
+              <button class="tab active" data-tab="report">报告</button>
+              <button class="tab" data-tab="evidence">证据板</button>
+              <button class="tab" data-tab="hypotheses">研究假设</button>
+              <button class="tab" data-tab="graph">证据图谱</button>
+              <button class="tab" data-tab="gaps">研究空白</button>
+              <button class="tab" data-tab="experiments">实验设计</button>
+              <button class="tab" data-tab="citations">引用</button>
+            </div>
+            <div id="tab-report" class="tab-pane active"><div id="report" class="report"></div><div class="report-actions"><button id="researchCopyBtn" class="btn-soft" type="button">复制全文</button></div></div>
+            <div id="tab-evidence" class="tab-pane"><div id="evidenceBoard" class="evidence-board"></div></div>
+            <div id="tab-hypotheses" class="tab-pane"><div id="hypoBoard" class="insight-board"></div></div>
+            <div id="tab-graph" class="tab-pane"><div id="graphBoard" class="graph-board"></div></div>
+            <div id="tab-gaps" class="tab-pane"><div id="gapBoard" class="insight-board"></div></div>
+            <div id="tab-experiments" class="tab-pane"><div id="expBoard" class="insight-board"></div></div>
+            <div id="tab-citations" class="tab-pane"><div id="citationList" class="citation-list"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 文献检索 -->
+      <section id="view-search" class="view hidden">
+        <div class="page-head">
+          <h2>文献检索</h2>
+          <p>跨 OpenAlex / Crossref / arXiv 检索论文与资料。普通检索可翻页浏览、存入文库；智能检索会多步检索并生成一份简要检索报告。</p>
+        </div>
+
+        <div class="mode-switch">
+          <button class="mode-btn active" data-mode="normal">普通检索</button>
+          <button class="mode-btn" data-mode="smart">智能检索</button>
+        </div>
+
+        <div class="search-bar">
+          <input id="litQuery" class="lit-input" placeholder="检索主题 / 关键词 / 论文标题（可在「⚙ 筛选」中限定年份与排序）" />
+          <select id="litSources" class="lit-select">
+            <option value="openalex,crossref,arxiv">全部来源</option>
+            <option value="openalex">OpenAlex</option>
+            <option value="crossref">Crossref</option>
+            <option value="arxiv">arXiv</option>
+          </select>
+          <button id="litFilterBtn" class="btn-soft filt-btn" type="button">⚙ 筛选</button>
+          <button id="litSearchBtn" class="btn-primary">检索</button>
+        </div>
+        <!-- 筛选弹层（集成年份 / 手动近N年 / 排序） -->
+        <div id="litFilterPop" class="filt-pop hidden">
+          <div class="filt-row">
+            <label>时间范围</label>
+            <select id="litYear" class="lit-select">
+              <option value="">不限年份</option>
+              <option value="1">近 1 年</option>
+              <option value="3">近 3 年</option>
+              <option value="5">近 5 年</option>
+            </select>
+          </div>
+          <div class="filt-row">
+            <label>或指定近 N 年（手动输入）</label>
+            <input id="litYearManual" type="number" min="1" max="50" placeholder="如 3" class="lit-input" />
+          </div>
+          <div class="filt-row">
+            <label>开放获取（可全文）</label>
+            <select id="litOa" class="lit-select">
+              <option value="">不限</option>
+              <option value="1">仅开放获取</option>
+            </select>
+          </div>
+          <div class="filt-row">
+            <label>文献类型</label>
+            <select id="litType" class="lit-select">
+              <option value="">不限</option>
+              <option value="article">期刊论文</option>
+              <option value="preprint">预印本</option>
+              <option value="book">图书</option>
+            </select>
+          </div>
+          <div class="filt-row">
+            <label>排序方式</label>
+            <select id="litSort" class="lit-select">
+              <option value="rel">相关度</option>
+              <option value="year">年份（新→旧）</option>
+            </select>
+          </div>
+          <div class="filt-actions">
+            <button id="filtReset" class="btn-ghost" type="button">重置</button>
+            <button id="filtApply" class="btn-primary" type="button">应用</button>
+          </div>
+        </div>
+        <!-- 当前过滤信息（在搜索框下方展示） -->
+        <div id="litFilterChips" class="filt-chips"></div>
+        <div class="smart-hint" id="smartHint">智能检索：输入一个方向或明确需求（如“帮我找近3-5年，大语言模型智能体（LLM Agent）在自动化文献综述中应用强相关的20篇文献，15篇中文，5篇英文”），系统会先按你的意图设计返回格式，再多源检索并整理成结构化文献清单（含引用与溯源）。</div>
+
+        <!-- 智能检索：报告区 -->
+        <div id="smartPanel" class="smart-panel hidden">
+          <div class="smart-steps" id="smartSteps"></div>
+          <div id="smartReport" class="smart-report"><div class="empty">输入方向后点击「检索」生成检索报告。</div></div>
+          <div class="report-actions hidden" id="smartActions">
+            <button id="smartDownloadHtml" class="btn-soft" type="button">⬇ 下载 HTML</button>
+            <button id="smartCopyMd" class="btn-soft" type="button">复制为 Markdown</button>
+            <button id="smartCopyTxt" class="btn-soft" type="button">复制全文</button>
+          </div>
+          <div class="smart-sources-head hidden" id="smartSrcHead">检索到的文献</div>
+          <div id="smartSources" class="lit-results"></div>
+        </div>
+
+        <!-- 首页推荐：填补留白 -->
+        <div id="recoPanel" class="reco-panel">
+          <div class="reco-head">🔥 为您推荐 · 可能感兴趣的最新研究</div>
+          <div id="recoList" class="reco-list"><div class="empty">正在为你获取最新研究…</div></div>
+        </div>
+
+        <!-- 普通检索：结果区 -->
+        <div id="normalPanel">
+          <div class="search-meta" id="litMeta"></div>
+          <div class="bulk-actions" id="litBulk">
+            <label class="chk"><input type="checkbox" id="litSelectAll" /> 全选</label>
+            <button id="litToResearch" class="btn-soft">用选中项做研究</button>
+            <button id="litSaveSel" class="btn-soft">存入文库</button>
+            <span id="litSelCount" class="sel-count">已选 0 项</span>
+          </div>
+          <div id="litResults" class="lit-results">
+            <div class="empty">输入关键词开始检索。</div>
+          </div>
+          <div class="load-more-wrap hidden" id="loadMoreWrap">
+            <button id="loadMoreBtn" class="btn-ghost">加载更多结果</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 论文研讨 -->
+      <section id="view-paper" class="view hidden">
+        <div class="page-head research-top">
+          <div>
+            <h2>论文研讨</h2>
+            <p>上传一篇 PDF / 文本论文，与 Hy3 围绕全文进行交互式讨论：概括、追问方法、梳理局限与可延伸的方向。</p>
+          </div>
+        </div>
+
+        <div id="paperEmpty" class="research-empty">
+          <div class="empty-card">
+            <div class="ec-emoji">📄</div>
+            <h3>上传一篇论文开始研讨</h3>
+            <p>支持 .pdf / .txt / .md。解析在本地服务端完成，你可以围绕全文多轮提问、追问方法、梳理局限与可拓展方向。</p>
+            <div class="paper-empty-actions">
+              <button id="paperEmptyBtn" class="btn-primary">📎 选择论文文件</button>
+              <button id="paperFromLibBtn" class="btn-soft">📚 从文库选择</button>
+              <input id="paperFile" type="file" accept=".pdf,.txt,.md" hidden />
+            </div>
+          </div>
+        </div>
+
+        <div id="paperSetup" class="paper-setup hidden">
+          <div class="setup-card">
+            <div class="lib-upload">
+              <label class="file-btn" for="paperFile">📎 选择论文文件</label>
+              <button id="paperUploadBtn" class="btn-primary">上传并解析论文</button>
+            </div>
+            <div id="paperStatus" class="paper-status">支持 .pdf / .txt / .md；解析在本地服务端完成，全文用于本次研讨。</div>
+          </div>
+        </div>
+
+        <div id="paperChat" class="paper-chat hidden">
+          <div class="paper-chat-head">
+            <span id="paperTitle" class="paper-title">论文</span>
+            <div class="paper-chat-actions">
+              <button id="paperNewBtn" class="btn-soft">换一篇</button>
+              <button id="paperCopyBtn" class="btn-soft" type="button">复制</button>
+              <button id="paperDeleteBtn" class="btn-soft" type="button">删除记录</button>
+            </div>
+          </div>
+          <div id="paperMessages" class="paper-messages">
+            <div class="empty">向论文提问，例如「用三句话概括这篇论文」。</div>
+          </div>
+          <div class="paper-starters" id="paperStarters">
+            <button class="chip" data-q="用三句话概括这篇论文的核心贡献。">三句话概括</button>
+            <button class="chip" data-q="它的核心方法/模型是什么？请指出对应的章节或图示。">核心方法</button>
+            <button class="chip" data-q="论文存在哪些局限或未解决的问题？">局限与空白</button>
+            <button class="chip" data-q="如果要在该方向上继续做研究，有哪些值得拓展的子方向？">可拓展方向</button>
+          </div>
+          <div class="paper-input-row">
+            <textarea id="paperInput" class="paper-input" rows="2" placeholder="向这篇论文提问…"></textarea>
+            <button id="paperSendBtn" class="btn-primary">发送</button>
+          </div>
+        </div>
+
+        <!-- 从文库选择论文 -->
+        <div id="paperLibPicker" class="paper-lib-picker hidden">
+          <div class="lib-pick-head">选择文库中可用于研讨的 PDF（需含正文）</div>
+          <div id="paperLibList" class="lib-pick-list"></div>
+        </div>
+      </section>
+
+      <!-- 我的文库 -->
+      <section id="view-library" class="view hidden">
+        <div class="page-head research-top">
+          <div>
+            <h2>我的文库</h2>
+            <p>管理保存的论文与本地上传的文献 / 笔记，按文件夹归类，作为研究的可靠上下文。支持筛选、排序与批量带入研究。</p>
+          </div>
+        </div>
+
+        <div class="lib-layout">
+          <aside class="lib-side">
+            <div class="lib-side-head">
+              <span class="lib-side-title">文件夹</span>
+              <div class="lib-side-actions">
+                <button id="libNewFolder" class="lib-side-btn" title="在当前文件夹下新建子文件夹">＋</button>
+                <button id="libRenFolder" class="lib-side-btn" title="重命名当前文件夹" disabled>✎</button>
+                <button id="libDelFolder" class="lib-side-btn" title="删除当前文件夹" disabled>✕</button>
+              </div>
+            </div>
+            <div id="libFolders" class="lib-folders"></div>
+          </aside>
+
+          <div id="libResizer" class="lib-resizer" title="拖动调整侧栏宽度"></div>
+
+          <div class="lib-main">
+            <div id="libPath" class="lib-path"></div>
+            <div class="lib-toolbar">
+              <input id="libSearch" class="lit-input" placeholder="搜索标题 / 作者…" />
+              <button id="libFilterBtn" class="btn-soft lib-filter-btn" type="button">⚙ 筛选</button>
+              <button id="libUploadBtn" class="btn-primary lib-upload-btn"
+                title="上传本地 PDF / TXT / MD（论文或笔记），解析后存入当前文件夹">📎 上传文档</button>
+              <input id="libFile" type="file" accept=".pdf,.txt,.md,.markdown" multiple hidden />
+            </div>
+            <div id="libFilterPop" class="lib-filter-pop hidden">
+              <span class="lfp-label">类型</span>
+              <select id="libType" class="lit-select">
+                <option value="">全部类型</option>
+                <option value="paper">论文</option>
+                <option value="upload">上传文档</option>
+              </select>
+              <span class="lfp-label">排序</span>
+              <select id="libSort" class="lit-select">
+                <option value="recent">最近保存</option>
+                <option value="old">最早保存</option>
+                <option value="title">按标题</option>
+                <option value="year">按年份（新→旧）</option>
+              </select>
+              <button id="libFilterClose" class="btn-soft lib-filter-apply" type="button">完成</button>
+            </div>
+
+            <div class="bulk-actions">
+              <label class="chk"><input type="checkbox" id="libSelectAll" /> 全选</label>
+              <button id="libToResearch" class="btn-soft">用选中项做研究</button>
+              <button id="libMoveBtn" class="btn-soft">移动到文件夹…</button>
+              <span id="libCount" class="sel-count"></span>
+            </div>
+
+            <div id="libList" class="lib-list">
+              <div class="empty">文库为空，去「文献检索」保存论文，或点击右上角「上传文档」加入本地文献。</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 历史动态 -->
+      <section id="view-history" class="view hidden">
+        <div class="page-head"><h2>历史动态</h2><p>四个模块的全部历史：深度研究、文献检索、论文研讨、写作工坊。</p></div>
+        <div class="hist-head">
+          <div class="hist-filter" id="histFilter">
+            <button class="hf active" data-kind="all">全部</button>
+            <button class="hf" data-kind="research">深度研究</button>
+            <button class="hf" data-kind="search">文献检索</button>
+            <button class="hf" data-kind="paper">论文研讨</button>
+            <button class="hf" data-kind="studio">写作工坊</button>
+            <button class="hf" data-kind="advisor">思路提炼</button>
+          </div>
+          <div class="hist-toolbar">
+            <button id="histSelectBtn" class="btn-soft" type="button">选择删除</button>
+            <div id="histBulk" class="hist-bulk hidden">
+              <label class="chk"><input type="checkbox" id="histSelectAll" /> 全选</label>
+              <button id="histDelSel" class="btn-soft btn-danger" disabled>删除选中 (<span id="histSelCount">0</span>)</button>
+              <button id="histCancelSel" class="btn-ghost">取消</button>
+            </div>
+          </div>
+        </div>
+        <div id="histList" class="hist-list">
+          <div class="empty">暂无研究记录。</div>
+        </div>
+      </section>
+
+      <!-- 写作助手 -->
+      <section id="view-studio" class="view hidden">
+        <div class="page-head"><h2>写作助手</h2><p>面向研究人员的写作小工具：选择一个任务，按提示填入信息，Hy3 帮你完成对应的写作环节。涉及真实性（如引言、相关工作）的任务，请直接提供相关文献及其说明，Hy3 会据此进行真实引用。</p></div>
+        <div class="studio-wrap">
+          <div class="studio-toolbar" id="studioToolbar"></div>
+          <div id="studioToolDesc" class="studio-tool-desc"></div>
+          <div class="studio-form">
+            <div id="studioFields" class="studio-fields"></div>
+            <div class="studio-src">
+              <button id="studioRun" class="btn-primary">生成</button>
+              <button id="studioCopyBtn" class="btn-soft hidden" type="button">复制</button>
+            </div>
+          </div>
+          <div id="studioOutput" class="studio-output">
+            <div class="empty">选择左侧任务并填写信息后点击「生成」。</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 思路提炼 -->
+      <section id="view-advisor" class="view hidden">
+        <div class="page-head research-top">
+          <div>
+            <h2>思路提炼</h2>
+            <p>与 Hy3 就你的研究想法进行<strong>互动式推演</strong>：厘清问题、锚定研究基点、提出可证伪假设，并基于真实文献给出<strong>证据支撑</strong>。
+              <b>本模块不产出成稿</b>，只帮你把思路想清楚；右侧「提炼指南」会把结论按<strong>已锚定</strong>与<strong>待论证</strong>两部分沉淀。</p>
+          </div>
+        </div>
+
+        <div class="advisor-layout">
+          <!-- 左：思路对话（下拉窗口） -->
+          <div class="collapse-win advisor-chat" id="advisorChatWin">
+            <div class="win-head" data-toggle="advisorChatWin">
+              <span class="win-title">💡 思路对话</span>
+              <div class="win-head-actions">
+                <button id="advisorNewBtn" class="btn-soft" type="button">新对话</button>
+                <span class="win-chevron">▾</span>
+              </div>
+            </div>
+            <div class="win-body">
+              <div class="advisor-status" id="advisorStatus" hidden></div>
+              <div id="advisorMessages" class="advisor-messages">
+                <div class="empty">描述你的研究兴趣或卡点，例如：「我想做医疗 RAG 的上下文压缩，但不知道从哪个点切入。」</div>
+              </div>
+              <div class="advisor-starters" id="advisorStarters">
+                <button class="chip" data-q="我想做检索增强生成（RAG）的上下文压缩，但不知道从哪个点切入，帮我一起想方向。">RAG 上下文压缩方向</button>
+                <button class="chip" data-q="我有一个关于多模态检索的粗略想法，能帮我把它变成可验证的研究假设吗？">想法变假设</button>
+                <button class="chip" data-q="我已经定了研究问题，帮我设计一个最小可行的验证实验（数据/指标/基线）。">设计最小实验</button>
+                <button class="chip" data-q="帮我校验一下我这个方向有没有研究空白，以及和已有工作怎么差异化。">找研究空白</button>
+              </div>
+              <div class="advisor-input-row">
+                <textarea id="advisorInput" class="advisor-input" rows="2" placeholder="描述你的研究兴趣、想法或卡点…"></textarea>
+                <button id="advisorSendBtn" class="btn-primary">发送</button>
+              </div>
+
+              <!-- 检索依据（子下拉窗口） -->
+              <div class="sub-win collapse-win" id="advisorEvidenceWin">
+                <div class="win-head sub" data-toggle="advisorEvidenceWin">
+                  <span class="win-title">📚 检索依据</span>
+                  <div class="win-head-actions">
+                    <span class="win-chevron">▾</span>
+                  </div>
+                </div>
+                <div class="win-body">
+                  <div id="advisorEvidenceLog" class="evidence-log">
+                    <div class="empty">在推演中若判断某个论断需要用真实文献核验，会<strong>自主规划并检索</strong>依据，结果同步到右侧「本次引用」。</div>
+                  </div>
+                  <div id="advisorEvidenceList" class="evidence-list"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 右：提炼指南（下拉窗口） -->
+          <div class="collapse-win advisor-guide" id="advisorGuideWin">
+            <div class="win-head" data-toggle="advisorGuideWin">
+              <span class="win-title">🧭 提炼指南</span>
+              <div class="win-head-actions">
+                <button id="advisorGuideBtn" class="btn-primary" type="button">生成指南</button>
+                <span class="win-chevron">▾</span>
+              </div>
+            </div>
+            <div class="win-body">
+              <div id="advisorGuideBody" class="advisor-guide-body">
+                <div class="empty">在左侧对话中梳理思路后，点击「生成指南」导出一份结构化思路提炼结果。
+                  指南会按<strong>已锚定的研究要素</strong>与<strong>待论证的研究要素</strong>两组沉淀，可作为下一步研究的决策底稿。</div>
+              </div>
+              <div class="advisor-guide-actions hidden" id="advisorGuideActions">
+                <button id="advisorGuideCopy" class="btn-soft" type="button">复制全文</button>
+                <button id="advisorGuideDownload" class="btn-soft" type="button">下载 Markdown</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 创造工坊 · AI Feature Studio -->
+      <section id="view-forge" class="view hidden">
+        <!-- 紧凑头部：标题 + 操作 + 统计 + 标签 + 搜索 全部一行 -->
+        <div class="forge-header">
+          <div class="forge-header-bg"></div>
+          <div class="forge-header-row forge-header-top">
+            <div class="forge-title-group">
+              <span class="forge-badge-mini">✨ AI Feature Studio</span>
+              <h2 class="forge-h-title">创造工坊</h2>
+              <span class="forge-h-sub">打造拥有独立界面与工作流的 AI 微应用，共建功能生态</span>
+            </div>
+            <div class="forge-h-actions">
+              <button id="forgeCreatorBtn" class="btn-soft btn-sm">创作者中心</button>
+              <button id="newFeatureBtn" class="btn-primary btn-sm">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                新建功能
+              </button>
+            </div>
+            <div class="forge-h-stats">
+              <div class="fhs-item"><span class="fhs-num" id="forgeStatFeatures">0</span><span class="fhs-lbl">功能</span></div>
+              <div class="fhs-sep"></div>
+              <div class="fhs-item"><span class="fhs-num" id="forgeStatUses">0</span><span class="fhs-lbl">使用</span></div>
+              <div class="fhs-sep"></div>
+              <div class="fhs-item"><span class="fhs-num" id="forgeStatForks">0</span><span class="fhs-lbl">Fork</span></div>
+            </div>
+          </div>
+          <div class="forge-header-row forge-header-bar">
+            <div class="forge-tabs" id="forgeSubtabs">
+              <button class="forge-tab active" data-scope="marketplace">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10z"/></svg>
+                <span>Marketplace</span>
+              </button>
+              <button class="forge-tab" data-scope="mine">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span>我的</span>
+              </button>
+              <button class="forge-tab" data-scope="favorites">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <span>收藏</span>
+              </button>
+              <button class="forge-tab" data-scope="templates">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                <span>模板</span>
+              </button>
+              <button class="forge-tab" data-scope="creator">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <span>创作者</span>
+              </button>
+            </div>
+            <div class="forge-toolbar">
+              <div class="forge-search-wrap">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input id="featSearch" class="forge-search-input" placeholder="搜索功能…" />
+              </div>
+              <div class="forge-cats" id="forgeCats"></div>
+              <select id="forgeSort" class="forge-sort-select">
+                <option value="popular">热门</option>
+                <option value="newest">最新</option>
+                <option value="rating">评分</option>
+                <option value="forks">Fork</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="forge-main-wrap">
+          <div id="forgeContentMarketplace" class="forge-content">
+            <div id="featList" class="feat-grid">
+              <div class="empty">加载中…</div>
+            </div>
+          </div>
+
+          <div id="forgeContentMine" class="forge-content hidden">
+            <div id="myFeatList" class="feat-grid">
+              <div class="empty">还没有创建功能，点击「新建功能」开始吧。</div>
+            </div>
+          </div>
+
+          <div id="forgeContentFavorites" class="forge-content hidden">
+            <div id="favFeatList" class="feat-grid">
+              <div class="empty">还没有收藏的功能。</div>
+            </div>
+          </div>
+
+          <div id="forgeContentTemplates" class="forge-content hidden">
+            <div id="tplFeatList" class="feat-grid">
+              <div class="empty">加载中…</div>
+            </div>
+          </div>
+
+          <div id="forgeContentCreator" class="forge-content hidden">
+            <div class="creator-dashboard">
+              <div class="creator-welcome">
+                <div class="creator-avatar">🧑‍💻</div>
+                <div class="creator-welcome-text">
+                  <h3>创作者中心</h3>
+                  <p>查看你的创作数据、获得徽章、跟踪作品表现</p>
+                </div>
+              </div>
+              <div class="creator-metrics">
+                <div class="creator-metric-card accent">
+                  <div class="cm-icon">🚀</div>
+                  <div class="cm-value" id="cmWorks">0</div>
+                  <div class="cm-label">作品数量</div>
+                </div>
+                <div class="creator-metric-card">
+                  <div class="cm-icon">👥</div>
+                  <div class="cm-value" id="cmUsers">0</div>
+                  <div class="cm-label">总使用人数</div>
+                </div>
+                <div class="creator-metric-card">
+                  <div class="cm-icon">⭐</div>
+                  <div class="cm-value" id="cmFavs">0</div>
+                  <div class="cm-label">我的收藏</div>
+                </div>
+                <div class="creator-metric-card">
+                  <div class="cm-icon">🔀</div>
+                  <div class="cm-value" id="cmForks">0</div>
+                  <div class="cm-label">Fork 数</div>
+                </div>
+                <div class="creator-metric-card">
+                  <div class="cm-icon">📊</div>
+                  <div class="cm-value" id="cmRating">0.0</div>
+                  <div class="cm-label">平均评分</div>
+                </div>
+                <div class="creator-metric-card">
+                  <div class="cm-icon">🏆</div>
+                  <div class="cm-value" id="cmBadge">新创作者</div>
+                  <div class="cm-label">创作者等级</div>
+                </div>
+              </div>
+              <div class="creator-badges-section">
+                <h4>🏅 成就徽章</h4>
+                <div class="creator-badges" id="creatorBadges">
+                  <div class="cbadge unlocked">
+                    <span class="cb-icon">🌱</span>
+                    <span class="cb-name">新创作者</span>
+                    <span class="cb-desc">创建第一个功能</span>
+                  </div>
+                  <div class="cbadge">
+                    <span class="cb-icon">⭐</span>
+                    <span class="cb-name">新星</span>
+                    <span class="cb-desc">获得 10 个收藏</span>
+                  </div>
+                  <div class="cbadge">
+                    <span class="cb-icon">🔥</span>
+                    <span class="cb-name">热门作者</span>
+                    <span class="cb-desc">作品使用 100 次</span>
+                  </div>
+                  <div class="cbadge">
+                    <span class="cb-icon">👑</span>
+                    <span class="cb-name">顶级创作者</span>
+                    <span class="cb-desc">获得官方认证</span>
+                  </div>
+                </div>
+              </div>
+              <div class="creator-works-section">
+                <h4>📈 我的作品表现</h4>
+                <div id="creatorWorks" class="creator-works-list">
+                  <div class="empty">创建功能后这里会显示作品数据。</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 反馈看板 -->
+      <section id="view-feedback" class="view hidden">
+        <div class="page-head">
+          <h2>反馈看板</h2>
+          <p>看看大家都在关心什么：上方<strong>问题词云</strong>汇聚了所有反馈的高频关键词（悬停看次数，点击筛选下方列表）；下方可选择方面并提交你的建议。所有反馈均经过<strong>敏感词屏蔽</strong>后展示。</p>
+        </div>
+
+        <div class="fb-cloud-wrap">
+        <div class="fb-cloud-head">
+          <span class="fb-cloud-title">问题词云</span>
+          <span id="fbCloudUpdated" class="fb-cloud-updated"></span>
+          <span class="fb-cloud-note">悬停看出现次数，点击按该关键词筛选下方列表</span>
+          <button id="fbClearFilter" class="btn-soft hidden">清除筛选</button>
+        </div>
+        <canvas id="fbCloud" class="fb-cloud" width="1000" height="340"></canvas>
+        <div id="fbCloudEmpty" class="empty hidden">暂无关键词。</div>
+      </div>
+
+      <div class="fb-body">
+        <div class="fb-list-wrap">
+          <div class="fb-list-head">
+            <span class="forge-section-label">已有反馈 <span id="fbCount" class="fb-count"></span></span>
+            <div class="fb-sort">
+              <label>排序</label>
+              <select id="fbSort" class="lit-select">
+                <option value="up">up 最多</option>
+                <option value="new">最新反馈</option>
+              </select>
+            </div>
+          </div>
+          <div id="fbList" class="fb-list"></div>
+        </div>
+
+        <div class="fb-form-dock">
+          <div class="fb-form">
+            <div class="fb-form-title">✍ 我要反馈</div>
+            <div class="fb-aspect">
+              <label class="fb-aspect-label">反馈方面</label>
+              <div id="fbCats" class="fb-cats"></div>
+            </div>
+            <textarea id="fbContent" class="query-input" rows="3" placeholder="说说你的建议、遇到的问题或期待…"></textarea>
+            <div class="nf-actions">
+              <span id="fbMasked" class="fb-masked hidden">⚠ 已自动屏蔽敏感词</span>
+              <button id="fbSubmit" class="btn-primary">提交反馈</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      </section>
+
+      <!-- 设置 -->
+      <section id="view-settings" class="view hidden">
+        <div class="page-head"><h2>设置</h2><p>查看模型连接状态，并保存默认研究偏好。</p></div>
+        <div class="settings-card" id="settingsCard">
+          <div id="connStatus" class="conn-status">检测中…</div>
+          <div class="set-row"><span>模型</span><b id="setModel">–</b></div>
+          <div class="set-row"><span>接口地址</span><b id="setBase">–</b></div>
+          <div class="set-row"><span>检索源状态</span><div id="setSources" class="src-status"></div></div>
+
+          <div class="set-divider"></div>
+          <h3>默认研究偏好</h3>
+          <p class="set-desc">新建深度研究时自动套用以下默认项，可在研究页临时调整。</p>
+          <div class="options">
+            <label class="opt"><span>默认深度</span>
+              <select id="setDepth"><option value="quick">Quick</option><option value="standard">Standard</option><option value="max">Max</option></select></label>
+            <label class="opt"><span>默认风格</span>
+              <select id="setStyle"><option value="academic">学术综述</option><option value="advisor">导师汇报</option><option value="technical">技术方案</option><option value="concise">简洁版</option></select></label>
+            <label class="opt"><span>默认语言</span>
+              <select id="setLang"><option value="zh">中文</option><option value="en">English</option></select></label>
+            <label class="opt"><span>默认任务类型</span>
+              <select id="setTaskType"><option value="literature_review">文献综述</option><option value="tech_survey">技术调研</option><option value="proposal">开题汇报</option><option value="plan_report">项目方案 / 申报</option></select></label>
+            <label class="opt"><span>默认引用文献数量</span>
+              <input id="setCiteCount" type="number" min="0" max="80" step="1" value="0" class="cite-input" /></label>
+          </div>
+
+          <div class="set-divider"></div>
+          <h3>界面偏好</h3>
+          <div class="options">
+            <label class="opt"><span>最近动态显示条数</span>
+              <input id="setRecentCount" type="number" min="1" max="30" step="1" value="6" class="cite-input" /></label>
+          </div>
+
+          <div class="set-divider"></div>
+          <h3>检索源</h3>
+          <div class="opt" style="margin-top:6px"><span>启用检索源</span>
+            <div class="chk-group">
+              <label class="chk"><input type="checkbox" value="openalex" class="srcChk" checked /> OpenAlex</label>
+              <label class="chk"><input type="checkbox" value="crossref" class="srcChk" checked /> Crossref</label>
+              <label class="chk"><input type="checkbox" value="arxiv" class="srcChk" checked /> arXiv</label>
+              <label class="chk"><input type="checkbox" value="semantic_scholar" class="srcChk" /> Semantic Scholar</label>
+            </div>
+          </div>
+          <button id="saveSettingsBtn" class="btn-primary" style="margin-top:18px">保存默认设置</button>
+          <div id="settingsMsg" class="set-msg"></div>
+        </div>
+      </section>
+
+      <!-- 个人主页 -->
+      <section id="view-profile" class="view hidden">
+        <div class="page-head"><h2>个人主页</h2><p>完善你的研究者档案。<b>研究兴趣</b>会用于「推荐研究」与「猜你想搜」的个性化推荐。</p></div>
+        <div class="profile-wrap">
+          <div class="profile-card profile-identity">
+            <div class="pf-avatar-col">
+              <div id="pfAvatar" class="pf-avatar">🧑‍🔬</div>
+              <div id="pfAvatarPick" class="pf-avatar-pick"></div>
+              <button id="pfAvatarUploadBtn" class="pf-av-upload" type="button">📷 上传图片</button>
+              <input id="pfAvatarFile" type="file" accept="image/*" hidden />
+            </div>
+            <div class="pf-fields">
+              <label class="opt"><span>昵称</span>
+                <input id="pfName" type="text" placeholder="如：Hy3 研究员" /></label>
+              <label class="opt"><span>身份</span>
+                <select id="pfRole">
+                  <option value="">未设置</option>
+                  <option value="undergrad">本科生</option>
+                  <option value="master">硕士研究生</option>
+                  <option value="phd">博士研究生</option>
+                  <option value="postdoc">博士后</option>
+                  <option value="faculty">教师 / 导师</option>
+                  <option value="researcher">研究员</option>
+                  <option value="engineer">工程师</option>
+                  <option value="other">其他</option>
+                </select></label>
+              <label class="opt"><span>机构 / 院校</span>
+                <input id="pfOrg" type="text" placeholder="如：某某大学 智能信息处理实验室" /></label>
+              <label class="opt"><span>研究领域</span>
+                <input id="pfField" type="text" placeholder="如：自然语言处理 / 信息检索" /></label>
+            </div>
+          </div>
+
+          <div class="profile-card">
+            <h3>研究兴趣 <span class="pf-hint-inline">用于个性化推荐</span></h3>
+            <p class="set-desc">添加你关注的研究方向或关键词，系统会据此推荐研究选题与检索方向。</p>
+            <div id="pfInterests" class="pf-tags"></div>
+            <div class="pf-tag-input">
+              <input id="pfInterestInput" class="lit-input" placeholder="输入兴趣后回车添加，如：检索增强生成（RAG）" />
+              <button id="pfInterestAdd" class="btn-soft" type="button">添加</button>
+            </div>
+            <div class="pf-suggest">
+              <span class="set-desc">快速添加：</span>
+              <div id="pfInterestSuggest" class="pf-chip-row"></div>
+            </div>
+          </div>
+
+          <div class="profile-card">
+            <h3>个人简介</h3>
+            <textarea id="pfBio" class="query-input" rows="4" placeholder="简单介绍你的研究背景、方向与目标…"></textarea>
+          </div>
+
+          <div class="profile-actions">
+            <button id="pfSave" class="btn-primary">保存个人主页</button>
+            <span id="pfMsg" class="set-msg"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ Feature Workspace（独立功能工作区·按 /feature/{id} 进入） ============ -->
+      <section id="view-feature" class="view view-feature hidden">
+        <!-- 顶部功能工具栏（替代主导航） -->
+        <div class="fw-toolbar" id="fwToolbar">
+          <div class="fw-toolbar-left">
+            <button class="fw-back-btn" id="fwBackBtn" title="返回功能市场">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              返回工坊
+            </button>
+            <div class="fw-sep"></div>
+            <div class="fw-title-area">
+              <span class="fw-emoji" id="fwEmoji">🧩</span>
+              <div class="fw-title-text">
+                <div class="fw-name" id="fwName">Feature</div>
+                <div class="fw-breadcrumb" id="fwBreadcrumb">AI Feature Studio · <span id="fwVersion">v1.0.0</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="fw-toolbar-center" id="fwToolTabs"></div>
+          <div class="fw-toolbar-right">
+            <button class="fw-icon-btn" id="fwFavBtn" title="收藏">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </button>
+            <button class="fw-icon-btn" id="fwForkBtn" title="Fork / Remix">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="3" r="2"/><circle cx="6" cy="21" r="2"/><circle cx="18" cy="6" r="2"/><path d="M6 5v14M18 8c0 3-3 5-6 5H8"/></svg>
+            </button>
+            <button class="fw-icon-btn" id="fwShareBtn" title="分享">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+            </button>
+            <button class="fw-icon-btn" id="fwInfoBtn" title="功能详情">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- 功能工作区主体（按 layout_type 渲染不同布局） -->
+        <div class="fw-workspace" id="fwWorkspace">
+
+          <!-- ===== Layout: research（科研工作区·三栏布局） ===== -->
+          <div class="fw-layout fw-layout-research hidden" data-layout="research">
+            <div class="fw-panel fw-panel-left">
+              <div class="fw-panel-header">
+                <span>📚 文献库</span>
+                <button class="fw-mini-btn" id="resUploadBtn">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                  上传 PDF
+                </button>
+              </div>
+              <div class="fw-panel-body">
+                <div class="res-paper-list" id="resPaperList">
+                  <div class="res-empty">
+                    <div class="res-empty-icon">📄</div>
+                    <p>还没有添加文献</p>
+                    <button class="btn-soft" id="resAddDemo">加载示例论文</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="fw-panel fw-panel-center">
+              <div class="fw-panel-header">
+                <span id="resReaderTitle">📖 阅读区</span>
+                <div class="fw-panel-actions">
+                  <button class="fw-mini-btn" id="resOutlineBtn">大纲</button>
+                  <button class="fw-mini-btn" id="resHighlightBtn">高亮</button>
+                  <button class="fw-mini-btn" id="resCiteBtn">引用</button>
+                </div>
+              </div>
+              <div class="fw-panel-body fw-reader" id="resReader">
+                <div class="res-reader-placeholder">
+                  <div class="res-reader-icon">📑</div>
+                  <h3>选择一篇文献开始阅读</h3>
+                  <p>从左侧文献库选择，或上传新的 PDF</p>
+                  <div class="res-starter-chips" id="resStarters"></div>
+                </div>
+                <div class="res-reader-content hidden" id="resReaderContent"></div>
+              </div>
+            </div>
+            <div class="fw-panel fw-panel-right">
+              <div class="fw-panel-header">
+                <span>✏️ 笔记 & 引用</span>
+                <button class="fw-mini-btn" id="resExportNotesBtn">导出</button>
+              </div>
+              <div class="fw-panel-body">
+                <div class="res-tabs">
+                  <button class="res-tab active" data-restab="notes">笔记</button>
+                  <button class="res-tab" data-restab="citations">引用</button>
+                  <button class="res-tab" data-restab="outline">大纲</button>
+                </div>
+                <div class="res-tab-content">
+                  <div class="res-tab-pane active" data-restabpane="notes">
+                    <textarea class="fw-textarea" id="resNotes" placeholder="在这里记录阅读笔记..."></textarea>
+                    <div class="res-ai-notes" id="resAiNotes"></div>
+                  </div>
+                  <div class="res-tab-pane" data-restabpane="citations">
+                    <div class="res-cite-list" id="resCiteList"><p class="fw-empty">还没有引用记录</p></div>
+                  </div>
+                  <div class="res-tab-pane" data-restabpane="outline">
+                    <div class="res-outline-list" id="resOutline"><p class="fw-empty">选择文献后生成大纲</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="fw-chat-bar">
+              <div class="fw-chat-input-wrap">
+                <input type="text" class="fw-chat-input" id="resChatInput" placeholder="针对当前文献提问，例如：这篇论文的创新点是什么？" />
+                <button class="fw-send-btn" id="resSendBtn">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== Layout: review（审稿工作区） ===== -->
+          <div class="fw-layout fw-layout-review hidden" data-layout="review">
+            <div class="rev-upload-area" id="revUploadArea">
+              <div class="rev-upload-box" id="revUploadBox">
+                <div class="rev-upload-icon">📝</div>
+                <h3>提交待审稿论文</h3>
+                <p>粘贴论文文本 或 上传 PDF 文件</p>
+                <textarea class="fw-textarea rev-upload-textarea" id="revPaperText" placeholder="在此粘贴论文全文..."></textarea>
+                <div class="rev-upload-actions">
+                  <button class="btn-soft">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                    上传 PDF
+                  </button>
+                  <button class="btn-primary rev-start-btn" id="revStartBtn">开始审稿 →</button>
+                </div>
+              </div>
+            </div>
+            <div class="rev-main hidden" id="revMain">
+              <div class="fw-panel rev-scoring-panel">
+                <div class="fw-panel-header"><span>📊 评分维度</span></div>
+                <div class="fw-panel-body" id="revScoring">
+                  <div class="rev-score-card">
+                    <div class="rev-score-head"><span>创新性与贡献</span><span class="rev-score-val" id="revScore1">--</span></div>
+                    <input type="range" min="1" max="10" value="0" class="rev-slider" id="revSlider1" data-score="1"/>
+                    <p class="rev-score-desc">核心问题是否新颖？贡献是否显著？</p>
+                  </div>
+                  <div class="rev-score-card">
+                    <div class="rev-score-head"><span>方法严谨性</span><span class="rev-score-val" id="revScore2">--</span></div>
+                    <input type="range" min="1" max="10" value="0" class="rev-slider" id="revSlider2" data-score="2"/>
+                    <p class="rev-score-desc">技术方法是否正确、严谨、可复现？</p>
+                  </div>
+                  <div class="rev-score-card">
+                    <div class="rev-score-head"><span>实验充分性</span><span class="rev-score-val" id="revScore3">--</span></div>
+                    <input type="range" min="1" max="10" value="0" class="rev-slider" id="revSlider3" data-score="3"/>
+                    <p class="rev-score-desc">实验是否足够支撑结论？对比是否充分？</p>
+                  </div>
+                  <div class="rev-score-card">
+                    <div class="rev-score-head"><span>写作质量</span><span class="rev-score-val" id="revScore4">--</span></div>
+                    <input type="range" min="1" max="10" value="0" class="rev-slider" id="revSlider4" data-score="4"/>
+                    <p class="rev-score-desc">表述是否清晰？组织是否合理？</p>
+                  </div>
+                  <div class="rev-decision">
+                    <label>最终建议</label>
+                    <select class="fw-select" id="revDecision">
+                      <option value="">选择决定</option>
+                      <option value="accept">Accept（接收）</option>
+                      <option value="weak-accept">Weak Accept（弱接收）</option>
+                      <option value="borderline">Borderline（边缘）</option>
+                      <option value="weak-reject">Weak Reject（弱拒）</option>
+                      <option value="reject">Reject（拒稿）</option>
+                    </select>
+                  </div>
+                  <button class="btn-primary rev-gen-btn" id="revGenBtn">🤖 AI 生成完整审稿意见</button>
+                </div>
+              </div>
+              <div class="fw-panel rev-output-panel">
+                <div class="fw-panel-header">
+                  <span>📋 审稿意见</span>
+                  <div class="fw-panel-actions">
+                    <button class="fw-mini-btn">导出 PDF</button>
+                    <button class="fw-mini-btn">复制</button>
+                  </div>
+                </div>
+                <div class="fw-panel-body rev-output-body" id="revOutput">
+                  <div class="rev-waiting">
+                    <div class="rev-waiting-icon">⏳</div>
+                    <p>点击左侧「AI 生成完整审稿意见」开始</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== Layout: experiment（实验设计器） ===== -->
+          <div class="fw-layout fw-layout-experiment hidden" data-layout="experiment">
+            <div class="fw-panel exp-hyp-panel">
+              <div class="fw-panel-header"><span>🎯 假设 & 变量</span></div>
+              <div class="fw-panel-body">
+                <div class="exp-section">
+                  <label>研究问题</label>
+                  <textarea class="fw-textarea" id="expQuestion" placeholder="例如：使用A方法是否能显著提升B任务的准确率？" rows="2"></textarea>
+                </div>
+                <div class="exp-section">
+                  <label>研究假设</label>
+                  <div class="exp-hypo-item">
+                    <span class="exp-h-label">H₁（备择假设）</span>
+                    <textarea class="fw-textarea" id="expH1" placeholder="H₁: ..." rows="2"></textarea>
+                  </div>
+                  <div class="exp-hypo-item">
+                    <span class="exp-h-label">H₀（零假设）</span>
+                    <textarea class="fw-textarea" id="expH0" placeholder="H₀: ..." rows="2"></textarea>
+                  </div>
+                </div>
+                <div class="exp-section">
+                  <label>变量设计</label>
+                  <div class="exp-var-table">
+                    <div class="exp-var-row exp-var-head"><span>类型</span><span>名称</span><span>操作化定义</span></div>
+                    <div class="exp-var-row" id="expVarIv"><span class="exp-var-tag iv">自变量</span><input type="text" placeholder="变量名" class="fw-input"/><input type="text" placeholder="如何测量/操纵" class="fw-input"/></div>
+                    <div class="exp-var-row" id="expVarDv"><span class="exp-var-tag dv">因变量</span><input type="text" placeholder="变量名" class="fw-input"/><input type="text" placeholder="如何测量" class="fw-input"/></div>
+                    <div class="exp-var-row" id="expVarCv"><span class="exp-var-tag cv">控制变量</span><input type="text" placeholder="变量名" class="fw-input"/><input type="text" placeholder="如何控制" class="fw-input"/></div>
+                  </div>
+                  <button class="fw-mini-btn exp-add-var" id="expAddVar">+ 添加变量</button>
+                </div>
+                <button class="btn-primary exp-gen-btn" id="expGenWorkflow">🤖 AI 生成实验流程</button>
+              </div>
+            </div>
+            <div class="fw-panel exp-steps-panel">
+              <div class="fw-panel-header"><span>📋 实验流程</span><button class="fw-mini-btn">+ 添加步骤</button></div>
+              <div class="fw-panel-body exp-steps-canvas" id="expSteps">
+                <div class="exp-empty-steps">
+                  <div class="exp-empty-icon">🧪</div>
+                  <p>填写左侧假设与变量后，AI 将自动生成实验步骤</p>
+                </div>
+              </div>
+            </div>
+            <div class="fw-panel exp-right-panel">
+              <div class="fw-panel-header"><span>📅 时间表 & 分析方案</span></div>
+              <div class="fw-panel-body">
+                <div class="exp-section">
+                  <label>⏱ 时间规划</label>
+                  <div class="exp-gantt" id="expGantt"><p class="fw-empty">等待生成</p></div>
+                </div>
+                <div class="exp-section">
+                  <label>📊 数据分析方案</label>
+                  <div class="exp-analysis" id="expAnalysis"><p class="fw-empty">等待生成</p></div>
+                </div>
+                <div class="exp-section">
+                  <label>⚠️ 潜在混淆因素</label>
+                  <div class="exp-confounds" id="expConfounds"><p class="fw-empty">等待检查</p></div>
+                </div>
+                <div class="exp-starter-chips" id="expStarters"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== Layout: meeting（会议助手） ===== -->
+          <div class="fw-layout fw-layout-meeting hidden" data-layout="meeting">
+            <div class="fw-panel mt-transcript-panel">
+              <div class="fw-panel-header">
+                <span>🎙️ 转写记录</span>
+                <div class="fw-panel-actions">
+                  <button class="fw-mini-btn">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                    上传音频
+                  </button>
+                </div>
+              </div>
+              <div class="fw-panel-body mt-transcript-body">
+                <div class="mt-upload" id="mtUploadArea">
+                  <div class="mt-upload-icon">🎤</div>
+                  <h3>上传会议录音或粘贴文字记录</h3>
+                  <p>支持音频文件（mp3/wav/m4a）或直接粘贴转写文本</p>
+                  <textarea class="fw-textarea" id="mtTranscript" placeholder="在此粘贴会议文字记录..." rows="8"></textarea>
+                  <button class="btn-primary mt-analyze-btn" id="mtAnalyzeBtn">🔍 开始分析</button>
+                </div>
+                <div class="mt-transcript-view hidden" id="mtTranscriptView"></div>
+              </div>
+            </div>
+            <div class="fw-panel mt-summary-panel">
+              <div class="fw-panel-header">
+                <span>📝 纪要 & 行动项</span>
+                <div class="fw-panel-actions">
+                  <button class="fw-mini-btn">导出 DOCX</button>
+                  <button class="fw-mini-btn">复制</button>
+                </div>
+              </div>
+              <div class="fw-panel-body mt-summary-body" id="mtSummary">
+                <div class="mt-waiting">
+                  <div class="mt-waiting-icon">⏳</div>
+                  <p>上传会议内容后开始分析</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== Layout: medical（医学报告） ===== -->
+          <div class="fw-layout fw-layout-medical hidden" data-layout="medical">
+            <div class="fw-panel md-form-panel">
+              <div class="fw-panel-header"><span>🏥 患者信息</span></div>
+              <div class="fw-panel-body md-form-body">
+                <div class="md-section">
+                  <h4>基本信息</h4>
+                  <div class="md-row">
+                    <div class="md-field"><label>姓名</label><input type="text" class="fw-input" id="mdName" placeholder="患者姓名"/></div>
+                    <div class="md-field"><label>年龄</label><input type="number" class="fw-input" id="mdAge" placeholder="年龄"/></div>
+                    <div class="md-field"><label>性别</label>
+                      <select class="fw-select" id="mdGender"><option value="">--</option><option value="M">男</option><option value="F">女</option></select>
+                    </div>
+                  </div>
+                </div>
+                <div class="md-section">
+                  <h4>主诉 (CC)</h4>
+                  <textarea class="fw-textarea" id="mdCC" placeholder="患者主要症状及持续时间..." rows="2"></textarea>
+                </div>
+                <div class="md-section">
+                  <h4>现病史 (HPI)</h4>
+                  <textarea class="fw-textarea" id="mdHPI" placeholder="起病情况、主要症状特点、伴随症状、诊治经过..." rows="4"></textarea>
+                </div>
+                <div class="md-section">
+                  <h4>体格检查</h4>
+                  <textarea class="fw-textarea" id="mdExam" placeholder="生命体征、各系统检查..." rows="3"></textarea>
+                </div>
+                <div class="md-section">
+                  <h4>辅助检查</h4>
+                  <textarea class="fw-textarea" id="mdLabs" placeholder="实验室检查、影像学检查结果..." rows="3"></textarea>
+                </div>
+                <div class="md-disclaimer">⚠️ 本工具仅供参考，不构成医疗建议。请以临床医生诊断为准。</div>
+                <button class="btn-primary md-gen-btn" id="mdGenBtn">🩺 AI 生成病历报告</button>
+              </div>
+            </div>
+            <div class="fw-panel md-report-panel">
+              <div class="fw-panel-header">
+                <span>📋 病历报告</span>
+                <div class="fw-panel-actions">
+                  <button class="fw-mini-btn">导出 PDF</button>
+                  <button class="fw-mini-btn">打印</button>
+                </div>
+              </div>
+              <div class="fw-panel-body md-report-body" id="mdReport">
+                <div class="md-waiting">
+                  <div class="md-waiting-icon">🩺</div>
+                  <p>填写左侧患者信息后，AI 将辅助生成病历</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== Layout: coding（编程工作区·IDE风格） ===== -->
+          <div class="fw-layout fw-layout-coding hidden" data-layout="coding">
+            <div class="fw-panel cd-explorer">
+              <div class="fw-panel-header"><span>📁 文件</span></div>
+              <div class="fw-panel-body cd-explorer-body">
+                <div class="cd-tree">
+                  <div class="cd-tree-item cd-folder open">
+                    <span class="cd-tree-ic">📂</span> src
+                    <div class="cd-tree-children">
+                      <div class="cd-tree-item cd-file active" data-file="main"><span class="cd-tree-ic">📄</span> main.py</div>
+                      <div class="cd-tree-item cd-file" data-file="utils"><span class="cd-tree-ic">📄</span> utils.py</div>
+                    </div>
+                  </div>
+                  <div class="cd-tree-item cd-folder"><span class="cd-tree-ic">📁</span> tests</div>
+                  <div class="cd-tree-item cd-file"><span class="cd-tree-ic">📄</span> README.md</div>
+                  <div class="cd-tree-item cd-file"><span class="cd-tree-ic">📄</span> requirements.txt</div>
+                </div>
+                <button class="cd-new-file">+ 新文件</button>
+              </div>
+            </div>
+            <div class="cd-center-area">
+              <div class="fw-panel cd-editor-panel">
+                <div class="fw-panel-header cd-tabs" id="cdTabs">
+                  <div class="cd-tab active" data-cdtab="main">
+                    <span>📄 main.py</span><button class="cd-tab-close">×</button>
+                  </div>
+                </div>
+                <div class="fw-panel-body cd-editor-body">
+                  <div class="cd-editor" id="cdEditor" contenteditable="true" spellcheck="false"><pre><code><span class="cd-com"># 粘贴你的代码，或直接在这里编写</span>
+<span class="cd-key">def</span> <span class="cd-fn">fibonacci</span>(<span class="cd-var">n</span>):
+    <span class="cd-com"># 计算斐波那契数列的第 n 项</span>
+    <span class="cd-key">if</span> <span class="cd-var">n</span> <= <span class="cd-num">1</span>:
+        <span class="cd-key">return</span> <span class="cd-var">n</span>
+    <span class="cd-key">return</span> <span class="cd-fn">fibonacci</span>(<span class="cd-var">n</span> - <span class="cd-num">1</span>) + <span class="cd-fn">fibonacci</span>(<span class="cd-var">n</span> - <span class="cd-num">2</span>)
+
+<span class="cd-key">if</span> <span class="cd-var">__name__</span> == <span class="cd-str">"__main__"</span>:
+    <span class="cd-fn">print</span>(<span class="cd-fn">fibonacci</span>(<span class="cd-num">10</span>))</code></pre></div>
+                </div>
+              </div>
+              <div class="fw-panel cd-terminal-panel">
+                <div class="fw-panel-header">
+                  <span>💻 终端</span>
+                  <div class="fw-panel-actions">
+                    <button class="fw-mini-btn" id="cdRunBtn">▶ 运行</button>
+                    <button class="fw-mini-btn">清空</button>
+                  </div>
+                </div>
+                <div class="fw-panel-body cd-terminal-body" id="cdTerminal">
+                  <div class="cd-term-line"><span class="cd-term-prompt">$</span> <span class="cd-term-cmd">python main.py</span></div>
+                  <div class="cd-term-output">55</div>
+                  <div class="cd-term-line"><span class="cd-term-prompt">$</span> <span class="cd-term-cursor">▌</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="fw-panel cd-ai-panel">
+              <div class="fw-panel-header"><span>🤖 AI 助手</span></div>
+              <div class="fw-panel-body cd-ai-body">
+                <div class="cd-ai-messages" id="cdAiMessages">
+                  <div class="cd-ai-msg cd-ai-assistant">
+                    <div class="cd-ai-avatar">🤖</div>
+                    <div class="cd-ai-bubble">你好！我是你的编程助手。我可以帮你解释代码、调试 Bug、重构、生成测试。请粘贴代码或描述你的问题。</div>
+                  </div>
+                </div>
+                <div class="cd-ai-input-wrap">
+                  <textarea class="cd-ai-input" id="cdAiInput" placeholder="问点什么... (Enter发送，Shift+Enter换行)" rows="2"></textarea>
+                  <button class="fw-send-btn" id="cdSendBtn">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                  </button>
+                </div>
+                <div class="cd-starter-chips" id="cdStarters"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== Layout: chat（通用聊天布局·默认兜底） ===== -->
+          <div class="fw-layout fw-layout-chat hidden" data-layout="chat">
+            <div class="fw-chat-area" id="fwChatArea">
+              <div class="fw-chat-welcome" id="fwChatWelcome">
+                <div class="fw-chat-emoji" id="fwChatEmoji">🧩</div>
+                <h3 id="fwChatTitle">开始对话</h3>
+                <p id="fwChatDesc">描述你的需求，AI 将为你提供帮助</p>
+                <div class="fw-starter-chips" id="fwChatStarters"></div>
+              </div>
+              <div class="fw-chat-messages hidden" id="fwChatMessages"></div>
+            </div>
+            <div class="fw-chat-bar fw-chat-bar-standalone">
+              <div class="fw-chat-input-wrap">
+                <textarea class="fw-chat-input" id="fwChatInput" placeholder="输入消息..." rows="1"></textarea>
+                <button class="fw-send-btn" id="fwSendBtn">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 功能详情侧边栏（README/评分/评论） -->
+        <div class="fw-info-panel hidden" id="fwInfoPanel">
+          <div class="fw-info-header">
+            <h3 id="fwInfoName">功能详情</h3>
+            <button class="fw-info-close" id="fwInfoClose">×</button>
+          </div>
+          <div class="fw-info-body" id="fwInfoBody"></div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ============ 右侧动态栏（利用宽屏空白） ============ -->
+    <aside id="rightrail" class="rightrail">
+      <div class="rr-header">
+        <div class="rr-header-txt">
+          <span class="rr-header-title">📊 研究动态面板</span>
+          <span class="rr-header-sub">实时状态 · 最近动态 · 引用溯源 · 贴士</span>
+        </div>
+        <button id="themeToggle" class="theme-toggle" title="切换深色 / 浅色">
+          <svg class="ic ic-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+          <svg class="ic ic-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5 3.6 3.6M20.4 20.4 19 19M19 5l1.4-1.4M3.6 20.4 5 19"/></svg>
+        </button>
+      </div>
+      <div class="rr-block">
+        <div class="rr-title">模型状态</div>
+        <div id="rrModel" class="rr-model">检测中…</div>
+      </div>
+      <div class="rr-block">
+        <div class="rr-title">最近动态</div>
+        <div id="rrRecent" class="rr-recent"><div class="rr-empty">暂无记录</div></div>
+      </div>
+      <div class="rr-block rr-cite-block">
+        <div class="rr-title">本次引用 <span class="rr-sub" id="rrCiteSub"></span></div>
+        <div id="rrCite" class="rr-cite"><div class="rr-empty">尚无引用。运行「智能检索」后，本次文献的引用与溯源会显示在这里。</div></div>
+      </div>
+      <div class="rr-block rr-tips">
+        <div class="rr-title">使用贴士</div>
+        <ul>
+          <li>输入主题后会自动识别意图并套用选项。</li>
+          <li>文献可存入文库，作为研究上下文。</li>
+          <li>上传论文可围绕全文多轮研讨。</li>
+          <li>支持 <code>$E=mc^2$</code> 数学公式渲染。</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <!-- ============ 使用指南弹窗（全局，内容随当前页面动态变化） ============ -->
+  <div id="guideModal" class="modal-mask hidden">
+    <div class="modal guide-modal">
+      <div class="modal-head">
+        <span id="guideTitle" class="modal-title">📖 使用指南</span>
+        <button class="modal-x" id="guideClose">×</button>
+      </div>
+      <div class="modal-body">
+        <div id="guideSteps" class="guide-steps"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 通用弹窗（承载各“显式流程”） ============ -->
+  <div id="flowModal" class="modal-mask hidden">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <span id="modalTitle" class="modal-title">窗口</span>
+        <button id="modalClose" class="modal-x" title="关闭">✕</button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- ============ 新建文件夹弹窗 ============ -->
+  <div id="libFolderModal" class="modal-mask hidden">
+    <div class="modal lib-folder-modal" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <span class="modal-title">新建文件夹</span>
+        <button class="modal-x" id="libFolderModalClose" title="关闭">✕</button>
+      </div>
+      <div class="modal-body">
+        <label class="lf-field">
+          <span class="lf-label">文件夹名称</span>
+          <input id="libFolderName" class="lit-input" placeholder="例如：深度学习综述" />
+        </label>
+        <label class="lf-field">
+          <span class="lf-label">位置（父文件夹）</span>
+          <select id="libFolderParent" class="lit-select"></select>
+        </label>
+        <div class="lf-actions">
+          <button id="libFolderCancel" class="btn-ghost">取消</button>
+          <button id="libFolderOk" class="btn-primary">创建</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 移动到文件夹弹窗：显式目录树选择目标 -->
+  <div id="libMoveModal" class="modal-mask hidden">
+    <div class="modal lib-folder-modal" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <span class="modal-title">移动到文件夹</span>
+        <button class="modal-x" id="libMoveModalClose" title="关闭">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="libMoveTree" class="lib-move-tree"></div>
+        <div class="lf-actions">
+          <button id="libMoveCancel" class="btn-ghost">取消</button>
+          <button id="libMoveConfirm" class="btn-primary">确认移动</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 引用详情弹层（点击引用可溯源） ============ -->
+  <div id="citePop" class="cite-pop-mask hidden">
+    <div class="cite-pop" role="dialog" aria-modal="true">
+      <div class="cite-pop-head"><span id="citePopTitle"></span><button id="citePopClose" class="modal-x">✕</button></div>
+      <div id="citePopBody" class="cite-pop-body"></div>
+    </div>
+  </div>
+
+  <!-- ============ 创造工坊：独立功能弹窗（完全独立） ============ -->
+  <div id="featureModal" class="modal-mask hidden">
+    <div class="modal feature-modal" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <span id="featureModalTitle" class="modal-title"></span>
+        <button id="featureModalClose" class="modal-x" title="关闭">✕</button>
+      </div>
+      <div id="featureModalBody" class="feature-body"></div>
+    </div>
+  </div>
+
+  <!-- ============ 创造工坊：新建功能（三种创建模式） ============ -->
+  <div id="newFeatureModal" class="modal-mask hidden">
+    <div class="modal builder-modal" role="dialog" aria-modal="true">
+      <div class="modal-head builder-modal-head">
+        <div class="builder-title-wrap">
+          <span class="modal-title">✨ 创建新的 AI Feature</span>
+          <span class="builder-subtitle">选择适合你的创建模式</span>
+        </div>
+        <button id="newFeatureClose" class="modal-x" title="关闭">✕</button>
+      </div>
+      <div class="builder-mode-select" id="builderModeSelect">
+        <div class="builder-mode-card active" data-level="quick">
+          <div class="bmc-icon">⚡</div>
+          <div class="bmc-title">AI Quick Build</div>
+          <div class="bmc-desc">一句话描述需求，Hy3 30秒自动生成完整功能</div>
+          <div class="bmc-tag">零门槛 · 适合所有人</div>
+        </div>
+        <div class="builder-mode-card" data-level="visual">
+          <div class="bmc-icon">🎨</div>
+          <div class="bmc-title">Visual Builder</div>
+          <div class="bmc-desc">拖拽组件 + AI 协同设计，无需代码</div>
+          <div class="bmc-tag">可视化 · 适合产品/设计/科研人员</div>
+        </div>
+      </div>
+      <div class="builder-panels">
+        <!-- Mode A: AI Quick Build -->
+        <div class="builder-panel active" data-level="quick">
+          <div class="bp-head">
+            <div class="bp-head-icon">⚡</div>
+            <div>
+              <div class="bp-head-title">AI Quick Build</div>
+              <div class="bp-head-desc">用一句话描述你的需求，Hy3 将自动完成：页面布局、图标、配色、Workflow、Prompt、工具绑定、主题，预计 30 秒内生成。</div>
+            </div>
+          </div>
+          <div class="bp-examples">
+            <span class="bp-ex-label">试试这些例子：</span>
+            <div class="bp-chips">
+              <button class="chip bp-chip" data-q="帮我做一个医学论文审稿工具">医学论文审稿</button>
+              <button class="chip bp-chip" data-q="做一个实验设计助手，帮我规划实验流程和基线方法">实验设计助手</button>
+              <button class="chip bp-chip" data-q="创建一个文献阅读工作区，支持PDF上传、证据提取、笔记">文献阅读工作区</button>
+              <button class="chip bp-chip" data-q="做一个会议纪要整理工具，自动提炼要点和待办">会议纪要整理</button>
+            </div>
+          </div>
+          <div class="bp-input-wrap">
+            <textarea id="nfDesc" class="builder-textarea" rows="4" placeholder="例如：帮我做一个医学论文审稿工具，从创新性、方法严谨性、实验充分性、写作质量四个维度给出审稿意见..."></textarea>
+          </div>
+          <div class="bp-options">
+            <label class="opt"><span>功能分类</span>
+              <select id="qbCategory">
+                <option value="">自动判断</option>
+                <option value="Research">Research</option>
+                <option value="Medical">Medical</option>
+                <option value="Education">Education</option>
+                <option value="Writing">Writing</option>
+                <option value="Coding">Coding</option>
+                <option value="Office">Office</option>
+                <option value="Translation">Translation</option>
+                <option value="Data Analysis">Data Analysis</option>
+              </select></label>
+          </div>
+          <div class="nf-actions"><button id="nfGenerate" class="btn-primary bp-generate">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            Hy3 智能生成（~30s）
+          </button></div>
+          <div id="nfPreview" class="nf-preview hidden"></div>
+          <div id="qbProgress" class="qb-progress hidden">
+            <div class="qb-progress-bar"><div class="qb-progress-fill"></div></div>
+            <div class="qb-progress-steps" id="qbSteps"></div>
+          </div>
+        </div>
+
+        <!-- Mode B: Visual Builder -->
+        <div class="builder-panel" data-level="visual">
+          <div class="bp-head">
+            <div class="bp-head-icon">🎨</div>
+            <div>
+              <div class="bp-head-title">Visual Builder</div>
+              <div class="bp-head-desc">与 AI Co-Designer 对话讲清需求，AI 自动理解场景并推荐组件，拖拽调整布局后生成功能。</div>
+            </div>
+          </div>
+          <div class="vb-layout">
+            <div class="vb-sidebar">
+              <div class="vb-section-title">组件库</div>
+              <div class="vb-components">
+                <div class="vb-comp" draggable="true" data-comp="input"><span>📝</span><span>Input</span></div>
+                <div class="vb-comp" draggable="true" data-comp="upload"><span>📎</span><span>Upload</span></div>
+                <div class="vb-comp" draggable="true" data-comp="button"><span>🔘</span><span>Button</span></div>
+                <div class="vb-comp" draggable="true" data-comp="pdf"><span>📄</span><span>PDF</span></div>
+                <div class="vb-comp" draggable="true" data-comp="markdown"><span>📑</span><span>Markdown</span></div>
+                <div class="vb-comp" draggable="true" data-comp="chart"><span>📊</span><span>Chart</span></div>
+                <div class="vb-comp" draggable="true" data-comp="table"><span>📋</span><span>Table</span></div>
+                <div class="vb-comp" draggable="true" data-comp="timeline"><span>⏱️</span><span>Timeline</span></div>
+                <div class="vb-comp" draggable="true" data-comp="mindmap"><span>🧠</span><span>MindMap</span></div>
+                <div class="vb-comp" draggable="true" data-comp="search"><span>🔍</span><span>Search</span></div>
+                <div class="vb-comp" draggable="true" data-comp="code"><span>⌨️</span><span>Code</span></div>
+                <div class="vb-comp" draggable="true" data-comp="image"><span>🖼️</span><span>Image</span></div>
+              </div>
+              <div class="vb-suggest" id="vbSuggest">
+                <div class="vb-suggest-title">💡 AI 建议</div>
+                <div class="vb-suggest-text">描述你的需求，AI 会推荐合适的组件组合...</div>
+              </div>
+            </div>
+            <div class="vb-main">
+              <div class="vb-canvas-wrap">
+                <div class="vb-canvas-title">工作区画布（拖拽组件到此处）</div>
+                <div id="vbCanvas" class="vb-canvas">
+                  <div class="vb-canvas-empty">
+                    <div class="vb-empty-icon">🎯</div>
+                    <div class="vb-empty-text">从左侧拖拽组件开始设计，或在下方与 AI 对话</div>
+                  </div>
+                </div>
+              </div>
+              <div class="vb-chat-wrap">
+                <div class="vb-chat-head">🤖 AI Co-Designer</div>
+                <div id="nfChat" class="nf-chat vb-chat"><div class="empty">描述你的功能，AI 会理解场景并推荐组件布局。例如：「我要做一个论文审稿工具，需要上传PDF、显示证据面板、输出审稿意见」</div></div>
+                <div class="nf-chat-input vb-chat-input">
+                  <input id="nfChatInput" class="lit-input" placeholder="与 AI 设计助手对话..." />
+                  <button id="nfChatSend" class="btn-soft">发送</button>
+                </div>
+              </div>
+            </div>
+            <div class="vb-props">
+              <div class="vb-section-title">属性面板</div>
+              <div id="vbProps" class="vb-props-panel">
+                <div class="empty" style="padding:20px">选中组件查看属性</div>
+              </div>
+            </div>
+          </div>
+          <div class="nf-actions"><button id="nfBuild" class="btn-primary">生成功能</button></div>
+          <div id="nfBuilder" class="nf-builder hidden"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+  <script src="/app.js"></script>
+</body>
+</html>
