@@ -41,9 +41,10 @@ logs/
 .coverage
 htmlcov/
 
-# Large files / video assets (to be added via GitHub Release)
+# Large files / video assets
 docs/demo.mp4
 docs/poster.png
+/videos/
 
 # Temp / probe / error files
 err.txt

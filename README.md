@@ -17,19 +17,17 @@
 
 ---
 
-## 📹 项目演示
+## 📹 功能演示
 
-<!--
-视频录制完成后：
-1. 将视频保存为 docs/demo.mp4，封面保存为 docs/poster.png
-2. 取消下一行注释即可在 GitHub 上直接播放：
-<video src="docs/demo.mp4" controls width="100%" poster="docs/poster.png"></video>
+以下为各模块的演示视频，点击即可在 GitHub 页面内直接播放：
 
-或者上传到 Bilibili/YouTube，替换下方链接：
-[![演示视频封面](docs/poster.png)](https://your-video-link)
--->
+| 🔬 深度研究 | 🔍 智能检索 | 💡 思路提炼 |
+|:---:|:---:|:---:|
+| <video src="docs/videos/deep-research.mp4" controls width="100%"></video> | <video src="docs/videos/smart-search.mp4" controls width="100%"></video> | <video src="docs/videos/idea-refiner.mp4" controls width="100%"></video> |
 
-> 🎬 视频涵盖全部 11 个模块的演示。
+| 📄✍️ 论文研讨 & 写作工坊 | 🔨 创造工坊 | 📚📊🕐👤⚙️ 文库/反馈/历史/设置 |
+|:---:|:---:|:---:|
+| <video src="docs/videos/paper-writing.mp4" controls width="100%"></video> | <video src="docs/videos/feature-workshop.mp4" controls width="100%"></video> | <video src="docs/videos/history-settings.mp4" controls width="100%"></video> |
 
 ---
 
@@ -302,6 +300,7 @@ Hy3 Research Studio/
 │   └── styles.css              # 深色主题样式
 ├── data/                       # JSON 数据持久化（自动生成）
 ├── docs/                       # 文档与素材
+│   ├── videos/                 # 功能演示视频
 │   ├── 技术报告.md              # 完整技术报告
 │   ├── 视频录制脚本与字幕表.md   # 视频 storyboard + SRT
 │   └── 创造工坊方案.md          # 创造工坊产品方案

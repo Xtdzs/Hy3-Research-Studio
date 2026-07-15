@@ -19,15 +19,15 @@
 
 ## 📹 Demo Videos
 
-<!--
-After recording the demo:
-1. Save video as docs/demo.mp4 and cover as docs/poster.png
-2. Uncomment the line below to play directly on GitHub:
-<video src="docs/demo.mp4" controls width="100%" poster="docs/poster.png"></video>
+Click to play each module demo directly on GitHub:
 
-Or upload to YouTube and replace the link:
-[![Demo Video Cover](docs/poster.png)](https://your-video-link)
--->
+| 🔬 Deep Research | 🔍 Smart Search | 💡 Idea Refiner |
+|:---:|:---:|:---:|
+| <video src="docs/videos/deep-research.mp4" controls width="100%"></video> | <video src="docs/videos/smart-search.mp4" controls width="100%"></video> | <video src="docs/videos/idea-refiner.mp4" controls width="100%"></video> |
+
+| 📄✍️ Paper Seminar & Writing Studio | 🔨 Feature Workshop | 📚📊🕐👤⚙️ Library/Feedback/History/Settings |
+|:---:|:---:|:---:|
+| <video src="docs/videos/paper-writing.mp4" controls width="100%"></video> | <video src="docs/videos/feature-workshop.mp4" controls width="100%"></video> | <video src="docs/videos/history-settings.mp4" controls width="100%"></video> |
 
 ---
 
@@ -300,6 +300,7 @@ Hy3 Research Studio/
 │   └── styles.css              # Dark theme styles
 ├── data/                       # JSON persistence (auto-created)
 ├── docs/                       # Documentation & assets
+│   ├── videos/                 # Demo videos
 │   ├── 技术报告.md              # Full technical report (Chinese)
 │   ├── 视频录制脚本与字幕表.md   # Video storyboard + SRT
 │   └── 创造工坊方案.md          # Feature workshop product spec
