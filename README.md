@@ -19,37 +19,22 @@
 
 ## 📹 功能演示
 
-以下为各模块的演示视频，点击即可在 GitHub 页面内直接播放：
+点击封面图即可观看各模块演示视频：
 
-### 🔬 深度研究（Deep Research）
+<p align="center">
+  <a href="docs/videos/deep-research.mp4"><img src="docs/videos/thumbs/deep-research.jpg" alt="🔬 深度研究" width="49%"></a>
+  <a href="docs/videos/smart-search.mp4"><img src="docs/videos/thumbs/smart-search.jpg" alt="🔍 智能检索" width="49%"></a>
+</p>
 
-<video src="https://raw.githubusercontent.com/Xtdzs/Hy3-Research-Studio/master/docs/videos/deep-research.mp4" controls width="100%">
-</video>
+<p align="center">
+  <a href="docs/videos/idea-refiner.mp4"><img src="docs/videos/thumbs/idea-refiner.jpg" alt="💡 思路提炼" width="49%"></a>
+  <a href="docs/videos/paper-writing.mp4"><img src="docs/videos/thumbs/paper-writing.jpg" alt="📄✍️ 论文研讨 & 写作工坊" width="49%"></a>
+</p>
 
-### 🔍 智能检索（Smart Search）
-
-<video src="https://raw.githubusercontent.com/Xtdzs/Hy3-Research-Studio/master/docs/videos/smart-search.mp4" controls width="100%">
-</video>
-
-### 💡 思路提炼（Idea Refiner）
-
-<video src="https://raw.githubusercontent.com/Xtdzs/Hy3-Research-Studio/master/docs/videos/idea-refiner.mp4" controls width="100%">
-</video>
-
-### 📄✍️ 论文研讨 & 写作工坊（Paper Seminar & Writing Studio）
-
-<video src="https://raw.githubusercontent.com/Xtdzs/Hy3-Research-Studio/master/docs/videos/paper-writing.mp4" controls width="100%">
-</video>
-
-### 🔨 创造工坊（Feature Workshop）
-
-<video src="https://raw.githubusercontent.com/Xtdzs/Hy3-Research-Studio/master/docs/videos/feature-workshop.mp4" controls width="100%">
-</video>
-
-### 📚📊🕐👤⚙️ 文库 / 反馈 / 历史 / 设置（Library / Feedback / History / Settings）
-
-<video src="https://raw.githubusercontent.com/Xtdzs/Hy3-Research-Studio/master/docs/videos/history-settings.mp4" controls width="100%">
-</video>
+<p align="center">
+  <a href="docs/videos/feature-workshop.mp4"><img src="docs/videos/thumbs/feature-workshop.jpg" alt="🔨 创造工坊" width="49%"></a>
+  <a href="docs/videos/history-settings.mp4"><img src="docs/videos/thumbs/history-settings.jpg" alt="📚📊🕐👤⚙️ 文库/反馈/历史/设置" width="49%"></a>
+</p>
 
 ---
 

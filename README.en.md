@@ -19,37 +19,22 @@
 
 ## 📹 Demo Videos
 
-Click to play each module demo directly on GitHub:
+Click a thumbnail to watch the demo video for each module:
 
-### 🔬 Deep Research
+<p align="center">
+  <a href="docs/videos/deep-research.mp4"><img src="docs/videos/thumbs/deep-research.jpg" alt="🔬 Deep Research" width="49%"></a>
+  <a href="docs/videos/smart-search.mp4"><img src="docs/videos/thumbs/smart-search.jpg" alt="🔍 Smart Search" width="49%"></a>
+</p>
 
-<video src="https://raw.githubusercontent.com/Xtdzs/Hy3-Research-Studio/master/docs/videos/deep-research.mp4" controls width="100%">
-</video>
+<p align="center">
+  <a href="docs/videos/idea-refiner.mp4"><img src="docs/videos/thumbs/idea-refiner.jpg" alt="💡 Idea Refiner" width="49%"></a>
+  <a href="docs/videos/paper-writing.mp4"><img src="docs/videos/thumbs/paper-writing.jpg" alt="📄✍️ Paper Seminar & Writing Studio" width="49%"></a>
+</p>
 
-### 🔍 Smart Search
-
-<video src="https://raw.githubusercontent.com/Xtdzs/Hy3-Research-Studio/master/docs/videos/smart-search.mp4" controls width="100%">
-</video>
-
-### 💡 Idea Refiner
-
-<video src="https://raw.githubusercontent.com/Xtdzs/Hy3-Research-Studio/master/docs/videos/idea-refiner.mp4" controls width="100%">
-</video>
-
-### 📄✍️ Paper Seminar & Writing Studio
-
-<video src="https://raw.githubusercontent.com/Xtdzs/Hy3-Research-Studio/master/docs/videos/paper-writing.mp4" controls width="100%">
-</video>
-
-### 🔨 Feature Workshop
-
-<video src="https://raw.githubusercontent.com/Xtdzs/Hy3-Research-Studio/master/docs/videos/feature-workshop.mp4" controls width="100%">
-</video>
-
-### 📚📊🕐👤⚙️ Library / Feedback / History / Settings
-
-<video src="https://raw.githubusercontent.com/Xtdzs/Hy3-Research-Studio/master/docs/videos/history-settings.mp4" controls width="100%">
-</video>
+<p align="center">
+  <a href="docs/videos/feature-workshop.mp4"><img src="docs/videos/thumbs/feature-workshop.jpg" alt="🔨 Feature Workshop" width="49%"></a>
+  <a href="docs/videos/history-settings.mp4"><img src="docs/videos/thumbs/history-settings.jpg" alt="📚📊🕐👤⚙️ Library/Feedback/History/Settings" width="49%"></a>
+</p>
 
 ---
 
