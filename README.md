@@ -27,7 +27,7 @@
 
 > 旗舰功能演示：输入研究主题 → 8阶段自动化流水线（规划→检索→压缩→假设→证据图谱→研究空白→实验设计→报告）→ SSE实时进度条 → 流式生成带 [sN] 引用的学术报告 → 点击引用查看原文 → 多标签页查看证据包/假设/证据图谱/研究空白/实验设计 → 章节级润色
 
-[<img src="docs/videos/thumbs/deep-research.jpg" alt="🔬 深度研究演示" width="100%">](docs/videos/deep-research.mp4)
+<video src="docs/videos/deep-research.mp4" poster="docs/videos/thumbs/deep-research.jpg" controls width="100%"></video>
 
 ---
 
