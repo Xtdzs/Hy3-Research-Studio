@@ -29,7 +29,7 @@
 [![演示视频封面](docs/poster.png)](https://your-video-link)
 -->
 
-> 🎬 视频涵盖全部 11 个模块的演示。录制脚本与 SRT 字幕表见 [docs/视频录制脚本与字幕表.md](docs/视频录制脚本与字幕表.md)。
+> 🎬 视频涵盖全部 11 个模块的演示。
 
 ---
 
@@ -212,7 +212,7 @@ python run.py
 │  Zero-build · SSE streaming · Hash routing · Dark theme    │
 │  ┌──────┬──────┬───────┬───────┬────────┬─────────────────┐│
 │  │ Deep │Smart │ Paper │Writing│ Idea   │  AI Feature     ││
-│  │Research│Search│Seminar│Studio │Refiner │  Workshop (PoC) ││
+│  │Research│Search│Seminar│Studio │Refiner │  Workshop     ││
 │  └──────┴──────┴───────┴───────┴────────┴─────────────────┘│
 └──────────────────────────┬─────────────────────────────────┘
                            │ SSE + REST JSON
@@ -222,10 +222,10 @@ python run.py
 │  │ 8-Stage     │  │ Retrieval    │  │ Feature Store      │ │
 │  │ Pipeline    │◄─┤ Tool + RAG   │  │ (CRUD + Heuristic) │ │
 │  └──────┬──────┘  └──────┬───────┘  └─────────┬──────────┘ │
-│         │                │                     │            │
+│         │                │                     │           │
 │  ┌──────┴──────┐  ┌──────┴───────┐  ┌─────────┴──────────┐ │
 │  │ Prompt Eng  │  │ Multi-Source │  │ JSON File Store    │ │
-│  │ (30+templates)│ │ Search Layer │  │ (零数据库)         │ │
+│  │ 30+templates│  │ Search Layer │  │ (零数据库)          │ │
 │  └──────┬──────┘  └──────┬───────┘  └────────────────────┘ │
 │         └────────────┬───┘                                 │
 │                      ▼                                     │
@@ -361,19 +361,7 @@ python -m tests.test_offline        # 离线单元测试（无需 API Key）
 
 ## 🤝 CodeBuddy 协作说明
 
-本项目在 **CodeBuddy + Hy3** 协作下完成，各文件的 AI 辅助内容：
-
-- `backend/hy3_client.py`：OpenAI 兼容客户端封装、Token 统计、健壮 JSON 解析（fenced code / 平衡括号三级回退）
-- `backend/pipeline.py`：8 阶段研究流水线编排、SSE 事件、时序指标、证据压缩与引用锚定
-- `backend/search.py`：多源检索、字段归一化、并行请求与去重
-- `backend/retrieval_tool.py`：Agent 检索工具、TOOL_SPEC、两层相关性过滤、中英文检索式改写
-- `backend/main.py`：全部 REST + SSE 接口（40+ 端点）
-- `backend/prompts.py`：30+ 套 Prompt 模板（Planner/Compressor/Hypothesis/Graph/Gap/Experiment/Writer/Refiner/Feature/Advisor）
-- `backend/features.py`：创造工坊数据层（4 个模板种子、CRUD、启发式布局推断、Fork/评分/收藏）
-- `frontend/app.js`：SPA 路由、SSE 解析、8 阶段进度渲染、引用跳转、功能工作区路由
-- `frontend/styles.css`：深色科技风设计系统、CSS 变量、流式动画、响应式
-- `frontend/index.html`：11 个视图的 HTML 结构
-- `tests/evaluate.py`：三系统对比评测框架与 LLM-as-judge 评估
+本项目在 **CodeBuddy + Hy3** 协作下完成，体验良好，能有效提高开发效率。
 
 ---
 
