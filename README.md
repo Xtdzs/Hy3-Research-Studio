@@ -19,7 +19,7 @@
 
 ## 📹 功能演示
 
-以下演示视频覆盖全部 11 个功能模块，点击播放按钮即可在 GitHub 页面内直接观看。
+以下演示视频覆盖全部 11 个功能模块，点击封面图即可观看（将在 GitHub 内置播放器中打开）。
 
 ---
 
@@ -27,7 +27,7 @@
 
 > 旗舰功能演示：输入研究主题 → 8阶段自动化流水线（规划→检索→压缩→假设→证据图谱→研究空白→实验设计→报告）→ SSE实时进度条 → 流式生成带 [sN] 引用的学术报告 → 点击引用查看原文 → 多标签页查看证据包/假设/证据图谱/研究空白/实验设计 → 章节级润色
 
-<video src="docs/videos/deep-research.mp4" controls muted poster="docs/videos/thumbs/deep-research.jpg" width="100%"></video>
+[<img src="docs/videos/thumbs/deep-research.jpg" alt="🔬 深度研究演示" width="100%">](docs/videos/deep-research.mp4)
 
 ---
 
@@ -35,7 +35,7 @@
 
 > 多源学术检索演示：跨 OpenAlex/Crossref/arXiv 并行检索 → Hy3 自动优化检索式（中文→英文）→ LLM 语义过滤 → 论文卡片列表展示 → 一键收藏到文献库 → 流式生成带引用的结构化检索简报 → 按年份/类型/开放获取过滤
 
-<video src="docs/videos/smart-search.mp4" controls muted poster="docs/videos/thumbs/smart-search.jpg" width="100%"></video>
+[<img src="docs/videos/thumbs/smart-search.jpg" alt="🔍 智能检索演示" width="100%">](docs/videos/smart-search.mp4)
 
 ---
 
@@ -43,17 +43,17 @@
 
 > Agent 模式演示：研究教练对话 → 强制先检索再回答（tool_choice 强制调用检索工具）→ 显示"正在检索真实文献"气泡 → 两层过滤（关键词+语义）→ 带 [rN] 引用的回答流式输出 → Hy3 自动生成2-4个引导下一步的选择题 → 多轮收敛机制
 
-<video src="docs/videos/idea-refiner.mp4" controls muted poster="docs/videos/thumbs/idea-refiner.jpg" width="100%"></video>
+[<img src="docs/videos/thumbs/idea-refiner.jpg" alt="💡 思路提炼演示" width="100%">](docs/videos/idea-refiner.mp4)
 
 ---
 
 ### 📄 论文研讨 & ✍️ 写作工坊（Paper Seminar & Writing Studio）— 1分50秒
 
-> 论文研讨：PDF 上传解析 → 基于全文对话（总结贡献/分析局限/提取大纲）→ 多轮对话带完整论文上下文 → 上传历史保存
+> **论文研讨**：PDF 上传解析 → 基于全文对话（总结贡献/分析局限/提取大纲）→ 多轮对话带完整论文上下文 → 上传历史保存
 >
-> 写作工坊：4种写作工具（摘要生成/大纲生成/段落扩写/综述撰写）→ 输入要点 → 流式输出 → 历史可查
+> **写作工坊**：4种写作工具（摘要生成/大纲生成/段落扩写/综述撰写）→ 输入要点 → 流式输出 → 历史可查
 
-<video src="docs/videos/paper-writing.mp4" controls muted poster="docs/videos/thumbs/paper-writing.jpg" width="100%"></video>
+[<img src="docs/videos/thumbs/paper-writing.jpg" alt="📄✍️ 论文研讨 & 写作工坊演示" width="100%">](docs/videos/paper-writing.mp4)
 
 ---
 
@@ -61,19 +61,23 @@
 
 > ⚠️ 概念验证（PoC）演示：功能市场4个官方模板卡片（科研/审稿/会议/医学）→ AI Quick Build 一句话创建功能（输入描述 → Hy3 生成名称/emoji/系统Prompt/布局/引导语）→ 独立工作空间 + 专属布局（会议双栏布局）→ 引导语气泡 → 退出/重入状态管理
 
-<video src="docs/videos/feature-workshop.mp4" controls muted poster="docs/videos/thumbs/feature-workshop.jpg" width="100%"></video>
+[<img src="docs/videos/thumbs/feature-workshop.jpg" alt="🔨 创造工坊演示" width="100%">](docs/videos/feature-workshop.mp4)
 
 ---
 
 ### 📚 文献库 / 📊 反馈看板 / 🕐 历史记录 / 👤 个人主页 / ⚙️ 设置 — 1分53秒
 
-> 文库：跨模块收藏论文、文件夹分类、笔记、跨会话持久化
-> 反馈：提交反馈、词云可视化、投票机制、按票数排序
-> 历史：跨模块统一活动历史，按模块过滤，可恢复上次会话
-> 个人主页：身份/机构/研究兴趣设置，个性化画像驱动"猜你想搜"
-> 设置：API Key 管理、检索源开关、默认偏好、模型连接状态、数据管理
+> **📚 文献库**：跨模块收藏论文、文件夹分类、笔记、跨会话持久化
+>
+> **📊 反馈看板**：提交反馈、词云可视化、投票机制、按票数排序
+>
+> **🕐 历史记录**：跨模块统一活动历史，按模块过滤，可恢复上次会话
+>
+> **👤 个人主页**：身份/机构/研究兴趣设置，个性化画像驱动"猜你想搜"
+>
+> **⚙️ 设置**：API Key 管理、检索源开关、默认偏好、模型连接状态、数据管理
 
-<video src="docs/videos/history-settings.mp4" controls muted poster="docs/videos/thumbs/history-settings.jpg" width="100%"></video>
+[<img src="docs/videos/thumbs/history-settings.jpg" alt="📚📊🕐👤⚙️ 文库/反馈/历史/设置演示" width="100%">](docs/videos/history-settings.mp4)
 
 ---
 
