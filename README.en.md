@@ -21,13 +21,35 @@
 
 Click to play each module demo directly on GitHub:
 
-| 🔬 Deep Research | 🔍 Smart Search | 💡 Idea Refiner |
-|:---:|:---:|:---:|
-| <video src="docs/videos/deep-research.mp4" controls width="100%"></video> | <video src="docs/videos/smart-search.mp4" controls width="100%"></video> | <video src="docs/videos/idea-refiner.mp4" controls width="100%"></video> |
+### 🔬 Deep Research
 
-| 📄✍️ Paper Seminar & Writing Studio | 🔨 Feature Workshop | 📚📊🕐👤⚙️ Library/Feedback/History/Settings |
-|:---:|:---:|:---:|
-| <video src="docs/videos/paper-writing.mp4" controls width="100%"></video> | <video src="docs/videos/feature-workshop.mp4" controls width="100%"></video> | <video src="docs/videos/history-settings.mp4" controls width="100%"></video> |
+<video src="https://raw.githubusercontent.com/Xtdzs/Hy3-Research-Studio/master/docs/videos/deep-research.mp4" controls width="100%">
+</video>
+
+### 🔍 Smart Search
+
+<video src="https://raw.githubusercontent.com/Xtdzs/Hy3-Research-Studio/master/docs/videos/smart-search.mp4" controls width="100%">
+</video>
+
+### 💡 Idea Refiner
+
+<video src="https://raw.githubusercontent.com/Xtdzs/Hy3-Research-Studio/master/docs/videos/idea-refiner.mp4" controls width="100%">
+</video>
+
+### 📄✍️ Paper Seminar & Writing Studio
+
+<video src="https://raw.githubusercontent.com/Xtdzs/Hy3-Research-Studio/master/docs/videos/paper-writing.mp4" controls width="100%">
+</video>
+
+### 🔨 Feature Workshop
+
+<video src="https://raw.githubusercontent.com/Xtdzs/Hy3-Research-Studio/master/docs/videos/feature-workshop.mp4" controls width="100%">
+</video>
+
+### 📚📊🕐👤⚙️ Library / Feedback / History / Settings
+
+<video src="https://raw.githubusercontent.com/Xtdzs/Hy3-Research-Studio/master/docs/videos/history-settings.mp4" controls width="100%">
+</video>
 
 ---
 

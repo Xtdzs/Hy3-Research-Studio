@@ -21,13 +21,35 @@
 
 以下为各模块的演示视频，点击即可在 GitHub 页面内直接播放：
 
-| 🔬 深度研究 | 🔍 智能检索 | 💡 思路提炼 |
-|:---:|:---:|:---:|
-| <video src="docs/videos/deep-research.mp4" controls width="100%"></video> | <video src="docs/videos/smart-search.mp4" controls width="100%"></video> | <video src="docs/videos/idea-refiner.mp4" controls width="100%"></video> |
+### 🔬 深度研究（Deep Research）
 
-| 📄✍️ 论文研讨 & 写作工坊 | 🔨 创造工坊 | 📚📊🕐👤⚙️ 文库/反馈/历史/设置 |
-|:---:|:---:|:---:|
-| <video src="docs/videos/paper-writing.mp4" controls width="100%"></video> | <video src="docs/videos/feature-workshop.mp4" controls width="100%"></video> | <video src="docs/videos/history-settings.mp4" controls width="100%"></video> |
+<video src="https://raw.githubusercontent.com/Xtdzs/Hy3-Research-Studio/master/docs/videos/deep-research.mp4" controls width="100%">
+</video>
+
+### 🔍 智能检索（Smart Search）
+
+<video src="https://raw.githubusercontent.com/Xtdzs/Hy3-Research-Studio/master/docs/videos/smart-search.mp4" controls width="100%">
+</video>
+
+### 💡 思路提炼（Idea Refiner）
+
+<video src="https://raw.githubusercontent.com/Xtdzs/Hy3-Research-Studio/master/docs/videos/idea-refiner.mp4" controls width="100%">
+</video>
+
+### 📄✍️ 论文研讨 & 写作工坊（Paper Seminar & Writing Studio）
+
+<video src="https://raw.githubusercontent.com/Xtdzs/Hy3-Research-Studio/master/docs/videos/paper-writing.mp4" controls width="100%">
+</video>
+
+### 🔨 创造工坊（Feature Workshop）
+
+<video src="https://raw.githubusercontent.com/Xtdzs/Hy3-Research-Studio/master/docs/videos/feature-workshop.mp4" controls width="100%">
+</video>
+
+### 📚📊🕐👤⚙️ 文库 / 反馈 / 历史 / 设置（Library / Feedback / History / Settings）
+
+<video src="https://raw.githubusercontent.com/Xtdzs/Hy3-Research-Studio/master/docs/videos/history-settings.mp4" controls width="100%">
+</video>
 
 ---
 
