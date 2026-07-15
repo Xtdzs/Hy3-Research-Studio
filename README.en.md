@@ -19,22 +19,61 @@
 
 ## 📹 Demo Videos
 
-Click a thumbnail to watch the demo video for each module:
+The demo videos below cover all 11 modules. Click play to watch directly on GitHub.
 
-<p align="center">
-  <a href="docs/videos/deep-research.mp4"><img src="docs/videos/thumbs/deep-research.jpg" alt="🔬 Deep Research" width="49%"></a>
-  <a href="docs/videos/smart-search.mp4"><img src="docs/videos/thumbs/smart-search.jpg" alt="🔍 Smart Search" width="49%"></a>
-</p>
+---
 
-<p align="center">
-  <a href="docs/videos/idea-refiner.mp4"><img src="docs/videos/thumbs/idea-refiner.jpg" alt="💡 Idea Refiner" width="49%"></a>
-  <a href="docs/videos/paper-writing.mp4"><img src="docs/videos/thumbs/paper-writing.jpg" alt="📄✍️ Paper Seminar & Writing Studio" width="49%"></a>
-</p>
+### 🔬 Deep Research — 3m41s
 
-<p align="center">
-  <a href="docs/videos/feature-workshop.mp4"><img src="docs/videos/thumbs/feature-workshop.jpg" alt="🔨 Feature Workshop" width="49%"></a>
-  <a href="docs/videos/history-settings.mp4"><img src="docs/videos/thumbs/history-settings.jpg" alt="📚📊🕐👤⚙️ Library/Feedback/History/Settings" width="49%"></a>
-</p>
+> Flagship feature: enter a research topic → 8-stage automated pipeline (Planning → Retrieval → Compression → Hypothesis → Evidence Graph → Gaps → Experiment → Report) → SSE real-time progress bar → streaming report with [sN] citations → click citation to view source → multi-tab evidence pack/hypotheses/evidence graph/gaps/experiment design → chapter-level polish
+
+<video src="docs/videos/deep-research.mp4" controls muted poster="docs/videos/thumbs/deep-research.jpg" width="100%"></video>
+
+---
+
+### 🔍 Smart Search — 2m01s
+
+> Multi-source academic search: parallel search across OpenAlex/Crossref/arXiv → Hy3 query optimization (Chinese→English) → LLM semantic filtering → paper card list → one-click save to library → streaming structured search brief with citations → filter by year/type/open access
+
+<video src="docs/videos/smart-search.mp4" controls muted poster="docs/videos/thumbs/smart-search.jpg" width="100%"></video>
+
+---
+
+### 💡 Idea Refiner — 2m11s
+
+> Agent mode: research coach dialogue → forced retrieval-before-answer (tool_choice enforces retrieve_papers) → "searching real literature" indicator → two-layer filtering (keyword + semantic) → streaming answer with [rN] citations → Hy3 auto-generates 2-4 follow-up choice buttons → multi-turn convergence mechanism
+
+<video src="docs/videos/idea-refiner.mp4" controls muted poster="docs/videos/thumbs/idea-refiner.jpg" width="100%"></video>
+
+---
+
+### 📄✍️ Paper Seminar & Writing Studio — 1m50s
+
+> Paper Seminar: PDF upload & parsing → chat with full paper content (summarize contributions/analyze limitations/extract outline) → multi-turn dialogue with full paper context → upload history
+>
+> Writing Studio: 4 writing tools (abstract generator/outline generator/paragraph expander/literature review writer) → input key points → streaming output → history tracking
+
+<video src="docs/videos/paper-writing.mp4" controls muted poster="docs/videos/thumbs/paper-writing.jpg" width="100%"></video>
+
+---
+
+### 🔨 Feature Workshop — 1m25s
+
+> ⚠️ Proof of Concept demo: marketplace with 4 official templates (Research/Review/Meeting/Medical) → AI Quick Build one-sentence creation (input description → Hy3 generates name/emoji/system prompt/layout/prompts) → independent workspace with specialized layout (meeting dual-column) → guided prompt bubbles → exit/re-entry state management
+
+<video src="docs/videos/feature-workshop.mp4" controls muted poster="docs/videos/thumbs/feature-workshop.jpg" width="100%"></video>
+
+---
+
+### 📚📊🕐👤⚙️ Library / Feedback / History / Profile / Settings — 1m53s
+
+> Library: cross-module paper collection, folder organization, notes, cross-session persistence
+> Feedback: submit feedback, word cloud visualization, voting, sorted by votes
+> History: cross-module unified activity log, module filtering, resume last session
+> Profile: identity/affiliation/research interests, personalized "guess you want" recommendations
+> Settings: API key management, search source toggles, default preferences, model status, data management
+
+<video src="docs/videos/history-settings.mp4" controls muted poster="docs/videos/thumbs/history-settings.jpg" width="100%"></video>
 
 ---
 
