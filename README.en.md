@@ -17,7 +17,7 @@
 
 ---
 
-## 📹 Demo Video
+## 📹 Demo Videos
 
 <!--
 After recording the demo:
@@ -28,8 +28,6 @@ After recording the demo:
 Or upload to YouTube and replace the link:
 [![Demo Video Cover](docs/poster.png)](https://your-video-link)
 -->
-
-> 🎬 The demo covers all 11 modules in 2 minutes. See [docs/视频录制脚本与字幕表.md](docs/视频录制脚本与字幕表.md) for the storyboard and SRT subtitles.
 
 ---
 
@@ -361,19 +359,7 @@ Metrics:
 
 ## 🤝 CodeBuddy Collaboration
 
-This project was built in collaboration with **CodeBuddy + Hy3**. AI-assisted code includes:
-
-- `backend/hy3_client.py`: OpenAI-compatible client, token tracking, robust JSON parsing (fenced code / balanced brackets 3-level fallback)
-- `backend/pipeline.py`: 8-stage pipeline orchestration, SSE events, timing metrics, evidence compression & citation anchoring
-- `backend/search.py`: Multi-source search, field normalization, parallel requests & deduplication
-- `backend/retrieval_tool.py`: Agent retrieval tool, TOOL_SPEC, two-layer relevance filtering, Chinese→English query rewriting
-- `backend/main.py`: All REST + SSE endpoints (40+ endpoints)
-- `backend/prompts.py`: 30+ prompt templates (Planner/Compressor/Hypothesis/Graph/Gap/Experiment/Writer/Refiner/Feature/Advisor)
-- `backend/features.py`: Feature workshop data layer (4 template seeds, CRUD, heuristic layout inference, fork/rating/favorite)
-- `frontend/app.js`: SPA routing, SSE parsing, 8-stage progress rendering, citation navigation, feature workspace routing
-- `frontend/styles.css`: Dark tech-style design system, CSS variables, streaming animations, responsive layout
-- `frontend/index.html`: HTML structure for all 11 views
-- `tests/evaluate.py`: 3-system comparison framework with LLM-as-judge evaluation
+This project was built in collaboration with **CodeBuddy + Hy3**, which could efficiently speed up my development.
 
 ---
 
