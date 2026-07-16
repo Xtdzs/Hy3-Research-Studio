@@ -53,8 +53,8 @@
 >
 > **写作工坊**：4种写作工具（摘要生成/大纲生成/段落扩写/综述撰写）→ 输入要点 → 流式输出 → 历史可查
 
-[<img src="docs/videos/thumbs/paper-writing.jpg" alt="📄✍️ 论文研讨 & 写作工坊演示" width="100%">]([docs/videos/paper-writing.mp4](https://github.com/user-attachments/assets/832bbb26-2db6-4dfd-9945-ae912c036186))
-![demo_video](https://github.com/user-attachments/assets/832bbb26-2db6-4dfd-9945-ae912c036186)
+[<img src="docs/videos/thumbs/paper-writing.jpg" alt="📄✍️ 论文研讨 & 写作工坊演示" width="100%">](https://github.com/user-attachments/assets/832bbb26-2db6-4dfd-9945-ae912c036186)
+https://github.com/user-attachments/assets/832bbb26-2db6-4dfd-9945-ae912c036186
 
 ---
 
