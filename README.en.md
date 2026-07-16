@@ -19,7 +19,7 @@
 
 ## 📹 Demo Videos
 
-The demo videos below cover all 11 modules. Click a thumbnail to watch (opens in GitHub's built-in video player).
+The demo videos below cover all 11 modules. Click play directly in the browser.
 
 ---
 
@@ -27,7 +27,7 @@ The demo videos below cover all 11 modules. Click a thumbnail to watch (opens in
 
 > Flagship feature: enter a research topic → 8-stage automated pipeline (Planning → Retrieval → Compression → Hypothesis → Evidence Graph → Gaps → Experiment → Report) → SSE real-time progress bar → streaming report with [sN] citations → click citation to view source → multi-tab evidence pack/hypotheses/evidence graph/gaps/experiment design → chapter-level polish
 
-[<img src="docs/videos/thumbs/deep-research.jpg" alt="🔬 Deep Research Demo" width="100%">](docs/videos/deep-research.mp4)
+https://github.com/user-attachments/assets/5fe54739-4611-4b49-a261-8179a12af1be
 
 ---
 
@@ -35,7 +35,7 @@ The demo videos below cover all 11 modules. Click a thumbnail to watch (opens in
 
 > Multi-source academic search: parallel search across OpenAlex/Crossref/arXiv → Hy3 query optimization (Chinese→English) → LLM semantic filtering → paper card list → one-click save to library → streaming structured search brief with citations → filter by year/type/open access
 
-[<img src="docs/videos/thumbs/smart-search.jpg" alt="🔍 Smart Search Demo" width="100%">](docs/videos/smart-search.mp4)
+https://github.com/user-attachments/assets/6ca03276-8752-4f93-b7e0-f4bf82507504
 
 ---
 
@@ -43,7 +43,7 @@ The demo videos below cover all 11 modules. Click a thumbnail to watch (opens in
 
 > Agent mode: research coach dialogue → forced retrieval-before-answer (tool_choice enforces retrieve_papers) → "searching real literature" indicator → two-layer filtering (keyword + semantic) → streaming answer with [rN] citations → Hy3 auto-generates 2-4 follow-up choice buttons → multi-turn convergence mechanism
 
-[<img src="docs/videos/thumbs/idea-refiner.jpg" alt="💡 Idea Refiner Demo" width="100%">](docs/videos/idea-refiner.mp4)
+https://github.com/user-attachments/assets/b29348cc-0ac6-4006-8ba2-eeef08736a84
 
 ---
 
@@ -53,7 +53,7 @@ The demo videos below cover all 11 modules. Click a thumbnail to watch (opens in
 >
 > **Writing Studio**: 4 writing tools (abstract generator/outline generator/paragraph expander/literature review writer) → input key points → streaming output → history tracking
 
-[<img src="docs/videos/thumbs/paper-writing.jpg" alt="📄✍️ Paper & Writing Demo" width="100%">](docs/videos/paper-writing.mp4)
+https://github.com/user-attachments/assets/07329c05-f508-46f8-8fc0-f65bda8593b8
 
 ---
 
@@ -61,7 +61,7 @@ The demo videos below cover all 11 modules. Click a thumbnail to watch (opens in
 
 > ⚠️ Proof of Concept demo: marketplace with 4 official templates (Research/Review/Meeting/Medical) → AI Quick Build one-sentence creation (input description → Hy3 generates name/emoji/system prompt/layout/prompts) → independent workspace with specialized layout (meeting dual-column) → guided prompt bubbles → exit/re-entry state management
 
-[<img src="docs/videos/thumbs/feature-workshop.jpg" alt="🔨 Feature Workshop Demo" width="100%">](docs/videos/feature-workshop.mp4)
+https://github.com/user-attachments/assets/95df1d62-03fa-4978-bd02-99c87024794f
 
 ---
 
@@ -77,7 +77,7 @@ The demo videos below cover all 11 modules. Click a thumbnail to watch (opens in
 >
 > **⚙️ Settings**: API key management, search source toggles, default preferences, model status, data management
 
-[<img src="docs/videos/thumbs/history-settings.jpg" alt="📚📊🕐👤⚙️ Library/Feedback/History/Settings Demo" width="100%">](docs/videos/history-settings.mp4)
+https://github.com/user-attachments/assets/d7c3da08-366e-47d8-9efc-3d55182262df
 
 ---
 
@@ -349,11 +349,9 @@ Hy3 Research Studio/
 │   ├── app.js                  # Frontend logic (routing/SSE/workspaces)
 │   └── styles.css              # Dark theme styles
 ├── data/                       # JSON persistence (auto-created)
-├── docs/                       # Documentation & assets
-│   ├── videos/                 # Demo videos
+├── docs/                       # Documentation
 │   ├── 技术报告.md              # Full technical report (Chinese)
-│   ├── 视频录制脚本与字幕表.md   # Video storyboard + SRT
-│   └── 创造工坊方案.md          # Feature workshop product spec
+│   └── 创造工坊方案.md          # Feature workshop product spec (Chinese)
 ├── tests/                      # Tests & evaluation
 │   ├── test_features.py        # Feature workshop unit tests
 │   ├── test_offline.py         # Offline mode tests (no API key needed)

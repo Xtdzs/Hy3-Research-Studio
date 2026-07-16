@@ -19,7 +19,7 @@
 
 ## 📹 功能演示
 
-以下演示视频覆盖全部 11 个功能模块，点击封面图即可观看（将在 GitHub 内置播放器中打开）。
+以下演示视频覆盖全部 11 个功能模块，可直接在下方点击播放。
 
 ---
 
@@ -27,7 +27,7 @@
 
 > 旗舰功能演示：输入研究主题 → 8阶段自动化流水线（规划→检索→压缩→假设→证据图谱→研究空白→实验设计→报告）→ SSE实时进度条 → 流式生成带 [sN] 引用的学术报告 → 点击引用查看原文 → 多标签页查看证据包/假设/证据图谱/研究空白/实验设计 → 章节级润色
 
-<video src="docs/videos/deep-research.mp4" poster="docs/videos/thumbs/deep-research.jpg" controls width="100%"></video>
+https://github.com/user-attachments/assets/5fe54739-4611-4b49-a261-8179a12af1be
 
 ---
 
@@ -35,7 +35,7 @@
 
 > 多源学术检索演示：跨 OpenAlex/Crossref/arXiv 并行检索 → Hy3 自动优化检索式（中文→英文）→ LLM 语义过滤 → 论文卡片列表展示 → 一键收藏到文献库 → 流式生成带引用的结构化检索简报 → 按年份/类型/开放获取过滤
 
-[<img src="docs/videos/thumbs/smart-search.jpg" alt="🔍 智能检索演示" width="100%">](docs/videos/smart-search.mp4)
+https://github.com/user-attachments/assets/6ca03276-8752-4f93-b7e0-f4bf82507504
 
 ---
 
@@ -43,7 +43,7 @@
 
 > Agent 模式演示：研究教练对话 → 强制先检索再回答（tool_choice 强制调用检索工具）→ 显示"正在检索真实文献"气泡 → 两层过滤（关键词+语义）→ 带 [rN] 引用的回答流式输出 → Hy3 自动生成2-4个引导下一步的选择题 → 多轮收敛机制
 
-[<img src="docs/videos/thumbs/idea-refiner.jpg" alt="💡 思路提炼演示" width="100%">](docs/videos/idea-refiner.mp4)
+https://github.com/user-attachments/assets/b29348cc-0ac6-4006-8ba2-eeef08736a84
 
 ---
 
@@ -53,8 +53,7 @@
 >
 > **写作工坊**：4种写作工具（摘要生成/大纲生成/段落扩写/综述撰写）→ 输入要点 → 流式输出 → 历史可查
 
-[<img src="docs/videos/thumbs/paper-writing.jpg" alt="📄✍️ 论文研讨 & 写作工坊演示" width="100%">](https://github.com/user-attachments/assets/832bbb26-2db6-4dfd-9945-ae912c036186)
-https://github.com/user-attachments/assets/832bbb26-2db6-4dfd-9945-ae912c036186
+https://github.com/user-attachments/assets/07329c05-f508-46f8-8fc0-f65bda8593b8
 
 ---
 
@@ -62,7 +61,7 @@ https://github.com/user-attachments/assets/832bbb26-2db6-4dfd-9945-ae912c036186
 
 > ⚠️ 概念验证（PoC）演示：功能市场4个官方模板卡片（科研/审稿/会议/医学）→ AI Quick Build 一句话创建功能（输入描述 → Hy3 生成名称/emoji/系统Prompt/布局/引导语）→ 独立工作空间 + 专属布局（会议双栏布局）→ 引导语气泡 → 退出/重入状态管理
 
-[<img src="docs/videos/thumbs/feature-workshop.jpg" alt="🔨 创造工坊演示" width="100%">](docs/videos/feature-workshop.mp4)
+https://github.com/user-attachments/assets/95df1d62-03fa-4978-bd02-99c87024794f
 
 ---
 
@@ -78,7 +77,7 @@ https://github.com/user-attachments/assets/832bbb26-2db6-4dfd-9945-ae912c036186
 >
 > **⚙️ 设置**：API Key 管理、检索源开关、默认偏好、模型连接状态、数据管理
 
-[<img src="docs/videos/thumbs/history-settings.jpg" alt="📚📊🕐👤⚙️ 文库/反馈/历史/设置演示" width="100%">](docs/videos/history-settings.mp4)
+https://github.com/user-attachments/assets/d7c3da08-366e-47d8-9efc-3d55182262df
 
 ---
 
@@ -350,10 +349,8 @@ Hy3 Research Studio/
 │   ├── app.js                  # 前端逻辑（路由/SSE/工作区）
 │   └── styles.css              # 深色主题样式
 ├── data/                       # JSON 数据持久化（自动生成）
-├── docs/                       # 文档与素材
-│   ├── videos/                 # 功能演示视频
+├── docs/                       # 文档
 │   ├── 技术报告.md              # 完整技术报告
-│   ├── 视频录制脚本与字幕表.md   # 视频 storyboard + SRT
 │   └── 创造工坊方案.md          # 创造工坊产品方案
 ├── tests/                      # 测试与评测
 │   ├── test_features.py        # 创造工坊单元测试
