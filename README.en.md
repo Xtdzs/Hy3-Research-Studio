@@ -418,7 +418,7 @@ This project was built in collaboration with **CodeBuddy + Hy3**, which could ef
 - Search relies on OpenAlex / Crossref / arXiv public APIs; if unavailable, UI remains browsable and AI features show offline fallback messages
 - All data is stored as JSON in the `data/` directory; backup or delete to reset
 - When `HY3_API_KEY` is not configured, the system enters offline mode: Feature Workshop uses heuristic layout inference; other AI features prompt for key configuration
-- The Feature Workshop specialized layouts are currently in PoC stage with mock data; see [Project Status](#-project-status)
+- The Feature Workshop specialized layouts are currently in PoC stage with mock data
 
 ---
 
