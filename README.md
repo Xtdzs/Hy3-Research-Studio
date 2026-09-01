@@ -74,6 +74,36 @@ Windows 用户可用现成脚本：`Hy3-Research-Studio/start.ps1`、`ScholarBen
 
 ---
 
+## 评测成果（Benchmark）
+
+> 该表由 `python -m scholarbench report_leaderboard --auto` 从 `ScholarBench/results/<model>/aggregate.json` 自动生成。
+> 复现：配置好各模型 Key 后运行 `ScholarBench/eval_models.ps1`（默认只跑便宜任务族 T3/T5/T6/T7/T8，`--no-judge` 客观指标）。
+> 首次评测前请先 `cd ScholarBench && python -m scholarbench build_dataset --offline`。
+
+<!-- LEADERBOARD:START -->
+### 当前结果（v0.1 · Lite · 客观指标）
+
+| 排名 | 系统 | BenchScore | T3 检索 | T5 引用核对 | T6 写作 | T7 Agent | T8 工具链 | 样本 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `mock`（链路参照） | 51.5 | 0.0 | 100.0 | 36.8 | 70.0 | 65.0 | 64 |
+
+> - `mock` 为确定性假回答，仅用于验证评测链路，**不代表任何模型**（T3=0 因固定回答不命中真实文献池；T5=100 因 lite 切分下前 8 条均为 supported 样本）。
+> - Hy3（`studio`）、DeepSeek、GLM-flash 等真实模型结果跑完后自动填入本表。
+> - 完整报告（各族得分 / 难度曲线 / 失败归因）见 `ScholarBench/eval_results/`。
+<!-- LEADERBOARD:END -->
+
+### 评测设置
+
+| 项 | 值 |
+|----|----|
+| 数据集 | ScholarBench v0.1（84 题，lite 64） |
+| 任务族 | T1–T8（此处默认只列便宜族 T3/T5/T6/T7/T8；T1 综述 / T2 开题 / T4 论文问答成本较高，按需增跑） |
+| 指标 | 客观规则指标（P@10 / nDCG@10 / 三分类准确率 / 工具链 F1 等）+ 7 维 Rubric（可选） |
+| 人类基线 | `human` adapter（上界锚点，规划中） |
+| 偏差控制 | 客观权重 α：T3/T5=0.85；judge 可用独立模型（`JUDGE_MODEL`） |
+
+---
+
 ## 声明
 
 - 本项目为**腾讯犀牛鸟开源人才培养计划实战任务作品**，与腾讯官方无隶属关系。

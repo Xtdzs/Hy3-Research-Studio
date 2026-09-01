@@ -30,7 +30,10 @@ def _resolve_tasks(args) -> list[Task]:
             tasks = load_split("lite")
     elif args.families:
         tasks = []
+        fams: list[str] = []
         for f in args.families:
+            fams += [x.strip() for x in f.split(",") if x.strip()]
+        for f in fams:
             p = suite_path(f)
             if p.exists():
                 from .schema import load_tasks

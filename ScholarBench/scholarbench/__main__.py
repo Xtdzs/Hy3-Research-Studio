@@ -12,6 +12,8 @@ SUBCOMMANDS = {
     "stats": lambda: __import__("scholarbench.stats_cmd", fromlist=["main"]).main(),
     "download_papers": lambda: __import__(
         "scholarbench.download_papers", fromlist=["main"]).main(),
+    "report_leaderboard": lambda: __import__(
+        "scholarbench.report_leaderboard", fromlist=["main"]).main(),
 }
 
 
