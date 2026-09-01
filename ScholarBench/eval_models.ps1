@@ -19,20 +19,18 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $here
 
 # ---------------- 配置区：要对比的模型 ----------------
-# name: 展示名；base_url: OpenAI 兼容端点；key: API Key；
-# model: 模型名；judge: 是否用该模型同时充当 judge（Hy3 之外的模型建议 $true）
+# name: 展示名；base_url: OpenAI 兼容端点；key: API Key（留 $null 自动用
+#       Hy3-Research-Studio/.env 的 HY3_API_KEY，即同一 TokenHub 额度）；
+# model: 模型名；judge: 是否用该模型同时充当 judge
 $Models = @(
-    # ① Hy3（腾讯 TokenHub，优先用 Hy3-Research-Studio/.env 的 Key）
-    @{ Name = "hy3";  BaseUrl = "https://tokenhub.tencentmaas.com/v1";
-       Key = $null;  Model = "hy3";  Judge = $true }
-
-    # ② 便宜模型示例（取消注释并填入真实 Key 即可启用）
-    # @{ Name = "deepseek-chat"; BaseUrl = "https://api.deepseek.com/v1";
-    #    Key = "sk-xxxx"; Model = "deepseek-chat"; Judge = $true }
-    # @{ Name = "glm-4-flash";  BaseUrl = "https://open.bigmodel.cn/api/paas/v4";
-    #    Key = "sk-xxxx"; Model = "glm-4-flash"; Judge = $true }
-    # @{ Name = "qwen-turbo";   BaseUrl = "https://dashscope.aliyuncs.com/compatible-mode/v1";
-    #    Key = "sk-xxxx"; Model = "qwen-turbo"; Judge = $true }
+    @{ Name = "hy3";                BaseUrl = "https://tokenhub.tencentmaas.com/v1";
+       Key = $null;  Model = "hy3";                Judge = $true }
+    @{ Name = "hy4-preview";        BaseUrl = "https://tokenhub.tencentmaas.com/v1";
+       Key = $null;  Model = "hy4-preview";        Judge = $true }
+    @{ Name = "glm-5.3-flash";      BaseUrl = "https://tokenhub.tencentmaas.com/v1";
+       Key = $null;  Model = "glm-5.3-flash";      Judge = $true }
+    @{ Name = "deepseek-v4-flash";  BaseUrl = "https://tokenhub.tencentmaas.com/v1";
+       Key = $null;  Model = "deepseek-v4-flash-0731"; Judge = $true }
 )
 
 $Split   = "lite"          # lite / full / hard

@@ -85,11 +85,13 @@ Windows 用户可用现成脚本：`Hy3-Research-Studio/start.ps1`、`ScholarBen
 
 | 排名 | 系统 | BenchScore | T3 检索 | T5 引用核对 | T6 写作 | T7 Agent | T8 工具链 | 样本 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | `mock`（链路参照） | 51.5 | 0.0 | 100.0 | 36.8 | 70.0 | 65.0 | 64 |
+| 1 | `studio`（Hy3 应用流水线） | **74.3** | 74.2 | 82.9 | 38.7 | 85.0 | 90.8 | 60 |
+| 2 | `mock`（链路参照） | 51.5 | 0.0 | 100.0 | 36.8 | 70.0 | 65.0 | 64 |
 
-> - `mock` 为确定性假回答，仅用于验证评测链路，**不代表任何模型**（T3=0 因固定回答不命中真实文献池；T5=100 因 lite 切分下前 8 条均为 supported 样本）。
-> - Hy3（`studio`）、DeepSeek、GLM-flash 等真实模型结果跑完后自动填入本表。
-> - 完整报告（各族得分 / 难度曲线 / 失败归因）见 `ScholarBench/eval_results/`。
+> - `studio` 为 Hy3 驱动的完整应用流水线（检索增强 + 证据压缩 + 引用溯源），BenchScore **74.3**（2026-09-01 实测，Hy3 API，客观指标）。
+> - 短板分析：**T6 学术写作 38.7**——流水线的写作工具未对齐参考摘要（ROUGE-L 低）；**T3 检索 74.2**——OpenAlex 限流（429）导致部分 easy 样本召回下降。详见 `ScholarBench/eval_results/`。
+> - `mock` 为确定性假回答，仅用于验证评测链路，**不代表任何模型**。
+> - 裸模型对比（`hy3` / `hy4-preview` / `glm-5.3-flash` / `deepseek-v4-flash-0731`）结果待补：`cd ScholarBench && python run_all_models.py`（断点续跑，约 30–60 分钟）。
 <!-- LEADERBOARD:END -->
 
 ### 评测设置

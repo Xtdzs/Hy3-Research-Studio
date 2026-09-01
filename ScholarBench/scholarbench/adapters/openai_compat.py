@@ -15,6 +15,21 @@ from ..schema import Answer, Task
 from .base import SUT, parse_reference_block
 
 # 各任务族的最小系统提示：保证裸模型"看得懂任务"，但不提供额外能力
+def _extract_verdict(content: str) -> str:
+    """从 T5 输出中提取三分类 verdict（兼容 JSON 或裸词前缀）。"""
+    if not content:
+        return ""
+    m = re.search(r"[\"'](?:verdict|result)[\"']\s*:\s*[\"'](\w+)[\"']", content)
+    if m:
+        v = m.group(1).strip().lower()
+        return v if v in ("supported", "unrelated", "nonexistent") else ""
+    head = content.strip().lower()
+    for v in ("supported", "unrelated", "nonexistent"):
+        if head.startswith(v):
+            return v
+    return ""
+
+
 FAMILY_SYSTEM = {
     "T1": "你是学术研究助手。请就给定主题撰写结构完整的中文文献综述，关键结论用 [sN] 标注引用，并在文末给出参考文献列表。",
     "T2": "你是学术研究助手。请就给定主题撰写研究开题方案，包含研究假设（可证伪）、实验设计（数据集/指标/基线/预期结果）。",
@@ -76,10 +91,14 @@ class OpenAICompatAdapter(SUT):
                 self.tokens += resp.usage.total_tokens
             content = (resp.choices[0].message.content or "").strip()
             cites = parse_reference_block(content)
+            meta: dict = {"tokens": self.tokens, "model": self.model}
+            if task.family == "T5":
+                verdict = _extract_verdict(content)
+                if verdict:
+                    meta["verdict"] = verdict
             return Answer(task_id=task.task_id,
                           system=f"{self.name}:{self.model}",
-                          content=content, citations=cites,
-                          meta={"tokens": self.tokens, "model": self.model})
+                          content=content, citations=cites, meta=meta)
         return self.timed(_run, task)
 
     def close(self) -> None:
