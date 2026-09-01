@@ -35,8 +35,8 @@ cd ScholarBench
 pip install -r requirements.txt
 cp .env.example .env        # 填入 HY3_API_KEY
 
-# 1) 构建数据集（--offline 不联网；--online 会从 OpenAlex 拉 T3 gold 文献池）
-python -m scholarbench build_dataset --offline
+# 1) 构建数据集（仅用种子库 + 本地 gold 池快照，无需联网）
+python -m scholarbench build_dataset
 
 # 2) 离线冒烟：验证「数据集 → 指标 → 报告」链路（零 API 成本）
 python -m scholarbench run --split lite --systems mock --no-judge
@@ -141,7 +141,7 @@ class MySystem(SUT):
 ## 抗污染与鲁棒性
 
 - **题目公开、answer key 不公开**：答案锚点存放于 `data/v0.1/keys_heldout/`（已 gitignore）
-- **数据集可复现**：`build_dataset.py` 从种子题库 + OpenAlex 公开元数据重建，带版本号与 gold pool 快照
+- **数据集可复现**：`build_dataset.py` 从种子题库 + 本地 gold pool 快照重建，带版本号
 - **对抗子集**：`--adversarial {water,term,fake,format,inject,conflict}` 对已生成的回答施加扰动，检验评测是否被表面特征欺骗
 
 | 扰动 | 期望信号 |
@@ -159,7 +159,7 @@ class MySystem(SUT):
 
 | 命令 | 作用 |
 |------|------|
-| `python -m scholarbench build_dataset [--online\|--offline]` | 构建数据集 + splits |
+| `python -m scholarbench build_dataset` | 构建数据集 + splits（本地种子库 + gold 池快照，无需联网） |
 | `python -m scholarbench stats` | 查看数据集统计 |
 | `python -m scholarbench run --split lite --systems studio` | 跑评测（客观 + Rubric） |
 | `python -m scholarbench run --split lite --systems studio --chunked` | 长文分块评测（[DeepResearchEval] 页级评分） |
@@ -169,6 +169,27 @@ class MySystem(SUT):
 | `python -m scholarbench report --results results/results.jsonl --out eval_results` | 生成 results.md / csv / failures.md / 雷达图 |
 
 产出目录：`eval_results/{results.md, results.csv, failures.md, attribution.md, capability_*.png}`。
+
+### 终端实时进度
+
+长批评测（如 `run_all_models.py` 跨 4 个基座跑 T3/T5/T6/T7/T8）耗时可能以小时计。评测过程**在终端直接展示实时进度**，无需额外工具：
+
+```text
+========== studio_hy3 (基座: hy3) ==========
+  并发生成 30 条（workers=3）
+  [1/30] T3-001 1420 字
+  [2/30] T3-002 976 字
+  ...
+  生成完成 30/30（失败 0）
+  评分中 18/30 (60%) · 失败 0 · 实时 BenchScore 74.5        ← 单行实时刷新
+  ...
+  BenchScore = 77.52  (样本 30，失败 0)
+  [当前排行榜] studio_hy3 77.5  |  mock 51.5              ← 每完成一个系统刷新跨模型对比
+```
+
+- **生成阶段**：每完成一条任务立即打印 `[i/N] 任务ID 字数`，可实时看到进展
+- **评分阶段**：单行（`\r` 覆盖刷新）显示 `已评分 i/N · 失败数 · 实时 BenchScore`，分数随评分逐条上升
+- **跨模型**：`run_all_models.py` 每跑完一个系统，打印一次当前全部已收集结果的排行榜，方便长跑中随时对照
 
 ---
 
@@ -215,7 +236,7 @@ ScholarBench/
 
 - **同源模型偏差**：judge 与被测系统都基于 Hy3，存在自评偏高风险。缓解手段是客观指标占主要权重（T3/T5 α=0.85）、judge 强制给出扣分引文、并用人工标注校准（见 `agreement.py` 的 bias 字段）。
 - **T4 需要 OA 全文**：`data/v0.1/papers/` 需自行下载 arXiv / PMC OA 论文，仓库不保存 PDF。
-- **T3 gold 池是"被引次数近似"**：以 OpenAlex 被引次数 Top-12 作为高相关近似，非人工标注的严格 gold。
+- **T3 gold 池是"被引次数近似"**：以本地快照中被引次数 Top-12 作为高相关近似，非人工标注的严格 gold。
 - **创造工坊为 PoC**：T8 当前只评测检索工具链，不覆盖未完成的低代码能力。
 
 后续：扩充 Full 集至 200 条、增加多语言（EN）子集、引入跨模型 Leaderboard、把 human 基线固化进榜单。

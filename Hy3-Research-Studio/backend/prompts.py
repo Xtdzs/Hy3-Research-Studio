@@ -994,7 +994,7 @@ def citation_verify_messages(claim: str, reference: dict, lookup: dict) -> list[
         f"DOI：{reference.get('doi', '')}\n"
         f"年份：{reference.get('year', '')}\n"
         f"摘要：{(reference.get('abstract') or '')[:1200]}\n\n"
-        f"外部核查（OpenAlex）结果：{json.dumps(lookup, ensure_ascii=False)}"
+        f"外部核查结果：{json.dumps(lookup, ensure_ascii=False)}"
     )
     return [{"role": "system", "content": CITATION_VERIFY_SYSTEM},
             {"role": "user", "content": user}]

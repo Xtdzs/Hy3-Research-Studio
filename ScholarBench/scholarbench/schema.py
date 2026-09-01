@@ -73,7 +73,7 @@ class Citation:
     doi: str = ""
     year: int | None = None
     url: str = ""
-    source: str = ""          # openalex / crossref / arxiv / unknown
+    source: str = ""          # crossref / arxiv / unknown
 
     def key(self) -> str:
         return (self.doi or self.title or "").strip().lower()

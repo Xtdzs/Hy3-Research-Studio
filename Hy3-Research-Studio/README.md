@@ -33,7 +33,7 @@ https://github.com/user-attachments/assets/5fe54739-4611-4b49-a261-8179a12af1be
 
 ### 🔍 智能检索（Smart Search）— 2分01秒
 
-> 多源学术检索演示：跨 OpenAlex/Crossref/arXiv 并行检索 → Hy3 自动优化检索式（中文→英文）→ LLM 语义过滤 → 论文卡片列表展示 → 一键收藏到文献库 → 流式生成带引用的结构化检索简报 → 按年份/类型/开放获取过滤
+> 多源学术检索演示：跨 Crossref/arXiv 并行检索 → Hy3 自动优化检索式（中文→英文）→ LLM 语义过滤 → 论文卡片列表展示 → 一键收藏到文献库 → 流式生成带引用的结构化检索简报 → 按年份/类型/开放获取过滤
 
 https://github.com/user-attachments/assets/6ca03276-8752-4f93-b7e0-f4bf82507504
 
@@ -169,7 +169,7 @@ python run.py
 | 阶段 | 说明 |
 |------|------|
 | ① 研究规划 | Hy3 将主题拆解为 2-5 个子问题，生成英文检索式，规划报告大纲 |
-| ② 多源检索 | 跨 OpenAlex / Crossref / arXiv 并行检索，关键词过滤 + LLM 语义相关性判断 |
+| ② 多源检索 | 跨 Crossref / arXiv 并行检索，关键词过滤 + LLM 语义相关性判断 |
 | ③ 证据压缩 | 将原始文献摘要压缩为结构化证据包（结论/方法/局限/支撑文献），压缩比 5:1~10:1 |
 | ④ 假设生成 | 基于证据推导 3-5 条可证伪研究假设，标注置信度与依据 |
 | ⑤ 证据图谱 | 识别证据间的逻辑关系（支持/矛盾/延伸/特化） |
@@ -187,7 +187,7 @@ python run.py
 
 ### 2. 🔍 智能检索（Smart Search）
 
-- 同时检索 OpenAlex、Crossref、arXiv（Semantic Scholar 可选增强）
+- 同时检索 Crossref、arXiv（Semantic Scholar 可选增强）
 - Hy3 自动优化检索式（中文→英文改写，提取核心关键词）
 - LLM 语义过滤剔除无关结果
 - 流式生成带引用的结构化检索简报
@@ -288,7 +288,7 @@ python run.py
               │   Hy3 API      │  Tencent TokenHub
               └────────────────┘
 
-  Parallel: OpenAlex · Crossref · arXiv · Semantic Scholar
+  Parallel: Crossref · arXiv · Semantic Scholar
 ```
 
 | 层 | 技术 | 说明 |
@@ -296,7 +296,7 @@ python run.py
 | 前端 | 原生 HTML/CSS/JS | 零构建，零 Node 依赖，FastAPI 直接静态托管 |
 | 后端 | Python 3.10+ / FastAPI / Uvicorn | 异步 SSE 流式响应 |
 | AI | 腾讯 Hy3 API（OpenAI 兼容） | 全程 API 调用，无训练/微调/本地部署 |
-| 检索 | OpenAlex + Crossref + arXiv | 免 Key 开箱即用，Semantic Scholar 可选 |
+| 检索 | Crossref + arXiv | 免 Key 开箱即用，Semantic Scholar 可选 |
 | 文档 | pypdf | PDF 文本提取 |
 | 存储 | JSON 文件 | `data/` 目录持久化，零数据库依赖 |
 | 并发 | ThreadPoolExecutor + threading.Lock | 多源并行检索 + 线程安全写操作 |
@@ -340,7 +340,7 @@ Hy3 Research Studio/
 │   ├── models.py               # Pydantic 数据模型
 │   ├── prompts.py              # 30+ Prompt 模板
 │   ├── retrieval_tool.py       # Agent 检索工具（Function Calling）
-│   ├── search.py               # OpenAlex/Crossref/arXiv 多源检索
+│   ├── search.py               # Crossref/arXiv 多源检索
 │   ├── store.py                # JSON 持久化（任务/文库/历史/设置）
 │   ├── features.py             # 创造工坊数据层（CRUD/模板/启发式布局）
 │   └── feedback.py             # 反馈看板数据层
@@ -398,7 +398,7 @@ python -m tests.test_offline        # 离线单元测试（无需 API Key）
 | `HY3_BASE_URL` | `https://tokenhub.tencentmaas.com/v1` | API 端点（OpenAI 兼容格式） |
 | `HY3_MODEL` | `hy3` | 模型名称 |
 | `HY3_TIMEOUT` | `120` | 请求超时（秒） |
-| `DEFAULT_SOURCES` | `openalex,crossref,arxiv` | 默认检索源 |
+| `DEFAULT_SOURCES` | `crossref,arxiv` | 默认检索源 |
 | `MAX_SOURCES_PER_QUERY` | `6` | 每条检索式最大返回数 |
 | `HTTP_TIMEOUT` | `20` | 检索请求超时（秒） |
 | `S2_API_KEY` | （空） | 可选，Semantic Scholar Key 增强召回 |
@@ -415,7 +415,7 @@ python -m tests.test_offline        # 离线单元测试（无需 API Key）
 ## 📝 注意事项
 
 - 本项目**全程通过 API 调用 Hy3**，不进行任何训练/微调/本地推理部署
-- 检索依赖 OpenAlex / Crossref / arXiv 公共 API，网络不可用时界面可正常浏览，AI 功能有离线兜底提示
+- 检索依赖 Crossref / arXiv 公共 API，网络不可用时界面可正常浏览，AI 功能有离线兜底提示
 - 所有数据存储在 `data/` 目录的 JSON 文件中，可随时备份或删除重置
 - 未配置 `HY3_API_KEY` 时系统进入离线模式：创造工坊使用启发式布局推断，其他 AI 功能提示配置 Key
 - 创造工坊专用布局当前为概念验证阶段，专用布局 AI 交互使用模拟数据，详见 [项目状态说明](#-项目状态说明)

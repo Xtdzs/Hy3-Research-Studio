@@ -52,7 +52,7 @@ cd Hy3-Research-Studio && python run.py      # 打开 http://localhost:8731
 
 # 3) 跑评测（终端 2）
 cd ScholarBench
-python -m scholarbench build_dataset --offline
+python -m scholarbench build_dataset
 python -m scholarbench run --split lite --systems studio --no-judge   # 客观冒烟
 python -m scholarbench run --split lite --systems studio --chunked     # 完整评测
 python -m scholarbench report --results results/results.jsonl --out eval_results
@@ -78,7 +78,7 @@ Windows 用户可用现成脚本：`Hy3-Research-Studio/start.ps1`、`ScholarBen
 
 > 该表由 `python -m scholarbench report_leaderboard --auto` 从 `ScholarBench/results/<model>/aggregate.json` 自动生成。
 > 复现：配置好各模型 Key 后运行 `ScholarBench/eval_models.ps1`（默认只跑便宜任务族 T3/T5/T6/T7/T8，`--no-judge` 客观指标）。
-> 首次评测前请先 `cd ScholarBench && python -m scholarbench build_dataset --offline`。
+> 首次评测前请先 `cd ScholarBench && python -m scholarbench build_dataset`。
 
 <!-- LEADERBOARD:START -->
 ### 当前结果（v0.1 · Lite · 客观指标）
@@ -88,8 +88,17 @@ Windows 用户可用现成脚本：`Hy3-Research-Studio/start.ps1`、`ScholarBen
 | 1 | `studio`（Hy3 应用流水线） | **74.3** | 74.2 | 82.9 | 38.7 | 85.0 | 90.8 | 60 |
 | 2 | `mock`（链路参照） | 51.5 | 0.0 | 100.0 | 36.8 | 70.0 | 65.0 | 64 |
 
-> - `studio` 为 Hy3 驱动的完整应用流水线（检索增强 + 证据压缩 + 引用溯源），BenchScore **74.3**（2026-09-01 实测，Hy3 API，客观指标）。
-> - 短板分析：**T6 学术写作 38.7**——流水线的写作工具未对齐参考摘要（ROUGE-L 低）；**T3 检索 74.2**——OpenAlex 限流（429）导致部分 easy 样本召回下降。详见 `ScholarBench/eval_results/`。
+### 多基座 Agent 对照（轻量 · 10 条/系统 · 客观指标）
+
+| 排名 | 系统（基座） | BenchScore | T3 检索 | T5 引用核对 | T6 写作 | T7 Agent | T8 工具链 | 样本 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `studio_ds`（deepseek-v4-flash） | **58.25** | 0.0 | 100.0 | 42.56 | 100.0 | 40.0 | 10 |
+| 2 | `studio_hy3`（hy3） | 40.72 | 0.0 | 20.0 | 19.87 | 100.0 | 90.0 | 10 |
+| 3 | `studio_glm`（glm-5.3-flash） | 35.19 | 0.0 | 100.0 | 0.0 | 50.0 | 0.0 | 10 |
+
+> - `studio` 为 Hy3 驱动的完整应用流水线（检索增强 + 证据压缩 + 引用溯源），BenchScore **74.3**（2026-09-01 实测，Hy3 API，客观指标，60 条）。
+> - 多基座对照 = 同一套 Hy3 Research Studio 流水线，仅替换底层基座；轻量子集（每族 1 easy + 1 medium，10 条/系统）。本轮为 Crossref + arXiv 双源检索，**T3 因检索源不稳定未召回（RETRIEVAL_MISS）记 0**；已改用仅 arXiv 检索源重测。
+> - 短板分析：**T6 学术写作 38.7**——流水线的写作工具未对齐参考摘要（ROUGE-L 低）；**T3 检索 74.2**——部分 easy 样本召回下降。评测检索源已改为仅 arXiv（不依赖 OpenAlex），详见 `ScholarBench/eval_results/`。
 > - `mock` 为确定性假回答，仅用于验证评测链路，**不代表任何模型**。
 > - 裸模型对比（`hy3` / `hy4-preview` / `glm-5.3-flash` / `deepseek-v4-flash-0731`）结果待补：`cd ScholarBench && python run_all_models.py`（断点续跑，约 30–60 分钟）。
 <!-- LEADERBOARD:END -->

@@ -96,7 +96,7 @@ def _is_cjk(text: str) -> bool:
 def _build_search_query(client, message: str, language: str) -> str:
     """把用户问题重构为英文检索式。
 
-    学术文献库（OpenAlex / Crossref / arXiv / Semantic Scholar）以英文索引为主，
+    学术文献库（Crossref / arXiv / Semantic Scholar）以英文索引为主，
     中文检索式召回质量差、易命中无关语料（如『压缩』匹配到图像/视频压缩）。
     故统一用英文关键词检索；当用户意在了解领域/现状/空白时末尾加 survey/review。
     失败时回退为原消息（由下游检索逻辑兜底）。
@@ -171,7 +171,6 @@ def get_settings() -> dict:
         },
         "profile": cfg.get("profile", {}),
         "source_status": {
-            "openalex": "已启用（免 Key）",
             "crossref": "已启用（免 Key）",
             "arxiv": "已启用（免 Key）",
             "semantic_scholar": "已配置 Key" if settings.s2_api_key else "未配置（可选增强）",
@@ -205,7 +204,7 @@ def post_settings(body: dict) -> dict:
 @app.get("/api/search")
 def api_search(
     q: str,
-    sources: str = "openalex,crossref,arxiv",
+    sources: str = "crossref,arxiv",
     limit: int = 20,
     year: Optional[int] = None,
     page: int = 1,
@@ -222,7 +221,7 @@ def api_search(
 @app.get("/api/search/stream")
 def api_search_stream(
     q: str,
-    sources: str = "openalex,crossref,arxiv",
+    sources: str = "crossref,arxiv",
     limit: int = 20,
     year: Optional[int] = None,
     page: int = 1,
@@ -297,7 +296,7 @@ def api_recommend(limit: int = 6) -> dict:
 
     def _fetch(t: str) -> list[dict]:
         try:
-            return search_literature(t, ["openalex", "crossref", "arxiv"], limit=4, year=year, page=1)
+            return search_literature(t, ["crossref", "arxiv"], limit=4, year=year, page=1)
         except Exception:  # noqa: BLE001
             return []
 

@@ -77,7 +77,7 @@
 | `doi` | str | DOI（可空） |
 | `year` | int\|null | 年份 |
 | `url` | str | 链接 |
-| `source` | str | `openalex` / `crossref` / `arxiv` / `studio_search` / `mock` |
+| `source` | str | `crossref` / `arxiv` / `studio_search` / `mock` |
 
 ### T5 特殊约定
 

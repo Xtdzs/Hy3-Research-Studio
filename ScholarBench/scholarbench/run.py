@@ -20,7 +20,50 @@ from .dataset import (load_adversarial, load_keys, load_split, suite_path,
                       version_dir)
 from .metrics import Judge, aggregate, compute_objective, rubric_to_100
 from .metrics.aggregate import leaderboard_rows, task_score
-from .schema import (EvalResult, Task, read_jsonl, write_jsonl)
+from .schema import (Answer, EvalResult, FAMILY_WEIGHTS, Task, read_jsonl,
+                     write_jsonl)
+
+
+class _Progress:
+    """终端实时进度：评分阶段用 \\r 刷新单行（不刷屏），生成阶段逐行输出。"""
+
+    def __init__(self, total: int) -> None:
+        self.total = total
+        self.generated = 0
+        self.failed = 0
+        self.scored = 0
+        self.scores: dict[str, list[float]] = {}
+        self._live = False
+
+    def add_generated(self, ok: bool) -> None:
+        self.generated += 1
+        if not ok:
+            self.failed += 1
+
+    def add_scored(self, family: str, score: float) -> None:
+        self.scored += 1
+        self.scores.setdefault(family, []).append(score)
+        self._refresh()
+
+    def _bench(self) -> float:
+        num = sum(FAMILY_WEIGHTS.get(f, 0.0) * (sum(v) / len(v))
+                  for f, v in self.scores.items())
+        den = sum(FAMILY_WEIGHTS.get(f, 0.0) for f in self.scores)
+        return num / den if den else 0.0
+
+    def _refresh(self) -> None:
+        pct = self.scored / self.total * 100 if self.total else 0
+        line = (f"  评分中 {self.scored}/{self.total} ({pct:.0f}%) · "
+                f"失败 {self.failed} · 实时 BenchScore {self._bench():.1f}")
+        sys.stdout.write("\r" + line)
+        sys.stdout.flush()
+        self._live = True
+
+    def finish(self) -> None:
+        """结束实时行（换行收尾），防止污染后续输出。"""
+        if self._live:
+            sys.stdout.write("\n")
+            sys.stdout.flush()
 
 
 def _resolve_tasks(args) -> list[Task]:
@@ -87,29 +130,64 @@ def evaluate(args) -> None:
         cached = _load_cached(cache_path)
         answers_out: list[dict] = []
         results: list[EvalResult] = []
+        prog = _Progress(len(tasks))
 
+        # ---- 生成阶段：cached 直接取，其余可并发生成 ----
+        answers_by_id: dict[str, Answer] = {}
+        cached_ids: set[str] = set()
+        pending: list[tuple[int, Task]] = []
         for i, task in enumerate(tasks, 1):
-            key = keys.get(task.task_id, {})
             tid = task.task_id
             if tid in cached and not args.regen:
-                ans = _answer_from_dict(cached[tid])
+                answers_by_id[tid] = _answer_from_dict(cached[tid])
+                cached_ids.add(tid)
             else:
-                print(f"  [{i}/{len(tasks)}] {tid} ({task.family}/{task.difficulty}) …",
+                pending.append((i, task))
+
+        if args.parallel > 1 and pending:
+            from concurrent.futures import ThreadPoolExecutor
+            print(f"  并发生成 {len(pending)} 条（workers={args.parallel}）", flush=True)
+
+            def _gen(t: Task):
+                a = sut.generate(t)
+                a.system = a.system or spec
+                return t.task_id, a
+
+            pend_map = {t.task_id: (i, t) for i, t in pending}
+            with ThreadPoolExecutor(max_workers=args.parallel) as ex:
+                for tid, a in ex.map(_gen, (t for _, t in pending)):
+                    answers_by_id[tid] = a
+                    i, task = pend_map[tid]
+                    print(f"  [{i}/{len(tasks)}] {task.task_id} {len(a.content)} 字"
+                          + ("" if a.ok else f" ✗{a.meta.get('error')}"), flush=True)
+                    prog.add_generated(a.ok)
+        else:
+            for i, task in pending:
+                print(f"  [{i}/{len(tasks)}] {task.task_id} ({task.family}/{task.difficulty}) …",
                       end="", flush=True)
                 ans = sut.generate(task)
                 ans.system = ans.system or spec
+                answers_by_id[task.task_id] = ans
                 print(f" {len(ans.content)} 字"
                       + ("" if ans.ok else f" ✗{ans.meta.get('error')}"))
-                answers_out.append(ans.to_dict())
+                prog.add_generated(ans.ok)
 
+        if prog.generated:
+            print(f"  生成完成 {prog.generated}/{len(tasks)}（失败 {prog.failed}）")
+
+        # ---- 评分阶段：统一处理 ----
+        for i, task in enumerate(tasks, 1):
+            tid = task.task_id
+            ans = answers_by_id[tid]
+            key = keys.get(tid, {})
+            if tid not in cached_ids:
+                answers_out.append(ans.to_dict())
             if args.adversarial:
                 ans = _perturb(ans, args.adversarial)
-
             metrics, obj_score, tags = compute_objective(task, ans, key)
             rscores = [] if judge is None else judge.score(task, ans, key)
             rub_score = rubric_to_100(rscores, task.family) if rscores else 0.0
             alpha = 1.0 if judge is None else task.alpha
-
             res = EvalResult(
                 task_id=tid, family=task.family, difficulty=task.difficulty,
                 system=ans.system or spec,
@@ -121,6 +199,7 @@ def evaluate(args) -> None:
             )
             results.append(res)
             all_results.append(res)
+            prog.add_scored(res.family, res.task_score)
 
         if answers_out:
             write_jsonl(cache_path,
@@ -131,6 +210,7 @@ def evaluate(args) -> None:
 
         agg = aggregate(results)
         for system, d in agg.items():
+            prog.finish()
             print(f"  BenchScore = {d['bench_score']}  "
                   f"(样本 {d['n_samples']}，失败 {d['n_failed']})")
 
@@ -166,6 +246,8 @@ def main() -> None:
     ap.add_argument("--out", default="results")
     ap.add_argument("--no-judge", action="store_true", help="只算客观指标，零 API 成本")
     ap.add_argument("--judge-model", default="")
+    ap.add_argument("--parallel", type=int, default=1,
+                    help="并发生成 worker 数（掩盖单条模型延迟，受 API 限流约束）")
     ap.add_argument("--chunked", action="store_true",
                     help="[DeepResearchEval] 长文（T1/T2/T6）分块逐段评分，逻辑/可读性更精确")
     ap.add_argument("--adversarial", default="",

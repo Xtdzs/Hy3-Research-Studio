@@ -25,8 +25,6 @@ Set-Location $here
 $Models = @(
     @{ Name = "hy3";                BaseUrl = "https://tokenhub.tencentmaas.com/v1";
        Key = $null;  Model = "hy3";                Judge = $true }
-    @{ Name = "hy4-preview";        BaseUrl = "https://tokenhub.tencentmaas.com/v1";
-       Key = $null;  Model = "hy4-preview";        Judge = $true }
     @{ Name = "glm-5.3-flash";      BaseUrl = "https://tokenhub.tencentmaas.com/v1";
        Key = $null;  Model = "glm-5.3-flash";      Judge = $true }
     @{ Name = "deepseek-v4-flash";  BaseUrl = "https://tokenhub.tencentmaas.com/v1";

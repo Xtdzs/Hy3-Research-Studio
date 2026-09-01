@@ -41,7 +41,7 @@ TOOL_SPEC: dict = {
                 "query": {
                     "type": "string",
                     "description": (
-                        "检索式：必须是【英文】学术检索式（论文库 OpenAlex/Crossref/arXiv/Semantic Scholar "
+                        "检索式：必须是【英文】学术检索式（论文库 Crossref/arXiv/Semantic Scholar "
                         "均以英文索引为主，中文检索式召回质量差、易命中无关语料，例如『压缩』会被匹配到图像/视频压缩）。"
                         "规则：① 只保留 2~5 个英文核心关键词，不要整句、不要中文；"
                         "② 当用户意在了解某『领域 / 方向 / 现状 / 研究空白 / 还缺什么』时，末尾追加 'survey' 或 'review'；"

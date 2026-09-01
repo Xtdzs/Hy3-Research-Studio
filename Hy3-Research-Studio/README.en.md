@@ -33,7 +33,7 @@ https://github.com/user-attachments/assets/5fe54739-4611-4b49-a261-8179a12af1be
 
 ### 🔍 Smart Search — 2m01s
 
-> Multi-source academic search: parallel search across OpenAlex/Crossref/arXiv → Hy3 query optimization (Chinese→English) → LLM semantic filtering → paper card list → one-click save to library → streaming structured search brief with citations → filter by year/type/open access
+> Multi-source academic search: parallel search across Crossref/arXiv → Hy3 query optimization (Chinese→English) → LLM semantic filtering → paper card list → one-click save to library → streaming structured search brief with citations → filter by year/type/open access
 
 https://github.com/user-attachments/assets/6ca03276-8752-4f93-b7e0-f4bf82507504
 
@@ -169,7 +169,7 @@ The core end-to-end capability. Input a research topic and Hy3 orchestrates an *
 | Stage | Description |
 |-------|-------------|
 | ① Planning | Hy3 decomposes the topic into 2-5 sub-questions, generates English search queries, drafts a report outline |
-| ② Multi-source Retrieval | Parallel search across OpenAlex/Crossref/arXiv; keyword filtering + LLM semantic relevance judgment |
+| ② Multi-source Retrieval | Parallel search across Crossref/arXiv; keyword filtering + LLM semantic relevance judgment |
 | ③ Evidence Compression | Raw abstracts compressed into structured Evidence Packets (claim/method/limitation/supporting citations), 5:1~10:1 ratio |
 | ④ Hypothesis Generation | Derives 3-5 falsifiable research hypotheses with confidence scores |
 | ⑤ Evidence Graph | Identifies logical relationships (support/contradict/extend/specialize) between evidence packets |
@@ -187,7 +187,7 @@ The core end-to-end capability. Input a research topic and Hy3 orchestrates an *
 
 ### 2. 🔍 Smart Search
 
-- Simultaneously searches OpenAlex, Crossref, arXiv (Semantic Scholar optional)
+- Simultaneously searches Crossref, arXiv (Semantic Scholar optional)
 - Hy3 auto-optimizes queries (Chinese→English rewriting, keyword extraction)
 - LLM semantic filtering removes irrelevant results
 - Streaming generation of structured search briefs with citations
@@ -288,7 +288,7 @@ Two creation modes:
               │   Hy3 API      │  Tencent TokenHub
               └────────────────┘
 
-  Parallel: OpenAlex · Crossref · arXiv · Semantic Scholar
+  Parallel: Crossref · arXiv · Semantic Scholar
 ```
 
 | Layer | Technology | Notes |
@@ -296,7 +296,7 @@ Two creation modes:
 | Frontend | Vanilla HTML/CSS/JS | Zero build, zero Node dependency, served statically by FastAPI |
 | Backend | Python 3.10+ / FastAPI / Uvicorn | Async SSE streaming |
 | AI | Tencent Hy3 API (OpenAI-compatible) | API calls only; no training/fine-tuning/local deployment |
-| Search | OpenAlex + Crossref + arXiv | No API key required out of the box; S2 optional |
+| Search | Crossref + arXiv | No API key required out of the box; S2 optional |
 | Documents | pypdf | PDF text extraction |
 | Storage | JSON files | `data/` directory persistence; zero database dependency |
 | Concurrency | ThreadPoolExecutor + threading.Lock | Parallel multi-source search + thread-safe writes |
@@ -340,7 +340,7 @@ Hy3 Research Studio/
 │   ├── models.py               # Pydantic data models
 │   ├── prompts.py              # 30+ prompt templates
 │   ├── retrieval_tool.py       # Agent retrieval tool (Function Calling)
-│   ├── search.py               # OpenAlex/Crossref/arXiv multi-source search
+│   ├── search.py               # Crossref/arXiv multi-source search
 │   ├── store.py                # JSON persistence (tasks/library/history/settings)
 │   ├── features.py             # Feature workshop data layer (CRUD/templates/heuristics)
 │   └── feedback.py             # Feedback board data layer
@@ -398,7 +398,7 @@ Metrics:
 | `HY3_BASE_URL` | `https://tokenhub.tencentmaas.com/v1` | API endpoint (OpenAI-compatible) |
 | `HY3_MODEL` | `hy3` | Model name |
 | `HY3_TIMEOUT` | `120` | Request timeout (seconds) |
-| `DEFAULT_SOURCES` | `openalex,crossref,arxiv` | Default search sources |
+| `DEFAULT_SOURCES` | `crossref,arxiv` | Default search sources |
 | `MAX_SOURCES_PER_QUERY` | `6` | Max results per query |
 | `HTTP_TIMEOUT` | `20` | Search request timeout (seconds) |
 | `S2_API_KEY` | (empty) | Optional, Semantic Scholar key for enhanced recall |
@@ -415,7 +415,7 @@ This project was built in collaboration with **CodeBuddy + Hy3**, which could ef
 ## 📝 Notes
 
 - This project calls Hy3 **entirely through API**; there is no training, fine-tuning, or local model deployment
-- Search relies on OpenAlex / Crossref / arXiv public APIs; if unavailable, UI remains browsable and AI features show offline fallback messages
+- Search relies on Crossref / arXiv public APIs; if unavailable, UI remains browsable and AI features show offline fallback messages
 - All data is stored as JSON in the `data/` directory; backup or delete to reset
 - When `HY3_API_KEY` is not configured, the system enters offline mode: Feature Workshop uses heuristic layout inference; other AI features prompt for key configuration
 - The Feature Workshop specialized layouts are currently in PoC stage with mock data; see [Project Status](#-project-status)

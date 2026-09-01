@@ -1236,7 +1236,7 @@ async function loadRecommendations() {
   }
 }
 function recoEmoji(src) {
-  return { openalex: "📘", crossref: "📗", arxiv: "📙" }[src] || "📄";
+  return { crossref: "📗", arxiv: "📙" }[src] || "📄";
 }
 function renderReco(list) {
   const box = $("#recoList");

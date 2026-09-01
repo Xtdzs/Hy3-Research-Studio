@@ -273,7 +273,7 @@
       <section id="view-search" class="view hidden">
         <div class="page-head">
           <h2>文献检索</h2>
-          <p>跨 OpenAlex / Crossref / arXiv 检索论文与资料。普通检索可翻页浏览、存入文库；智能检索会多步检索并生成一份简要检索报告。</p>
+          <p>跨 Crossref / arXiv 检索论文与资料。普通检索可翻页浏览、存入文库；智能检索会多步检索并生成一份简要检索报告。</p>
         </div>
 
         <div class="mode-switch">
@@ -284,8 +284,7 @@
         <div class="search-bar">
           <input id="litQuery" class="lit-input" placeholder="检索主题 / 关键词 / 论文标题（可在「⚙ 筛选」中限定年份与排序）" />
           <select id="litSources" class="lit-select">
-            <option value="openalex,crossref,arxiv">全部来源</option>
-            <option value="openalex">OpenAlex</option>
+            <option value="crossref,arxiv">全部来源</option>
             <option value="crossref">Crossref</option>
             <option value="arxiv">arXiv</option>
           </select>
@@ -878,7 +877,6 @@
           <h3>检索源</h3>
           <div class="opt" style="margin-top:6px"><span>启用检索源</span>
             <div class="chk-group">
-              <label class="chk"><input type="checkbox" value="openalex" class="srcChk" checked /> OpenAlex</label>
               <label class="chk"><input type="checkbox" value="crossref" class="srcChk" checked /> Crossref</label>
               <label class="chk"><input type="checkbox" value="arxiv" class="srcChk" checked /> arXiv</label>
               <label class="chk"><input type="checkbox" value="semantic_scholar" class="srcChk" /> Semantic Scholar</label>

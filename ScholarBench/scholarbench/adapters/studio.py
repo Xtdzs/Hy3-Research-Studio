@@ -219,12 +219,14 @@ class StudioAdapter(SUT):
         输出严格三分类之一：supported / unrelated / nonexistent
 
         方法学依据 [FactCheck]：Agent 化核查 = 先构造查询检索真实世界证据，
-        再基于证据做核查决策，而非只看被引摘要。这里先查 OpenAlex 验证文献
-        是否存在，把外部核查结果注入判定上下文；外部检索失败时降级为纯判断。
+        再基于证据做核查决策，而非只看被引摘要。
+        注：已移除 OpenAlex 外部核查（限流风险高、拖慢评测），
+        判定完全基于 LLM 对被引摘要与论断的语义一致性。
         """
         claim = task.prompt
         ref = task.context.get("reference", {})
-        lookup = self._lookup_openalex(ref)
+        lookup = {"searched": False, "found": False, "title_match": 0.0,
+                  "top_title": "", "n_results": 0, "skipped": True}
         sys_prompt = (
             "你是学术引用核查员。给定一条论断和一条被引文献，判断二者关系。\n"
             "只输出 JSON：{\"verdict\": \"supported\"|\"unrelated\"|\"nonexistent\", "
@@ -240,7 +242,7 @@ class StudioAdapter(SUT):
             f"DOI：{ref.get('doi', '')}\n"
             f"年份：{ref.get('year', '')}\n"
             f"摘要：{(ref.get('abstract') or '')[:1200]}\n\n"
-            f"外部核查（OpenAlex）结果：{json.dumps(lookup, ensure_ascii=False)}"
+            f"外部核查结果：{json.dumps(lookup, ensure_ascii=False)}"
         )
         try:
             data = self.client.chat_json(
@@ -262,56 +264,6 @@ class StudioAdapter(SUT):
             meta={"verdict": verdict, "reason": data.get("reason", ""),
                   "lookup": lookup},
         )
-
-    @staticmethod
-    def _lookup_openalex(ref: dict, timeout: float = 12.0) -> dict:
-        """[FactCheck] 外部证据：查询 OpenAlex 判断被引标题是否存在。
-
-        返回 {"searched", "found", "title_match", "top_title", "n_results", "doi_hit"}。
-        与 Studio 端 `/api/citation/verify` 的 lookup 保持一致。
-        """
-        import json as _json  # noqa: PLC0415
-        import urllib.error  # noqa: PLC0415
-        import urllib.parse
-        import urllib.request
-
-        def _tok(t: str) -> set:
-            return set(re.sub(r"[^\w\u4e00-\u9fff ]", " ", (t or "").lower()).split())
-
-        title = (ref.get("title") or "").strip()
-        if not title:
-            return {"searched": False, "found": False, "title_match": 0.0,
-                    "top_title": "", "n_results": 0}
-        params = urllib.parse.urlencode({
-            "search": title[:200],
-            "per_page": 3,
-            "select": "title,doi,publication_year",
-        })
-        req = urllib.request.Request(
-            f"https://api.openalex.org/works?{params}",
-            headers={"User-Agent": "ScholarBench/0.1"})
-        try:
-            with urllib.request.urlopen(req, timeout=timeout) as resp:
-                data = _json.loads(resp.read().decode("utf-8"))
-            results = data.get("results", [])
-            if not results:
-                return {"searched": True, "found": False, "title_match": 0.0,
-                        "top_title": "", "n_results": 0}
-            top = results[0]
-            rt = _tok(title)
-            match = max(len(rt & _tok(r.get("title") or "")) / max(1, len(rt))
-                        for r in results)
-            return {"searched": True,
-                    "found": bool((top.get("title") or "").strip()),
-                    "title_match": round(match, 4),
-                    "top_title": (top.get("title") or "")[:200],
-                    "n_results": len(results),
-                    "doi_hit": bool(ref.get("doi")) and (
-                        (top.get("doi") or "").replace("https://doi.org/", "")
-                        == str(ref.get("doi")).replace("https://doi.org/", ""))}
-        except (urllib.error.URLError, OSError, _json.JSONDecodeError) as exc:
-            return {"searched": False, "found": False, "title_match": 0.0,
-                    "top_title": "", "n_results": 0, "error": str(exc)[:80]}
 
     # -- T6 学术写作 --------------------------------------------------------
     def _run_writing(self, task: Task) -> Answer:

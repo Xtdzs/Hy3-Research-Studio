@@ -1,7 +1,6 @@
 """数据集构建：从种子题库 + 公开元数据生成 scholarbench 数据文件。
 
-    python -m scholarbench.build_dataset --offline     # 仅用种子库（无需联网）
-    python -m scholarbench.build_dataset --online      # 额外从 OpenAlex 拉 T3 gold 文献池
+    python -m scholarbench.build_dataset      # 仅用种子库 + 本地 gold 池快照（无需联网）
 
 产出：
     data/v0.1/T*.jsonl              题目（公开）
@@ -13,37 +12,11 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import urllib.parse
-import urllib.request
 from pathlib import Path
 
 from . import seedbank as sb
 from .dataset import DATA_ROOT, VERSION, version_dir
 from .schema import FAMILY_CAPABILITIES, Task, write_jsonl
-
-OPENALEX = "https://api.openalex.org/works"
-
-
-# --- T3 gold 文献池 --------------------------------------------------------
-def fetch_openalex(query: str, per_page: int = 20, timeout: float = 20.0) -> list[dict]:
-    """从 OpenAlex 拉取文献元数据（无需 API Key）。"""
-    params = urllib.parse.urlencode({
-        "search": query, "per_page": per_page,
-        "select": "title,doi,publication_year,cited_by_count,primary_location",
-    })
-    req = urllib.request.Request(f"{OPENALEX}?{params}",
-                                 headers={"User-Agent": "ScholarBench/0.1"})
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        data = json.loads(resp.read().decode("utf-8"))
-    out = []
-    for w in data.get("results", []):
-        out.append({
-            "title": (w.get("title") or "").strip(),
-            "doi": (w.get("doi") or "").replace("https://doi.org/", ""),
-            "year": w.get("publication_year"),
-            "cited_by_count": w.get("cited_by_count", 0),
-        })
-    return [d for d in out if d["title"]]
 
 
 # --- T1 / T2 ---------------------------------------------------------------
@@ -63,7 +36,7 @@ def build_t1t2() -> tuple[list[Task], dict]:
 
 
 # --- T3 学术检索 -----------------------------------------------------------
-def build_t3(online: bool = True) -> tuple[list[Task], dict]:
+def build_t3() -> tuple[list[Task], dict]:
     tasks: list[Task] = []
     keys: dict = {}
     pool_dir = version_dir() / "gold_pools"
@@ -75,22 +48,14 @@ def build_t3(online: bool = True) -> tuple[list[Task], dict]:
                  context={"per_query": 10, "top_k": 20})
         tasks.append(t)
 
+        # 仅使用本地 gold 池快照（已随仓库分发，无需联网）
         pool_file = pool_dir / f"{s['id']}.json"
         docs: list[dict] = []
         if pool_file.exists():
             docs = json.loads(pool_file.read_text(encoding="utf-8"))
-        elif online:
-            try:
-                docs = fetch_openalex(s["q"], per_page=20)
-                pool_file.write_text(
-                    json.dumps(docs, ensure_ascii=False, indent=2), encoding="utf-8")
-                print(f"  [openalex] {s['id']} 抓到 {len(docs)} 条")
-            except Exception as exc:  # noqa: BLE001
-                print(f"  [openalex] {s['id']} 失败：{exc}")
         # gold = 被引次数前 12 条（作为"高相关"近似）
         gold = sorted(docs, key=lambda d: -d.get("cited_by_count", 0))[:12]
-        keys[s["id"]] = {"gold_docs": gold, "pool_size": len(docs),
-                         "needs_online": not bool(docs)}
+        keys[s["id"]] = {"gold_docs": gold, "pool_size": len(docs)}
     return tasks, keys
 
 
@@ -242,13 +207,10 @@ SUITE_FILE = {
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="构建 ScholarBench 数据集")
-    ap.add_argument("--online", action="store_true", help="从 OpenAlex 拉取 T3 gold 文献池")
-    ap.add_argument("--offline", action="store_true", help="仅使用种子库")
     ap.add_argument("--families", nargs="*", default=list(SUITE_FILE))
     ap.add_argument("--version", default=VERSION)
     args = ap.parse_args()
 
-    online = args.online or not args.offline
     vdir = DATA_ROOT / args.version
     (vdir / "keys_heldout").mkdir(parents=True, exist_ok=True)
 
@@ -260,7 +222,7 @@ def main() -> None:
             tasks = [t for t in tasks if t.family == fam]
             keys = {k: v for k, v in keys.items() if k.startswith(fam)}
         elif fam == "T3":
-            tasks, keys = build_t3(online=online)
+            tasks, keys = build_t3()
         else:
             tasks, keys = builder()
 

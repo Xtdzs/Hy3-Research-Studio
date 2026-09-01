@@ -2,7 +2,6 @@
 
 默认使用**免 Key、稳定**的学术检索源，开箱即跑、能真正检索到文献：
 
-- OpenAlex   (https://api.openalex.org)   免费、限流宽松、元数据丰富
 - Crossref   (https://api.crossref.org)   免费、极稳定、含 DOI/摘要
 - arXiv      (Atom API)                   免费、覆盖预印本
 
@@ -25,14 +24,12 @@ import httpx
 from .config import settings
 from .models import SourceDocument, SourceType
 
-_OPENALEX = "https://api.openalex.org/works"
 _CROSSREF = "https://api.crossref.org/works"
 _ARXIV = "https://export.arxiv.org/api/query"
 _S2 = "https://api.semanticscholar.org/graph/v1/paper/search"
 _ATOM = "{http://www.w3.org/2005/Atom}"
 
-# OpenAlex / Crossref 要求提供 UA；这里用占位邮箱，可替换为项目联系邮箱。
-_UA = "Hy3ResearchStudio/1.0 (mailto:hy3-studio@example.com)"
+_UA = "Hy3ResearchStudio/1.0"
 
 
 def _clean(text: str) -> str:
@@ -42,84 +39,6 @@ def _clean(text: str) -> str:
 def _stable_id(title: str) -> str:
     h = hashlib.md5(title.lower().encode("utf-8")).hexdigest()[:10]
     return "L" + h
-
-
-def _reconstruct_abstract(inv_index: Optional[dict]) -> str:
-    """OpenAlex 用倒排索引存储摘要，需要还原成可读文本。"""
-    if not inv_index:
-        return ""
-    try:
-        length = max(max(pos) for pos in inv_index.values()) + 1
-    except Exception:  # noqa: BLE001
-        return ""
-    words = [""] * length
-    for word, positions in inv_index.items():
-        for p in positions:
-            words[p] = word
-    return _clean(" ".join(words))
-
-
-# ---------------------------------------------------------------------------
-# OpenAlex
-# ---------------------------------------------------------------------------
-def search_openalex(query: str, limit: int, year: Optional[int] = None, page: int = 1,
-                    oa: bool = False, doc_type: Optional[str] = None) -> list[SourceDocument]:
-    params = {
-        "search": query,
-        "per_page": min(limit, 50),
-        "page": max(1, page),
-        "select": "id,display_name,authorships,publication_year,primary_location,abstract_inverted_index,doi,cited_by_count",
-        "sort": "relevance_score:desc",
-    }
-    flt: list[str] = []
-    if year:
-        cur = datetime.now().year
-        flt.append(f"publication_year:{year}-{cur}")
-    if oa:
-        flt.append("is_oa:true")
-    if doc_type == "article":
-        flt.append("type:article")
-    elif doc_type == "preprint":
-        flt.append("type:preprint")
-    elif doc_type == "book":
-        flt.append("type:book")
-    if flt:
-        params["filter"] = ",".join(flt)
-    out: list[SourceDocument] = []
-    try:
-        r = httpx.get(_OPENALEX, params=params, timeout=settings.http_timeout,
-                      headers={"User-Agent": _UA})
-        r.raise_for_status()
-        for item in r.json().get("results", []) or []:
-            title = _clean(item.get("display_name") or "")
-            if not title:
-                continue
-            authors = [
-                _clean(a.get("author", {}).get("display_name", ""))
-                for a in (item.get("authorships") or [])[:6]
-            ]
-            venue = ""
-            loc = item.get("primary_location") or {}
-            src = loc.get("source") or {}
-            venue = _clean(src.get("display_name") or "")
-            url = item.get("doi") or item.get("id")
-            abstract = _reconstruct_abstract(item.get("abstract_inverted_index"))
-            out.append(
-                SourceDocument(
-                    source_id=_stable_id(title + (venue or "")),
-                    title=title,
-                    source_type=SourceType.paper,
-                    url=url,
-                    authors=[a for a in authors if a],
-                    year=str(item.get("publication_year") or ""),
-                    venue=venue or "OpenAlex",
-                    abstract=abstract,
-                    snippet=abstract[:600],
-                )
-            )
-    except Exception as exc:  # noqa: BLE001
-        print(f"[search] OpenAlex failed for '{query}': {exc}")
-    return out
 
 
 # ---------------------------------------------------------------------------
@@ -300,8 +219,6 @@ def _dedupe(docs: list[SourceDocument]) -> list[SourceDocument]:
 
 def _search_one(src: str, query: str, per: int, year: Optional[int], page: int,
                 oa: bool = False, doc_type: Optional[str] = None) -> list[SourceDocument]:
-    if src == "openalex":
-        return search_openalex(query, per, year, page, oa, doc_type)
     if src == "crossref":
         return search_crossref(query, per, year, page, oa, doc_type)
     if src == "arxiv":
@@ -376,7 +293,7 @@ def _guess_source(url: Optional[str], venue: Optional[str]) -> str:
         return "arXiv"
     if venue and "arxiv" in (venue or "").lower():
         return "arXiv"
-    if venue and venue in ("OpenAlex", "Crossref"):
+    if venue and venue == "Crossref":
         return venue
     return venue or "学术数据库"
 
@@ -390,13 +307,11 @@ def gather_sources(
     per_query = per_query or settings.max_sources_per_query
     sources = settings.default_sources if use_paper else []
     if use_paper and not sources:
-        sources = ["openalex", "crossref", "arxiv"]
+        sources = ["crossref", "arxiv"]
     out: list[SourceDocument] = []
     for q in queries:
         for src in sources:
-            if src == "openalex":
-                out += search_openalex(q, per_query)
-            elif src == "crossref":
+            if src == "crossref":
                 out += search_crossref(q, per_query)
             elif src == "arxiv":
                 out += search_arxiv(q, per_query)

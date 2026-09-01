@@ -46,13 +46,13 @@ class Settings:
     )
 
     # --- Retrieval ---------------------------------------------------------
-    # 默认启用免 Key 的可靠学术源：OpenAlex / Crossref / arXiv。
+    # 默认启用免 Key 的可靠学术源：Crossref / arXiv。
     # Semantic Scholar 仅在提供 S2_API_KEY 时启用（限流更宽松、召回更稳）。
     s2_api_key: str = field(default_factory=lambda: os.getenv("S2_API_KEY", ""))
     default_sources: list[str] = field(
         default_factory=lambda: [
             s for s in os.getenv(
-                "DEFAULT_SOURCES", "openalex,crossref,arxiv"
+                "DEFAULT_SOURCES", "crossref,arxiv"
             ).split(",") if s
         ]
     )
