@@ -1,0 +1,21 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+.idea/
+.vscode/
+.DS_Store
+
+# 评测产出（结果按需提交，缓存不提交）
+results*/
+eval_results/
+**/.judge_cache/
+
+# 论文全文体积较大，走下载脚本而非入库
+data/*/papers/*.pdf
+
+# Held-out 答案锚点：默认不公开，防止刷分
+# 若确需公开 dev split 的 key，请显式 git add -f
+data/*/keys_heldout/

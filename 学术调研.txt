@@ -1,0 +1,179 @@
+现在我已经收集到足够的研究文献。下面按照任务需求，从**应用侧**和**评测侧**两个维度，为你梳理可以直接支撑这个项目的前沿研究。
+
+---
+
+## 🧠 任务-研究映射总览
+
+| 任务要求 | 对应研究方向 | 关键论文数 |
+|---------|------------|-----------|
+| 应用侧：论文阅读助手 / 文献综述生成 / 引用核对 | 多 Agent 文献系统 + RAG + 引用检索 | 6 篇 |
+| 评测侧：自定义 rubric + 自动/半自动评测 | LLM-as-Judge + 幻觉检测 + 引用忠实度 | 5 篇 |
+
+---
+
+## 一、应用侧：学术 Agent 的前沿研究
+
+### 1. LITERAS — 多 Agent 文献综述与引用检索系统
+[LITERAS: Biomedical Literature Review and Citation Retrieval Agents](https://www.aminer.cn/pub/682b8d02163c01c850a75b7d)（Computers in Biology and Medicine, 2025）
+
+**核心方法**：多 AI Agent 架构，集成 PubMed API 检索 + 双向 Agent 间通信，自动生成带准确引用的文献综述草稿。
+**关键指标**：引用准确率 99.82%，引用一致性 96.81%，100% 来源为 Q1-Q2 期刊。
+**对你任务的启示**：
+- 这是"文献综述生成 + 引用核对"两个用例的直接参考
+- 多 Agent 协作循环（平均 2.2 次迭代/查询）可作为你的 Agent 架构模板
+- 其评测维度（引用准确性、引用一致性、来源质量）可直接迁移到你的 rubric
+
+---
+
+### 2. LLM + MAS 文献综述自动生成
+[Generation of Scientific Literature Surveys Based on LLM and MAS](https://www.aminer.cn/pub/6724af3601d2a3fbfcdf054b)（NLPCC 2024）
+
+**核心方法**：设计多个 Agent 角色（参考文献解析、分析、生成、整合），利用 LLM NLP 能力 + 多 Agent 协作生成高质量文献综述。
+**关键成果**：在 NLPCC2024 评测中多项自动指标（SoftHeadingRecall, ROUGE）和人工评估表现优异。
+**对你任务的启示**：
+- 角色 Agent 分工模式（解析→分析→生成→整合）可直接用于你的 Agent 设计
+- 其自动+人工评估双轨模式正好契合任务的"自动 + 半自动评测"要求
+
+---
+
+### 3. 自主多 Agent 文献推荐系统
+[An Autonomous Multi-Agent System for Customized Scientific Literature Recommendation](https://www.aminer.cn/pub/6578fca7939a5f4082adffc2)（Ingénierie des systèmes d information, 2023）
+
+**核心方法**：自主 Agent 自动生成搜索查询、执行综合在线检索、利用用户偏好进行智能过滤，持续学习优化推荐。
+**对你任务的启示**：
+- "论文阅读助手"用例的架构参考：从检索→过滤→个性化推荐的完整流水线
+- 用户反馈机制可作为半自动评测接口的设计灵感
+
+---
+
+### 4. LLM 事实核查 Agent
+[The Perils and Promises of Fact-Checking with Large Language Models](https://www.aminer.cn/pub/6535d747939a5f408295c5da)（Frontiers in AI, 2024, 57 引用）
+
+**核心方法**：LLM Agent 自动构造查询、检索上下文数据、做出核查决策，并解释推理过程、引用相关来源。
+**对你任务的启示**：
+- "引用核对"用例的直接参考：Agent 如何自主验证 claim 与引用的一致性
+- 其发现"准确性随查询语言和声明真实性波动"可作为失败 case 归因的分析框架
+
+---
+
+### 5. ContextCite — 上下文归因方法
+[ContextCite: Attributing Model Generation to Context](https://www.aminer.cn/pub/66d7c28e01d2a3fbfc859606)（NeurIPS 2024, 82 引用）
+
+**核心方法**：精确定位上下文中哪些部分导致模型生成特定陈述，支持：(1) 验证生成陈述 (2) 剪枝上下文提升质量 (3) 检测投毒攻击。
+**对你任务的启示**：
+- "证据可追溯性"维度的技术实现：将 Agent 输出精确归因到检索到的文献片段
+- 可作为你 rubric 中"证据可追溯性"指标的自动化评分方法
+
+---
+
+### 6. MARVEL — 多 Agent 研究验证器
+[MARVEL: a Multi-Agent Research Validator and Enabler Using Large Language Models](https://www.aminer.cn/pub/695f0da294d1bc07b45ff103)（Machine Learning: Science and Technology, 2026）
+
+**对你任务的启示**：多 Agent 系统在科研验证场景的最新探索，可作为"论文阅读助手"中自动验证论文结论的参考。
+
+---
+
+## 二、评测侧：LLM 评测框架的前沿研究
+
+### 1. SelfCheckGPT — 零资源黑盒幻觉检测（高引基石）
+[SelfCheckGPT: Zero-Resource Black-Box Hallucination Detection](https://www.aminer.cn/pub/6413dabd90e50fcafd3cd6a8)（EMNLP 2023, **1591 引用**）
+
+**核心方法**：通过多次采样，利用响应一致性检测幻觉——真实事实的采样响应趋于一致，幻觉事实的采样响应趋于矛盾。
+**对你任务的启示**：
+- **事实准确性**维度的自动化评测方法：无需外部数据库，通过采样一致性评分
+- 可直接集成到你的自动评测脚本中作为"幻觉检测"模块
+
+---
+
+### 2. Deep-Research Eval — 长文报告质量自动评测框架
+[Deep-Research Eval: an Automated Framework for Assessing Quality and Reliability in Long-Form Reports](https://www.aminer.cn/pub/69b4344a9be8eb7c4beba1cf)（Applied Sciences, 2026）
+
+**核心方法**：以"页"为基本评测单元，自适应评分系统评估每页逻辑质量；Paged-RAG + 可构建的参考数据库验证事实。在 5 个 Agent 上验证，CCI 达 0.7585，比基线提升 0.4588。
+**对你任务的启示**：
+- **这是与你的任务最匹配的评测研究**——专门评测 Agent 生成的长篇学术报告
+- 其评测维度（逻辑质量、事实验证、结构一致性）可直接迁移到你的 rubric
+- Paged-RAG 模块可作为"证据可追溯性"维度的自动化实现
+
+---
+
+### 3. LLM-as-Judge 综述
+[Large Language Models As Judges: Recent Advances in LLM-based Evaluation](https://www.aminer.cn/pub/6a8ac6a10a96f8c83cbca23c)（Artificial Intelligence Review, 2026）
+
+**核心内容**：全面综述 LLM 评测技术（2020-2026），涵盖：
+- 评测任务分类：摘要、对话、事实性、安全
+- 提示策略：零/少样本、**rubric-based**、成对比较、思维链
+- 高级流水线：集成裁判、多 Agent 辩论、工具增强验证
+- 系统偏差分析：长度偏差、位置偏差、自我偏好
+**对你任务的启示**：
+- **rubric 设计的直接方法论参考**：rubric-based prompting、ensemble judge 等
+- 其偏差分析可指导你设计更公平的评测脚本
+
+---
+
+### 4. RAG 引用忠实度评测
+[Correctness is Not Faithfulness in RAG Attributions](https://www.aminer.cn/pub/68e7e23e163c01c85077acaa)（ICTIR 2025, 18 引用）
+
+**核心发现**：区分"引用正确性"（引用文献是否支持陈述）与"引用忠实度"（模型是否真正依赖引用文献而非事后合理化），发现高达 57% 的引用缺乏忠实度。
+**对你任务的启示**：
+- **证据可追溯性**维度的深层定义：不仅要检查"引用对不对"，还要检查"模型真的在用这个引用吗"
+- 可作为你 rubric 中"证据可追溯性"与"事实准确性"分离设计的理论依据
+
+---
+
+### 5. LLM 引用机制的机械可解释性
+[How Do LLMs Cite? — A Mechanistic Interpretation of Attribution in RAG](https://www.aminer.cn/pub/69d84ff59be8eb7c4bed48f1)（ECIR 2026）
+
+**核心发现**：通过激活修补发现 LLM 的引用决策依赖浅层启发式（实体共指匹配），引发对引用可信度的担忧。
+**对你任务的启示**：
+- 为"失败 case 归因"提供深层分析视角：模型可能因浅层匹配而非真正理解来添加引用
+- 帮助你识别 Agent 在引用核对场景中的系统性弱点
+
+---
+
+## 三、建议的 Rubric 设计（基于上述研究）
+
+| 评测维度 | 定义 | 自动化方法 | 参考研究 |
+|---------|------|-----------|---------|
+| **事实准确性** | 生成内容与真实文献一致，无幻觉 | SelfCheckGPT 采样一致性 | SelfCheckGPT |
+| **引用正确性** | 引用文献真实存在且支持对应陈述 | 检索数据库交叉验证 | LITERAS |
+| **引用忠实度** | 模型真正依赖引用文献而非事后合理化 | 反事实探针测试 | Correctness is Not Faithfulness |
+| **证据可追溯性** | 每条陈述可精确归因到上下文片段 | ContextCite 归因方法 | ContextCite |
+| **结构逻辑性** | 综述/报告结构合理、逻辑连贯 | 页级自适应评分 | Deep-Research Eval |
+| **专业术语正确性** | 领域术语使用准确 | LLM-as-Judge + rubric prompt | LLM-as-Judge Survey |
+| **用户可理解性** | 非专家可理解，表述清晰 | 半自动（人工+LLM 评分） | LLM-as-Judge Survey |
+
+---
+
+## 四、推荐的 Agent 架构（综合上述研究）
+
+```
+用户输入
+  ↓
+[检索 Agent] → 调用学术 API（如 PubMed/arXiv）
+  ↓
+[解析 Agent] → 提取论文关键信息（方法/结论/引用）
+  ↓
+[分析 Agent] → 比对/综合多篇文献
+  ↓
+[生成 Agent] → 生成综述/回答 + 内联引用
+  ↓
+[验证 Agent] → 核对引用准确性 + 忠实度检查
+  ↓
+输出（带可追溯引用的学术回答）
+```
+
+这个架构融合了 **LITERAS 的多 Agent 循环** + **ContextCite 的归因** + **SelfCheckGPT 的幻觉检测**，覆盖了论文阅读助手、文献综述生成、引用核对三个业务用例。
+
+---
+
+## 五、总结
+
+| 维度 | 最核心参考 | 理由 |
+|------|-----------|------|
+| 应用架构 | [LITERAS](https://www.aminer.cn/pub/682b8d02163c01c850a75b7d) + [LLM+MAS 综述生成](https://www.aminer.cn/pub/6724af3601d2a3fbfcdf054b) | 多 Agent 文献系统 + 综述生成的完整方案 |
+| 引用核对 | [ContextCite](https://www.aminer.cn/pub/66d7c28e01d2a3fbfc859606) + [Fact-Checking Agent](https://www.aminer.cn/pub/6535d747939a5f408295c5da) | 归因方法 + 事实核查 Agent 架构 |
+| 评测框架 | [Deep-Research Eval](https://www.aminer.cn/pub/69b4344a9be8eb7c4beba1cf) + [LLM-as-Judge Survey](https://www.aminer.cn/pub/6a8ac6a10a96f8c83cbca23c) | 长文报告自动评测 + rubric 设计方法论 |
+| 幻觉检测 | [SelfCheckGPT](https://www.aminer.cn/pub/6413dabd90e50fcafd3cd6a8) | 1591 引用的基石方法，可直接集成 |
+| 引用忠实度 | [Correctness is Not Faithfulness](https://www.aminer.cn/pub/68e7e23e163c01c85077acaa) | 揭示 57% 引用不忠实的深层问题 |
+
+这些研究覆盖了任务要求的全部要素——从 Agent 应用构建到多维度 rubric 评测再到失败 case 归因，可以作为你项目的理论和技术基础。如果你需要我深入分析其中某篇论文的具体方法细节，随时说。

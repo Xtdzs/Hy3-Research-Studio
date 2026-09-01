@@ -1,0 +1,7 @@
+# ScholarBench 核心依赖（极少，仅评测所必需）
+openai>=1.30          # judge 与 openai_compat adapter
+
+# 可选依赖（缺失时自动降级，不影响主流程）
+pypdf>=4.2            # T4 论文 PDF 解析
+matplotlib>=3.7       # 能力雷达图 / 难度曲线
+numpy>=1.24           # 统计指标（agreement 已用纯标准库实现，非必需）

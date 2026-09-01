@@ -1,0 +1,122 @@
+[
+  {
+    "title": "Retrieval-Augmented Generation for Large Language Models: A Survey",
+    "doi": "10.48550/arxiv.2312.10997",
+    "year": 2023,
+    "cited_by_count": 711
+  },
+  {
+    "title": "Evaluation of Retrieval-Augmented Generation: A Survey",
+    "doi": "10.1007/978-981-96-1024-2_8",
+    "year": 2025,
+    "cited_by_count": 133
+  },
+  {
+    "title": "Graph Retrieval-Augmented Generation: A Survey",
+    "doi": "10.1145/3777378",
+    "year": 2025,
+    "cited_by_count": 106
+  },
+  {
+    "title": "A Survey on Retrieval-Augmented Text Generation",
+    "doi": "10.48550/arxiv.2202.01110",
+    "year": 2022,
+    "cited_by_count": 71
+  },
+  {
+    "title": "Retrieval-augmented generation for educational application: A systematic survey",
+    "doi": "10.1016/j.caeai.2025.100417",
+    "year": 2025,
+    "cited_by_count": 114
+  },
+  {
+    "title": "Retrieval-Augmented Generation for AI-Generated Content: A Survey",
+    "doi": "10.1007/s41019-025-00335-5",
+    "year": 2026,
+    "cited_by_count": 93
+  },
+  {
+    "title": "A Survey on RAG Meeting LLMs: Towards Retrieval-Augmented Large Language Models",
+    "doi": "10.1145/3637528.3671470",
+    "year": 2024,
+    "cited_by_count": 720
+  },
+  {
+    "title": "Retrieval-Augmented Generation for AI-Generated Content: A Survey",
+    "doi": "10.48550/arxiv.2402.19473",
+    "year": 2024,
+    "cited_by_count": 83
+  },
+  {
+    "title": "Retrieval-Augmented Generation (RAG) Chatbots for Education: A Survey of Applications",
+    "doi": "10.3390/app15084234",
+    "year": 2025,
+    "cited_by_count": 107
+  },
+  {
+    "title": "Graph Retrieval-Augmented Generation for Large Language Models: A Survey",
+    "doi": "10.1109/aixset62544.2024.00030",
+    "year": 2024,
+    "cited_by_count": 65
+  },
+  {
+    "title": "A Survey of Augmented Reality Technologies, Applications and Limitations",
+    "doi": "10.20870/ijvr.2010.9.2.2767",
+    "year": 2010,
+    "cited_by_count": 1651
+  },
+  {
+    "title": "Active Retrieval Augmented Generation",
+    "doi": "10.18653/v1/2023.emnlp-main.495",
+    "year": 2023,
+    "cited_by_count": 426
+  },
+  {
+    "title": "Internet of Things: A Survey on Enabling Technologies, Protocols, and Applications",
+    "doi": "10.1109/comst.2015.2444095",
+    "year": 2015,
+    "cited_by_count": 8540
+  },
+  {
+    "title": "A Survey on Retrieval-Augmented Text Generation for Large Language Models",
+    "doi": "10.1145/3805774",
+    "year": 2026,
+    "cited_by_count": 51
+  },
+  {
+    "title": "Enhancing the Precision and Interpretability of Retrieval-Augmented Generation (RAG) in Legal Technology: A Survey",
+    "doi": "10.1109/access.2025.3550145",
+    "year": 2025,
+    "cited_by_count": 60
+  },
+  {
+    "title": "RAGAs: Automated Evaluation of Retrieval Augmented Generation",
+    "doi": "10.18653/v1/2024.eacl-demo.16",
+    "year": 2024,
+    "cited_by_count": 424
+  },
+  {
+    "title": "Graph Retrieval-Augmented Generation: A Survey",
+    "doi": "10.48550/arxiv.2408.08921",
+    "year": 2024,
+    "cited_by_count": 26
+  },
+  {
+    "title": "Agentic Retrieval-Augmented Generation: A Survey on Agentic RAG",
+    "doi": "10.48550/arxiv.2501.09136",
+    "year": 2025,
+    "cited_by_count": 31
+  },
+  {
+    "title": "A Survey of Collaborative Filtering Techniques",
+    "doi": "10.1155/2009/421425",
+    "year": 2009,
+    "cited_by_count": 3630
+  },
+  {
+    "title": "Benchmarking Large Language Models in Retrieval-Augmented Generation",
+    "doi": "10.1609/aaai.v38i16.29728",
+    "year": 2024,
+    "cited_by_count": 371
+  }
+]

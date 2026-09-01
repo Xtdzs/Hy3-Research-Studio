@@ -1,0 +1,122 @@
+[
+  {
+    "title": "Chain-Of-Thought Prompting Elicits Reasoning in Large Language Models",
+    "doi": "10.52202/068431-1800",
+    "year": 2022,
+    "cited_by_count": 1743
+  },
+  {
+    "title": "Automatic Chain of Thought Prompting in Large Language Models",
+    "doi": "10.48550/arxiv.2210.03493",
+    "year": 2022,
+    "cited_by_count": 237
+  },
+  {
+    "title": "Structured Chain-of-Thought Prompting for Code Generation",
+    "doi": "10.1145/3690635",
+    "year": 2024,
+    "cited_by_count": 122
+  },
+  {
+    "title": "Reasoning Implicit Sentiment with Chain-of-Thought Prompting",
+    "doi": "10.18653/v1/2023.acl-short.101",
+    "year": 2023,
+    "cited_by_count": 104
+  },
+  {
+    "title": "Compositional Chain-of-Thought Prompting for Large Multimodal Models",
+    "doi": "10.1109/cvpr52733.2024.01367",
+    "year": 2024,
+    "cited_by_count": 80
+  },
+  {
+    "title": "Towards Understanding Chain-of-Thought Prompting: An Empirical Study of What Matters",
+    "doi": "10.18653/v1/2023.acl-long.153",
+    "year": 2023,
+    "cited_by_count": 112
+  },
+  {
+    "title": "Language Models Don't Always Say What They Think: Unfaithful Explanations in Chain-of-Thought Prompting",
+    "doi": "10.48550/arxiv.2305.04388",
+    "year": 2023,
+    "cited_by_count": 90
+  },
+  {
+    "title": "Visual Chain-of-Thought Prompting for Knowledge-Based Visual Reasoning",
+    "doi": "10.1609/aaai.v38i2.27888",
+    "year": 2024,
+    "cited_by_count": 39
+  },
+  {
+    "title": "Language Models Don't Always Say What They Think: Unfaithful Explanations in Chain-of-Thought Prompting",
+    "doi": "10.52202/075280-3275",
+    "year": 2023,
+    "cited_by_count": 71
+  },
+  {
+    "title": "Self-Consistency Improves Chain of Thought Reasoning in Language Models",
+    "doi": "10.48550/arxiv.2203.11171",
+    "year": 2022,
+    "cited_by_count": 714
+  },
+  {
+    "title": "A Chain-of-Thought Prompting Approach with LLMs for Evaluating Students’ Formative Assessment Responses in Science",
+    "doi": "10.1609/aaai.v38i21.30364",
+    "year": 2024,
+    "cited_by_count": 49
+  },
+  {
+    "title": "Plan-and-Solve Prompting: Improving Zero-Shot Chain-of-Thought Reasoning by Large Language Models",
+    "doi": "10.18653/v1/2023.acl-long.147",
+    "year": 2023,
+    "cited_by_count": 307
+  },
+  {
+    "title": "Towards Better Chain-of-Thought Prompting Strategies: A Survey",
+    "doi": "10.48550/arxiv.2310.04959",
+    "year": 2023,
+    "cited_by_count": 25
+  },
+  {
+    "title": "Cue-CoT: Chain-of-thought Prompting for Responding to In-depth Dialogue Questions with LLMs",
+    "doi": "10.18653/v1/2023.findings-emnlp.806",
+    "year": 2023,
+    "cited_by_count": 32
+  },
+  {
+    "title": "Evaluation of open and closed-source LLMs for low-resource language with zero-shot, few-shot, and chain-of-thought prompting",
+    "doi": "10.1016/j.nlp.2024.100124",
+    "year": 2025,
+    "cited_by_count": 41
+  },
+  {
+    "title": "Chain of Thought Prompting Elicits Knowledge Augmentation",
+    "doi": "10.18653/v1/2023.findings-acl.408",
+    "year": 2023,
+    "cited_by_count": 19
+  },
+  {
+    "title": "Structured Chain-of-Thought Prompting for Code Generation",
+    "doi": "10.48550/arxiv.2305.06599",
+    "year": 2023,
+    "cited_by_count": 17
+  },
+  {
+    "title": "Generating SPARQL from Natural Language Using Chain-of-Thoughts Prompting",
+    "doi": "10.3233/ssw240028",
+    "year": 2024,
+    "cited_by_count": 20
+  },
+  {
+    "title": "When do you need Chain-of-Thought Prompting for ChatGPT?",
+    "doi": "10.48550/arxiv.2304.03262",
+    "year": 2023,
+    "cited_by_count": 18
+  },
+  {
+    "title": "Enhancing Chain-of-Thoughts Prompting with Iterative Bootstrapping in Large Language Models",
+    "doi": "10.18653/v1/2024.findings-naacl.257",
+    "year": 2024,
+    "cited_by_count": 15
+  }
+]

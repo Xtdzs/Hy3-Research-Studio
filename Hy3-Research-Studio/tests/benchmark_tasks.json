@@ -1,0 +1,70 @@
+{
+  "description": "Hy3 Research Studio 评测任务集。覆盖方案 §12.3 的 4 类研究场景。每个任务含 key_points 用于计算证据覆盖率 Recall@key_points。",
+  "tasks": [
+    {
+      "id": "A1",
+      "category": "literature_review",
+      "query": "面向 RAG 的长上下文压缩方法综述与研究空白分析",
+      "task_type": "literature_review",
+      "key_points": [
+        "chunk summarization / 摘要式压缩",
+        "hierarchical memory / 分层记忆",
+        "query-aware compression / 查询感知压缩",
+        "retrieval-compression synergy / 检索与压缩协同",
+        "fidelity / hallucination risk / 保真与幻觉风险"
+      ]
+    },
+    {
+      "id": "A2",
+      "category": "literature_review",
+      "query": "多模态检索增强生成（Multimodal RAG）的方法分类与评测现状",
+      "task_type": "literature_review",
+      "key_points": [
+        "跨模态检索 (cross-modal retrieval)",
+        "图文对齐 / 表征学习",
+        "多模态生成融合策略",
+        "评测基准与指标",
+        "幻觉与对齐局限"
+      ]
+    },
+    {
+      "id": "B1",
+      "category": "tech_survey",
+      "query": "大语言模型代码智能体（Code Agent）的任务规划方法综述",
+      "task_type": "tech_survey",
+      "key_points": [
+        "任务分解 / plan-and-execute",
+        "工具调用与反馈循环",
+        "自我修正 / 错误恢复",
+        "评测基准 (SWE-bench 等)",
+        "长程规划局限"
+      ]
+    },
+    {
+      "id": "C1",
+      "category": "proposal",
+      "query": "医疗大语言模型的可信评测方法研究开题",
+      "task_type": "proposal",
+      "key_points": [
+        "医疗知识准确性评测",
+        "安全性 / 有害输出评测",
+        "可解释性与可追溯",
+        "现有基准局限",
+        "可行研究切入点"
+      ]
+    },
+    {
+      "id": "D1",
+      "category": "tech_survey",
+      "query": "扩散语言模型 (Diffusion Language Models) 的方法与效率分析",
+      "task_type": "tech_survey",
+      "key_points": [
+        "离散扩散建模",
+        "并行解码 / 推理效率",
+        "与自回归模型对比",
+        "训练目标设计",
+        "生成质量局限"
+      ]
+    }
+  ]
+}

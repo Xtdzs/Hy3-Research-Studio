@@ -1,0 +1,122 @@
+[
+  {
+    "title": "Diffusion Models: A Comprehensive Survey of Methods and Applications",
+    "doi": "10.1145/3626235",
+    "year": 2023,
+    "cited_by_count": 1526
+  },
+  {
+    "title": "A Survey of Large Language Models",
+    "doi": "10.1007/s11704-026-60308-3",
+    "year": 2026,
+    "cited_by_count": 1511
+  },
+  {
+    "title": "Diffusion Tensor Imaging of the Brain",
+    "doi": "10.1016/j.nurt.2007.05.011",
+    "year": 2007,
+    "cited_by_count": 2764
+  },
+  {
+    "title": "A Survey on RAG Meeting LLMs: Towards Retrieval-Augmented Large Language Models",
+    "doi": "10.1145/3637528.3671470",
+    "year": 2024,
+    "cited_by_count": 720
+  },
+  {
+    "title": "Large Language Models in Healthcare and Medical Domain: A Review",
+    "doi": "10.3390/informatics11030057",
+    "year": 2024,
+    "cited_by_count": 388
+  },
+  {
+    "title": "GMAN: A Graph Multi-Attention Network for Traffic Prediction",
+    "doi": "10.1609/aaai.v34i01.5477",
+    "year": 2020,
+    "cited_by_count": 1687
+  },
+  {
+    "title": "Large language models for generative information extraction: a survey",
+    "doi": "10.1007/s11704-024-40555-y",
+    "year": 2024,
+    "cited_by_count": 262
+  },
+  {
+    "title": "DiffuRec: A Diffusion Model for Sequential Recommendation",
+    "doi": "10.1145/3631116",
+    "year": 2023,
+    "cited_by_count": 145
+  },
+  {
+    "title": "Multimodal Large Language Models in Health Care: Applications, Challenges, and Future Outlook",
+    "doi": "10.2196/59505",
+    "year": 2024,
+    "cited_by_count": 296
+  },
+  {
+    "title": "A review of large language models and autonomous agents in chemistry",
+    "doi": "10.1039/d4sc03921a",
+    "year": 2024,
+    "cited_by_count": 226
+  },
+  {
+    "title": "GestureDiffuCLIP: Gesture Diffusion Model with CLIP Latents",
+    "doi": "10.1145/3592097",
+    "year": 2023,
+    "cited_by_count": 148
+  },
+  {
+    "title": "Leveraging Generative AI and Large Language Models: A Comprehensive Roadmap for Healthcare Integration",
+    "doi": "10.3390/healthcare11202776",
+    "year": 2023,
+    "cited_by_count": 255
+  },
+  {
+    "title": "Challenges and Applications of Large Language Models",
+    "doi": "10.48550/arxiv.2307.10169",
+    "year": 2023,
+    "cited_by_count": 180
+  },
+  {
+    "title": "DiffusionBERT: Improving Generative Masked Language Models with Diffusion Models",
+    "doi": "10.18653/v1/2023.acl-long.248",
+    "year": 2023,
+    "cited_by_count": 68
+  },
+  {
+    "title": "Efficient Deep Learning: A Survey on Making Deep Learning Models Smaller, Faster, and Better",
+    "doi": "10.1145/3578938",
+    "year": 2023,
+    "cited_by_count": 555
+  },
+  {
+    "title": "Informing cognitive abstractions through neuroimaging: The neural drift diffusion model.",
+    "doi": "10.1037/a0038894",
+    "year": 2015,
+    "cited_by_count": 188
+  },
+  {
+    "title": "Current Clinical Applications of Diffusion-Tensor Imaging in Neurological Disorders",
+    "doi": "10.3988/jcn.2018.14.2.129",
+    "year": 2018,
+    "cited_by_count": 307
+  },
+  {
+    "title": "The Power of Generative AI: A Review of Requirements, Models, Input–Output Formats, Evaluation Metrics, and Challenges",
+    "doi": "10.3390/fi15080260",
+    "year": 2023,
+    "cited_by_count": 621
+  },
+  {
+    "title": "Deep Generative Modelling: A Comparative Review of VAEs, GANs, Normalizing Flows, Energy-Based and Autoregressive Models",
+    "doi": "10.1109/tpami.2021.3116668",
+    "year": 2021,
+    "cited_by_count": 669
+  },
+  {
+    "title": "Equivariant 3D-conditional diffusion model for molecular linker design",
+    "doi": "10.1038/s42256-024-00815-9",
+    "year": 2024,
+    "cited_by_count": 158
+  }
+]

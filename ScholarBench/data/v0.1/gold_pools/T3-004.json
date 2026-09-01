@@ -1,0 +1,122 @@
+[
+  {
+    "title": "Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena",
+    "doi": "10.48550/arxiv.2306.05685",
+    "year": 2023,
+    "cited_by_count": 484
+  },
+  {
+    "title": "Large language models encode clinical knowledge",
+    "doi": "10.1038/s41586-023-06291-2",
+    "year": 2023,
+    "cited_by_count": 3697
+  },
+  {
+    "title": "QLoRA: Efficient Finetuning of Quantized LLMs",
+    "doi": "10.48550/arxiv.2305.14314",
+    "year": 2023,
+    "cited_by_count": 506
+  },
+  {
+    "title": "Humans or LLMs as the Judge? A Study on Judgement Bias",
+    "doi": "10.18653/v1/2024.emnlp-main.474",
+    "year": 2024,
+    "cited_by_count": 58
+  },
+  {
+    "title": "Evaluating Scoring Bias in LLM-as-a-Judge",
+    "doi": "10.1007/978-981-92-0372-7_2",
+    "year": 2026,
+    "cited_by_count": 4
+  },
+  {
+    "title": "Mental-LLM",
+    "doi": "10.1145/3643540",
+    "year": 2024,
+    "cited_by_count": 211
+  },
+  {
+    "title": "Evaluating Large Language Models Trained on Code",
+    "doi": "10.48550/arxiv.2107.03374",
+    "year": 2021,
+    "cited_by_count": 1460
+  },
+  {
+    "title": "A Survey on LLM-as-a-Judge",
+    "doi": "10.48550/arxiv.2411.15594",
+    "year": 2024,
+    "cited_by_count": 41
+  },
+  {
+    "title": "G-Eval: NLG Evaluation using Gpt-4 with Better Human Alignment",
+    "doi": "10.18653/v1/2023.emnlp-main.153",
+    "year": 2023,
+    "cited_by_count": 721
+  },
+  {
+    "title": "A framework to assess clinical safety and hallucination rates of LLMs for medical text summarisation",
+    "doi": "10.1038/s41746-025-01670-7",
+    "year": 2025,
+    "cited_by_count": 314
+  },
+  {
+    "title": "From Generation to Judgment: Opportunities and Challenges of LLM-as-a-judge",
+    "doi": "10.18653/v1/2025.emnlp-main.138",
+    "year": 2025,
+    "cited_by_count": 97
+  },
+  {
+    "title": "Bias and Unfairness in Information Retrieval Systems: New Challenges in the LLM Era",
+    "doi": "10.1145/3637528.3671458",
+    "year": 2024,
+    "cited_by_count": 120
+  },
+  {
+    "title": "A survey on large language model based autonomous agents",
+    "doi": "10.1007/s11704-024-40231-1",
+    "year": 2024,
+    "cited_by_count": 1490
+  },
+  {
+    "title": "GPT-4 Technical Report",
+    "doi": "10.4230/lipics.cosit.2024.11",
+    "year": 2023,
+    "cited_by_count": 2480
+  },
+  {
+    "title": "Can LLMs Replace Human Evaluators? An Empirical Study of LLM-as-a-Judge in Software Engineering",
+    "doi": "10.1145/3728963",
+    "year": 2025,
+    "cited_by_count": 52
+  },
+  {
+    "title": "A Survey of Large Language Models",
+    "doi": "10.1007/s11704-026-60308-3",
+    "year": 2026,
+    "cited_by_count": 1511
+  },
+  {
+    "title": "LLMs-as-Judges: A Comprehensive Survey on LLM-based Evaluation Methods",
+    "doi": "10.48550/arxiv.2412.05579",
+    "year": 2024,
+    "cited_by_count": 36
+  },
+  {
+    "title": "On LLMs-Driven Synthetic Data Generation, Curation, and Evaluation: A Survey",
+    "doi": "10.18653/v1/2024.findings-acl.658",
+    "year": 2024,
+    "cited_by_count": 107
+  },
+  {
+    "title": "Optimization-based Prompt Injection Attack to LLM-as-a-Judge",
+    "doi": "10.1145/3658644.3690291",
+    "year": 2024,
+    "cited_by_count": 61
+  },
+  {
+    "title": "Rankers, Judges, and Assistants: Towards Understanding the Interplay of LLMs in Information Retrieval Evaluation",
+    "doi": "10.1145/3726302.3730348",
+    "year": 2025,
+    "cited_by_count": 21
+  }
+]

@@ -1,0 +1,8 @@
+{"task_id": "T2-001", "family": "T2", "suite": "T2_proposal", "difficulty": "easy", "prompt": "设计一个研究方案：评估长文本摘要系统的事实一致性", "capability": ["C2", "C5", "C8"], "context": {"depth": "quick"}, "meta": {}}
+{"task_id": "T2-002", "family": "T2", "suite": "T2_proposal", "difficulty": "easy", "prompt": "为「学术文献推荐系统」设计开题方案", "capability": ["C2", "C5", "C8"], "context": {"depth": "quick"}, "meta": {}}
+{"task_id": "T2-003", "family": "T2", "suite": "T2_proposal", "difficulty": "medium", "prompt": "研究开题：医疗大语言模型的可信评测方法", "capability": ["C2", "C5", "C8"], "context": {"depth": "standard"}, "meta": {}}
+{"task_id": "T2-004", "family": "T2", "suite": "T2_proposal", "difficulty": "medium", "prompt": "开题：检索增强生成中的引用幻觉自动检测方法", "capability": ["C2", "C5", "C8"], "context": {"depth": "standard"}, "meta": {}}
+{"task_id": "T2-005", "family": "T2", "suite": "T2_proposal", "difficulty": "medium", "prompt": "开题：多智能体系统在科研假设生成中的有效性验证", "capability": ["C2", "C5", "C8"], "context": {"depth": "standard"}, "meta": {}}
+{"task_id": "T2-006", "family": "T2", "suite": "T2_proposal", "difficulty": "hard", "prompt": "开题：在什么条件下，小模型 + 检索能够匹配大模型 + 检索？设计一个能给出否定性结论的实验", "capability": ["C2", "C5", "C8"], "context": {"depth": "standard"}, "meta": {}}
+{"task_id": "T2-007", "family": "T2", "suite": "T2_proposal", "difficulty": "hard", "prompt": "开题：评估 LLM 生成证据图谱的可复现性（同一输入多次运行的稳定性）", "capability": ["C2", "C5", "C8"], "context": {"depth": "standard"}, "meta": {}}
+{"task_id": "T2-008", "family": "T2", "suite": "T2_proposal", "difficulty": "hard", "prompt": "开题：长上下文模型在「证据冲突」输入下的行为——模型会调和矛盾还是选择性忽略？", "capability": ["C2", "C5", "C8"], "context": {"depth": "standard"}, "meta": {}}

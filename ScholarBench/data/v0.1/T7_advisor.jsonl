@@ -1,0 +1,8 @@
+{"task_id": "T7-001", "family": "T7", "suite": "T7_advisor", "difficulty": "easy", "prompt": "我想做一个『论文引用网络可视化』的小工具，应该从哪入手？", "capability": ["C1", "C6", "C7"], "context": {}, "meta": {}}
+{"task_id": "T7-002", "family": "T7", "suite": "T7_advisor", "difficulty": "easy", "prompt": "如何评估我提出的检索算法是否真的有用？", "capability": ["C1", "C6", "C7"], "context": {}, "meta": {}}
+{"task_id": "T7-003", "family": "T7", "suite": "T7_advisor", "difficulty": "medium", "prompt": "我想研究『大模型在学术写作中的幻觉率』，有哪些成熟数据集可用？", "capability": ["C1", "C6", "C7"], "context": {}, "meta": {}}
+{"task_id": "T7-004", "family": "T7", "suite": "T7_advisor", "difficulty": "medium", "prompt": "多智能体做科研假设生成，值得做吗？现在做到什么程度了？", "capability": ["C1", "C6", "C7"], "context": {}, "meta": {}}
+{"task_id": "T7-005", "family": "T7", "suite": "T7_advisor", "difficulty": "medium", "prompt": "我的实验结果比基线差，可能是什么原因？", "capability": ["C1", "C6", "C7"], "context": {}, "meta": {}}
+{"task_id": "T7-006", "family": "T7", "suite": "T7_advisor", "difficulty": "hard", "prompt": "有人说『长上下文已经不需要 RAG 了』，这个说法成立吗？请给证据，并说明什么条件下不成立。", "capability": ["C1", "C6", "C7"], "context": {}, "meta": {}}
+{"task_id": "T7-007", "family": "T7", "suite": "T7_advisor", "difficulty": "hard", "prompt": "如果我要证明『小模型+检索不劣于大模型+检索』这个否定性主张，实验该怎么设计才站得住？", "capability": ["C1", "C6", "C7"], "context": {}, "meta": {}}
+{"task_id": "T7-008", "family": "T7", "suite": "T7_advisor", "difficulty": "hard", "prompt": "我复现不出某篇论文的结论，接下来该怎么办？", "capability": ["C1", "C6", "C7"], "context": {}, "meta": {}}

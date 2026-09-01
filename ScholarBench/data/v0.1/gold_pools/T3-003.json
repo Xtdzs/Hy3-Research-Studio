@@ -1,0 +1,122 @@
+[
+  {
+    "title": "Lost in the Middle: How Language Models Use Long Contexts",
+    "doi": "10.1162/tacl_a_00638",
+    "year": 2024,
+    "cited_by_count": 1215
+  },
+  {
+    "title": "Lost in the Middle: How Language Models Use Long Contexts",
+    "doi": "10.48550/arxiv.2307.03172",
+    "year": 2023,
+    "cited_by_count": 62
+  },
+  {
+    "title": "Training language models to follow instructions with human feedback",
+    "doi": "10.48550/arxiv.2203.02155",
+    "year": 2022,
+    "cited_by_count": 4343
+  },
+  {
+    "title": "PaLM: Scaling Language Modeling with Pathways",
+    "doi": "10.48550/arxiv.2204.02311",
+    "year": 2022,
+    "cited_by_count": 2135
+  },
+  {
+    "title": "LAMMPS - a flexible simulation tool for particle-based materials modeling at the atomic, meso, and continuum scales",
+    "doi": "10.1016/j.cpc.2021.108171",
+    "year": 2021,
+    "cited_by_count": 12282
+  },
+  {
+    "title": "A Survey of Large Language Models",
+    "doi": "10.1007/s11704-026-60308-3",
+    "year": 2026,
+    "cited_by_count": 1511
+  },
+  {
+    "title": "Head-Driven Statistical Models for Natural Language Parsing",
+    "doi": "10.1162/089120103322753356",
+    "year": 2003,
+    "cited_by_count": 1861
+  },
+  {
+    "title": "A critique of the cross-lagged panel model.",
+    "doi": "10.1037/a0038889",
+    "year": 2015,
+    "cited_by_count": 3889
+  },
+  {
+    "title": "Identity and Language Learning",
+    "doi": "10.21832/9781783090563",
+    "year": 2013,
+    "cited_by_count": 1707
+  },
+  {
+    "title": "A National Study of School Effectiveness for Language Minority Students' Long-Term Academic Achievement",
+    "doi": "",
+    "year": 2002,
+    "cited_by_count": 1201
+  },
+  {
+    "title": "Exploiting Generative AI to Scale up Intelligent Tutoring Systems",
+    "doi": "10.4230/lipics.itp.2023.19",
+    "year": 2023,
+    "cited_by_count": 79071
+  },
+  {
+    "title": "Permutation inference for the general linear model",
+    "doi": "10.1016/j.neuroimage.2014.01.060",
+    "year": 2014,
+    "cited_by_count": 3876
+  },
+  {
+    "title": "Negation in English and other languages",
+    "doi": "10.17169/refubium-47759",
+    "year": 2025,
+    "cited_by_count": 1629
+  },
+  {
+    "title": "Retrieval-Augmented Generation for Large Language Models: A Survey",
+    "doi": "10.48550/arxiv.2312.10997",
+    "year": 2023,
+    "cited_by_count": 711
+  },
+  {
+    "title": "Explainability for Large Language Models: A Survey",
+    "doi": "10.1145/3639372",
+    "year": 2024,
+    "cited_by_count": 616
+  },
+  {
+    "title": "Timing in turn-taking and its implications for processing models of language",
+    "doi": "10.3389/fpsyg.2015.00731",
+    "year": 2015,
+    "cited_by_count": 668
+  },
+  {
+    "title": "Evaluation and mitigation of the limitations of large language models in clinical decision-making",
+    "doi": "10.1038/s41591-024-03097-1",
+    "year": 2024,
+    "cited_by_count": 665
+  },
+  {
+    "title": "Structured information extraction from scientific text with large language models",
+    "doi": "10.1038/s41467-024-45563-x",
+    "year": 2024,
+    "cited_by_count": 685
+  },
+  {
+    "title": "The Long-Term Health Consequences of Child Physical Abuse, Emotional Abuse, and Neglect: A Systematic Review and Meta-Analysis",
+    "doi": "10.1371/journal.pmed.1001349",
+    "year": 2012,
+    "cited_by_count": 3385
+  },
+  {
+    "title": "Ecological Models and Data in R",
+    "doi": "10.2307/j.ctvcm4g37",
+    "year": 2008,
+    "cited_by_count": 1311
+  }
+]

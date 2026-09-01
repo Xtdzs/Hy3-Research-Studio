@@ -1,0 +1,8 @@
+{"task_id": "T1-001", "family": "T1", "suite": "T1_survey", "difficulty": "easy", "prompt": "面向 RAG 的长上下文压缩方法综述与研究空白分析", "capability": ["C1", "C2", "C5", "C8"], "context": {"depth": "quick"}, "meta": {}}
+{"task_id": "T1-002", "family": "T1", "suite": "T1_survey", "difficulty": "easy", "prompt": "多模态检索增强生成（Multimodal RAG）的方法分类与评测现状", "capability": ["C1", "C2", "C5", "C8"], "context": {"depth": "quick"}, "meta": {}}
+{"task_id": "T1-003", "family": "T1", "suite": "T1_survey", "difficulty": "medium", "prompt": "大语言模型代码智能体的任务规划方法综述", "capability": ["C1", "C2", "C5", "C8"], "context": {"depth": "standard"}, "meta": {}}
+{"task_id": "T1-004", "family": "T1", "suite": "T1_survey", "difficulty": "medium", "prompt": "扩散语言模型（Diffusion LM）的方法与推理效率分析", "capability": ["C1", "C2", "C5", "C8"], "context": {"depth": "standard"}, "meta": {}}
+{"task_id": "T1-005", "family": "T1", "suite": "T1_survey", "difficulty": "medium", "prompt": "LLM-as-a-judge 评测范式的偏差来源与缓解方法综述", "capability": ["C1", "C2", "C5", "C8"], "context": {"depth": "standard"}, "meta": {}}
+{"task_id": "T1-006", "family": "T1", "suite": "T1_survey", "difficulty": "hard", "prompt": "2025 年以来「测试时扩展 / test-time scaling」在开源复现工作上的分歧与证据冲突", "capability": ["C1", "C2", "C5", "C8"], "context": {"depth": "standard"}, "meta": {}}
+{"task_id": "T1-007", "family": "T1", "suite": "T1_survey", "difficulty": "hard", "prompt": "长上下文模型「中间遗忘 / lost-in-the-middle」现象：哪些结论在后续研究中被推翻或未被复现", "capability": ["C1", "C2", "C5", "C8"], "context": {"depth": "standard"}, "meta": {}}
+{"task_id": "T1-008", "family": "T1", "suite": "T1_survey", "difficulty": "hard", "prompt": "对比：在小样本场景下，参数高效微调与上下文学习在「领域迁移 + 低资源语言」上的适用边界", "capability": ["C1", "C2", "C5", "C8"], "context": {"depth": "standard"}, "meta": {}}

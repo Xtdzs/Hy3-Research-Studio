@@ -1,0 +1,122 @@
+[
+  {
+    "title": "LLaMA: Open and Efficient Foundation Language Models",
+    "doi": "10.48550/arxiv.2302.13971",
+    "year": 2023,
+    "cited_by_count": 3961
+  },
+  {
+    "title": "Parameter-efficient fine-tuning of large-scale pre-trained language models",
+    "doi": "10.1038/s42256-023-00626-4",
+    "year": 2023,
+    "cited_by_count": 1004
+  },
+  {
+    "title": "BioBERT: a pre-trained biomedical language representation model for biomedical text mining",
+    "doi": "10.1093/bioinformatics/btz682",
+    "year": 2019,
+    "cited_by_count": 7350
+  },
+  {
+    "title": "Exploring the Limits of Transfer Learning with a Unified Text-to-Text\\n Transformer",
+    "doi": "10.48550/arxiv.1910.10683",
+    "year": 2019,
+    "cited_by_count": 8346
+  },
+  {
+    "title": "Pre-train, Prompt, and Predict: A Systematic Survey of Prompting Methods in Natural Language Processing",
+    "doi": "10.1145/3560815",
+    "year": 2022,
+    "cited_by_count": 3825
+  },
+  {
+    "title": "The myth of language universals: Language diversity and its importance for cognitive science",
+    "doi": "10.1017/s0140525x0999094x",
+    "year": 2009,
+    "cited_by_count": 2657
+  },
+  {
+    "title": "A Survey of Large Language Models",
+    "doi": "10.1007/s11704-026-60308-3",
+    "year": 2026,
+    "cited_by_count": 1511
+  },
+  {
+    "title": "PaLM: Scaling Language Modeling with Pathways",
+    "doi": "10.48550/arxiv.2204.02311",
+    "year": 2022,
+    "cited_by_count": 2135
+  },
+  {
+    "title": "Few-Shot Parameter-Efficient Fine-Tuning is Better and Cheaper than In-Context Learning",
+    "doi": "10.48550/arxiv.2205.05638",
+    "year": 2022,
+    "cited_by_count": 293
+  },
+  {
+    "title": "Recent Advances in Natural Language Processing via Large Pre-trained Language Models: A Survey",
+    "doi": "10.1145/3605943",
+    "year": 2023,
+    "cited_by_count": 1263
+  },
+  {
+    "title": "TinyBERT: Distilling BERT for Natural Language Understanding",
+    "doi": "10.18653/v1/2020.findings-emnlp.372",
+    "year": 2020,
+    "cited_by_count": 1704
+  },
+  {
+    "title": "Unlocking Parameter-Efficient Fine-Tuning for Low-Resource Language Translation",
+    "doi": "10.18653/v1/2024.findings-naacl.263",
+    "year": 2024,
+    "cited_by_count": 5
+  },
+  {
+    "title": "Large language models generate functional protein sequences across diverse families",
+    "doi": "10.1038/s41587-022-01618-2",
+    "year": 2023,
+    "cited_by_count": 1129
+  },
+  {
+    "title": "LLaMA-Adapter: Efficient Fine-tuning of Language Models with Zero-init Attention",
+    "doi": "10.48550/arxiv.2303.16199",
+    "year": 2023,
+    "cited_by_count": 172
+  },
+  {
+    "title": "BLOOM: A 176B-Parameter Open-Access Multilingual Language Model",
+    "doi": "10.4230/oasics.commit2data.3",
+    "year": 2023,
+    "cited_by_count": 675
+  },
+  {
+    "title": "ChatDoctor: A Medical Chat Model Fine-Tuned on a Large Language Model Meta-AI (LLaMA) Using Medical Domain Knowledge",
+    "doi": "10.7759/cureus.40895",
+    "year": 2023,
+    "cited_by_count": 489
+  },
+  {
+    "title": "Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer",
+    "doi": "10.48550/arxiv.1910.10683",
+    "year": 2019,
+    "cited_by_count": 3695
+  },
+  {
+    "title": "BLIP-2: Bootstrapping Language-Image Pre-training with Frozen Image Encoders and Large Language Models",
+    "doi": "10.48550/arxiv.2301.12597",
+    "year": 2023,
+    "cited_by_count": 924
+  },
+  {
+    "title": "Efficient Neural Architecture Search via Parameter Sharing",
+    "doi": "10.48550/arxiv.1802.03268",
+    "year": 2018,
+    "cited_by_count": 626
+  },
+  {
+    "title": "Towards Adaptive Prefix Tuning for Parameter-Efficient Language Model Fine-tuning",
+    "doi": "10.18653/v1/2023.acl-short.107",
+    "year": 2023,
+    "cited_by_count": 91
+  }
+]

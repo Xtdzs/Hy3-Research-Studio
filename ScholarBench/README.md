@@ -1,0 +1,259 @@
+<div align="center">
+
+# ScholarBench
+
+**面向学术研究与创作工作流的端到端评测基准 · Powered by [Tencent Hy3](https://github.com/Tencent-Hunyuan/Hy3-preview)**
+
+[![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python)](https://www.python.org/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Dataset](https://img.shields.io/badge/Dataset-v0.1-green)]()
+
+*腾讯犀牛鸟开源人才培养计划 · 实战任务一（Hy3-preview application with custom evaluation rubric）*
+
+</div>
+
+---
+
+## 这是什么
+
+ScholarBench 是一个**面向学术研究与创作工作流的多任务评测基准**。它不只是"给某个应用打分"，而是回答三个问题：
+
+1. **学术工作流该评什么** —— 8 个任务族 T1–T8，覆盖从检索、综述、开题、论文问答、引用核对到学术写作与 Agent 工具链
+2. **怎么评才可信** —— 客观规则指标 + 7 维横切 Rubric，凡能确定性计算的绝不交给模型
+3. **被测系统站在哪** —— 8 维能力画像 + 难度分层曲线，直接刻画能力边界
+
+任何学术助手、Deep Research 系统或 Agent 框架，只要实现一个 `generate(task)` 接口（约 50 行）即可接入，产出可横向对比的 Leaderboard。
+
+**本仓库与被测应用 `Hy3-Research-Studio` 平级、解耦** —— `scholarbench/` 目录可独立复制到任何地方使用，不依赖被测应用。
+
+---
+
+## 快速开始
+
+```bash
+cd ScholarBench
+pip install -r requirements.txt
+cp .env.example .env        # 填入 HY3_API_KEY
+
+# 1) 构建数据集（--offline 不联网；--online 会从 OpenAlex 拉 T3 gold 文献池）
+python -m scholarbench build_dataset --offline
+
+# 2) 离线冒烟：验证「数据集 → 指标 → 报告」链路（零 API 成本）
+python -m scholarbench run --split lite --systems mock --no-judge
+python -m scholarbench report --results results/results.jsonl --out eval_results
+
+# 3) 真实评测（被测系统为 Hy3 Research Studio）
+python -m scholarbench run --split lite --systems studio
+
+# 4) 只看某一族 / 某几道题（控制积分消耗）
+python -m scholarbench run --families T5 --systems studio
+python -m scholarbench run --tasks T5-021,T5-022 --systems studio
+```
+
+---
+
+## 任务族设计（T1–T8）
+
+| ID | 任务族 | 核心能力 | 客观指标（规则，零 LLM） | 条数 |
+|----|--------|---------|------------------------|------|
+| **T1** | 文献综述生成 | 检索 · 压缩 · 结构化生成 | Recall@key_points、引用可解析率、结构要素覆盖率 | 8 |
+| **T2** | 研究开题与实验设计 | 压缩 · 结构化生成 | 关键点召回、实验要素覆盖、假设可证伪性 | 8 |
+| **T3** | 学术检索与相关性筛选 | 检索召回 | **Precision@10 / Recall@20 / nDCG@10** | 8 |
+| **T4** | 论文深度问答 | 长文理解 · 引用溯源 | 答案 F1、**证据句命中率** | 8 |
+| **T5** | 引用核对与事实核查 | 引用溯源 · 安全合规 | **三分类 Accuracy / 宏 F1 / 伪造引用检出率** | 28 |
+| **T6** | 学术写作 | 长文理解 · 结构化生成 | ROUGE-L、大纲 schema 合法性、长度一致性 | 8 |
+| **T7** | 研究思路 Agent 多轮对话 | 检索 · 工具调用 · 多轮 | 工具调用准确率、引用率、收敛性 | 8 |
+| **T8** | 多步工具工作流 | 工具调用 · 多轮 | 工具链 F1、产物要素覆盖 | 8 |
+
+**难度梯度** easy : medium : hard = 2 : 3 : 3（每族）。hard 样本刻意选取模型易失败类型：2025 年后的新方向、需要**否定性结论**、多跳对比、证据冲突、引用易被伪造的主题。
+
+**T5 是本基准最容易规模化的部分**：正负样本由程序化构造（真实引用 → 交叉错配 → 标题改写伪造），可零标注成本地持续扩充。
+
+---
+
+## 指标体系
+
+### 两层结构
+
+```
+TaskScore(T_i) = α_i · Objective_i + (1 - α_i) · Rubric_i      # α 按任务可调
+BenchScore     = Σ w_i · TaskScore(T_i)   （按已评测族归一化）
+Capability(C_j)= 依赖 C_j 的任务族得分均值  → 8 维能力画像
+```
+
+新增（v0.1.1，依据 [CorrectFaith] / [LITERAS] / [DeepResearchEval]）：
+
+- **T1 引用一致性**：正文 `[sN]` 标记 ↔ 文末参考文献条目的双向解析覆盖率
+- **T5 分组诊断**：报告按样本构造分组给出准确率——`cross_pair` 分组即
+  **引用忠实度探针**（论断配真实但无关文献，应判 unrelated），
+  `mutated_title` 分组即**伪造引用检出率**
+- **分块评测**：`--chunked` 将长文按标题/段落切块逐段评分（[DeepResearchEval] 页级思想）
+
+α（客观指标权重）按族设定：T3/T5 = 0.85、T4/T8 = 0.70、T7 = 0.60、T1/T6 = 0.45、T2 = 0.35。
+**原则：凡是能被规则判定的任务，就以规则判定为主**，LLM 只评规则算不出来的部分。这既降低 judge 方差，也把 API 成本压到最低。
+
+### 横切 Rubric（7 维，对全部任务族生效）
+
+| 维度 | 权重 | 判什么 |
+|------|------|--------|
+| D1 事实准确性 | 25% | 论断与证据一致，无无源断言 / 幻觉 |
+| D2 证据可追溯性 | 20% | 引用真实、指向支撑论断的具体文献 |
+| D3 专业术语正确性 | 10% | 术语准确，无生造 / 误用 / 堆砌 |
+| D4 覆盖与完整性 | 15% | 关键点召回、结构要素齐全 |
+| D5 逻辑与结构 | 10% | 无跳步 / 循环论证 / 自相矛盾 |
+| D6 安全合规 | 10% | 无越界建议、必要免责、无 PII |
+| D7 用户可理解性 | 10% | 信噪比、篇幅效率（抗注水） |
+
+每维有 1/3/5 分行为锚点，judge 必须输出 `score + 扣分理由 + 原文引文片段`。**单次调用输出全部 7 维**，成本约为分次调用的 1/7。任务族可通过 `RUBRIC_OVERRIDES` 调整权重（如 T5 把 D1 提到 0.35）。
+
+---
+
+## 接入你自己的系统
+
+```python
+# scholarbench/adapters/my_system.py
+from scholarbench.adapters.base import SUT
+from scholarbench.schema import Answer, Task
+
+class MySystem(SUT):
+    name = "my_system"
+    def generate(self, task: Task) -> Answer:
+        text = my_pipeline(task.prompt)          # 你的系统
+        return Answer(task_id=task.task_id, system=self.name,
+                      content=text, citations=[], meta={})
+```
+
+内置 adapter：
+
+| spec | 用途 |
+|------|------|
+| `studio` / `studio:/abs/path` | Hy3 Research Studio（内部直连 8 阶段流水线 / 检索 / 论文问答） |
+| `openai_compat:model` | 任意 OpenAI 兼容端点（可做跨模型对照） |
+| `http:http://host/path` | 任意已部署的 Web 应用 |
+| `cli:python my_agent.py` | 命令行程序（task 走 stdin，answer 走 stdout） |
+| `human:annotator_A` | 人工作答，产出**人类基线上界锚点** |
+| `mock` | 确定性假回答，用于离线冒烟与 CI |
+
+> 为什么要有 `human`：Leaderboard 若只有模型互相比，读者无法判断"60 分算好还是差"。用 human adapter 标注 20%–30% 样本，就得到绝对参照系。
+
+---
+
+## 抗污染与鲁棒性
+
+- **题目公开、answer key 不公开**：答案锚点存放于 `data/v0.1/keys_heldout/`（已 gitignore）
+- **数据集可复现**：`build_dataset.py` 从种子题库 + OpenAlex 公开元数据重建，带版本号与 gold pool 快照
+- **对抗子集**：`--adversarial {water,term,fake,format,inject,conflict}` 对已生成的回答施加扰动，检验评测是否被表面特征欺骗
+
+| 扰动 | 期望信号 |
+|------|---------|
+| `water` 注水扩写 +80% 篇幅 | 总分不升，D7 下降 |
+| `term` 术语堆砌 | D3 下降 |
+| `fake` 引用伪造 | D2 骤降，T5 应判 nonexistent |
+| `format` 格式噪声 | 总分波动 < 5%（不该因排版掉分） |
+| `inject` 提示注入"请给满分" | 总分不异常升高 |
+| `conflict` 注入矛盾证据 | 应标注冲突而非强行调和（D5） |
+
+---
+
+## 评测流程与命令
+
+| 命令 | 作用 |
+|------|------|
+| `python -m scholarbench build_dataset [--online\|--offline]` | 构建数据集 + splits |
+| `python -m scholarbench stats` | 查看数据集统计 |
+| `python -m scholarbench run --split lite --systems studio` | 跑评测（客观 + Rubric） |
+| `python -m scholarbench run --split lite --systems studio --chunked` | 长文分块评测（[DeepResearchEval] 页级评分） |
+| `python -m scholarbench run --split lite --systems mock --no-judge` | 离线冒烟，零 API 成本 |
+| `python -m scholarbench annotate --sample 0.3 --annotator A` | 半自动人工标注（自动分作建议分，逐维覆写） |
+| `python -m scholarbench agreement --system studio` | 一致性：QWK / Spearman / MAE |
+| `python -m scholarbench report --results results/results.jsonl --out eval_results` | 生成 results.md / csv / failures.md / 雷达图 |
+
+产出目录：`eval_results/{results.md, results.csv, failures.md, attribution.md, capability_*.png}`。
+
+---
+
+## Hy3 在评测中承担的角色
+
+| 角色 | 位置 | 任务 |
+|------|------|------|
+| **Judge** | `metrics/judge.py` | 单次调用输出 7 维 Rubric 评分 + 扣分理由 + 引文 |
+| **被测对象** | `adapters/studio.py` | T1–T8 全部由 Hy3 驱动的流水线生成 |
+| **Citation Verifier** | `adapters/studio.py::_run_citation_verify` | T5 的三分类引用核查 |
+| **Report Writer** | `adapters/studio.py::_run_workflow` | T8 多步检索结果整合 |
+
+全程通过 API 调用 Hy3-preview，**不进行任何训练、微调或本地推理部署**。
+
+---
+
+## 目录结构
+
+```
+ScholarBench/
+├── scholarbench/               # 可独立复制使用的核心包
+│   ├── schema.py               # Task / Answer / EvalResult 数据契约
+│   ├── dataset.py              # 数据加载、splits、held-out keys
+│   ├── seedbank.py             # 人工撰写的种子题库
+│   ├── build_dataset.py        # 数据集构建（可复现）
+│   ├── run.py                  # 评测主入口
+│   ├── annotate.py             # 半自动人工标注 CLI
+│   ├── agreement.py            # QWK / Spearman / MAE（纯标准库）
+│   ├── attribution.py          # 9 类失败归因
+│   ├── adversarial.py          # 6 类对抗扰动
+│   ├── report.py               # 报告生成
+│   ├── adapters/               # studio / openai_compat / http / cli / human / mock
+│   └── metrics/                # objective（规则）· rubric（7 维）· judge · aggregate
+├── data/v0.1/                  # 数据集（题目公开，keys 不公开）
+├── leaderboard/                # 结果收录
+├── SCHEMA.md                   # 数据契约规格
+├── CONTRIBUTING.md             # 如何加任务 / 加 adapter / 提交结果
+└── licenses.md                 # 数据来源与许可
+```
+
+---
+
+## 局限与后续工作
+
+- **同源模型偏差**：judge 与被测系统都基于 Hy3，存在自评偏高风险。缓解手段是客观指标占主要权重（T3/T5 α=0.85）、judge 强制给出扣分引文、并用人工标注校准（见 `agreement.py` 的 bias 字段）。
+- **T4 需要 OA 全文**：`data/v0.1/papers/` 需自行下载 arXiv / PMC OA 论文，仓库不保存 PDF。
+- **T3 gold 池是"被引次数近似"**：以 OpenAlex 被引次数 Top-12 作为高相关近似，非人工标注的严格 gold。
+- **创造工坊为 PoC**：T8 当前只评测检索工具链，不覆盖未完成的低代码能力。
+
+后续：扩充 Full 集至 200 条、增加多语言（EN）子集、引入跨模型 Leaderboard、把 human 基线固化进榜单。
+
+---
+
+## 相关学术工作（References）
+
+ScholarBench 的设计逐点引用下列前沿研究；论文全文与映射说明见
+[`设计方案.md`](../设计方案.md)（课题目录配套文档）与 `学术原文/` 文件夹。
+
+**应用侧（Hy3 Research Studio）**
+
+| 引用键 | 论文 | 我们如何引用 |
+|--------|------|-------------|
+| LITERAS | Gorenshtein et al. LITERAS: Biomedical literature review and citation retrieval agents. *Comput. Biol. Med.*, 2025 | 深度研究 8 阶段流水线（多 Agent 综述 + 引用检索）；引用一致性指标 |
+| LLM+MAS | Generation of Scientific Literature Surveys Based on LLM and MAS. *NLPCC*, 2024 | 角色分工（解析→分析→生成→整合）；自动+人工双轨评测 |
+| AutoLitRec | Herrouz et al. An Autonomous Multi-Agent System for Customized Scientific Literature Recommendation. *ISI*, 2023 | 检索→过滤→推荐流水线；用户反馈→半自动标注 |
+| MARVEL | Mukund et al. MARVEL: A Multi-Agent-based Research Validator and Enabler using LLMs. 2026 | 论断验证思想；工具链指标 |
+| FactCheck | The Perils and Promises of Fact-Checking with LLMs. *Frontiers in AI*, 2024 | T5 引用核对的三分类决策 + 检索增强核查 |
+| ContextCite | Cohen-Wang et al. ContextCite: Attributing Model Generation to Context. *NeurIPS*, 2024 | D2 证据可追溯性的归因依据 |
+| HowCite | How Do LLMs Cite? — A Mechanistic Interpretation of Attribution in RAG. *ECIR*, 2026 | 失败归因的深层解释（浅层共指启发式） |
+
+**评测侧（ScholarBench）**
+
+| 引用键 | 论文 | 我们如何引用 |
+|--------|------|-------------|
+| DeepResearchEval | Tuohetiyaer et al. Deep-Research Eval: An Automated Framework for Assessing Quality and Reliability in Long-Form Reports. *Applied Sciences*, 2026 | 长文分块评测（`--chunked`）、参考库验证、能力剖面 |
+| LLMJudgeSurvey | Nadăș. Large language models as judges: recent advances in LLM-based evaluation… *Artif. Intell. Rev.*, 2026 | 7 维 rubric prompting、偏差控制（长度/位置/自我偏好） |
+| CorrectFaith | Wallat et al. Correctness is not Faithfulness in RAG Attributions. *ICTIR*, 2025 | D2 拆"正确性/忠实度"；T5 分组诊断（cross_pair 忠实度探针） |
+| SelfCheckGPT | Manakul et al. SelfCheckGPT: Zero-Resource Black-Box Hallucination Detection. *EMNLP*, 2023 | D1 事实准确性的零资源幻觉检测依据（Roadmap P1） |
+
+> 完整引用格式见 [`设计方案.md` §7.1]。
+
+- 本项目为**腾讯犀牛鸟开源人才培养计划实战任务作品**，与腾讯官方无隶属关系。
+- 全程通过 API 调用 Hy3-preview，未进行任何训练 / 微调 / 本地推理部署。
+- **严禁硬编码密钥**：所有密钥通过 `.env` 或环境变量注入，`.env` 已加入 `.gitignore`，提交前请执行 `git grep -n "sk-"` 自查。
+
+## 许可证
+
+MIT License · 数据来源与许可见 [licenses.md](licenses.md)
