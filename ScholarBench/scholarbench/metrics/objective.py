@@ -206,11 +206,27 @@ def _obj_t4(task: Task, answer: Answer, key: dict):
 VALID_VERDICTS = ("supported", "unrelated", "nonexistent")
 
 
+# 兼容外部 Agent 的多种输出形态：
+#   {"verdict": "supported", ...} / verdict: supported / 裸词 supported / 长文本内含 JSON
+_VERDICT_RE = re.compile(
+    r"[\"'`]?\bverdict\b[\"'`]?\s*[:=]\s*[\"'`]?(\w+)", re.I)
+
+
 def _parse_verdict(answer: Answer) -> str:
+    """提取 T5 三分类判定。对不同接入方式（HTTP/CLI/裸模型）保持同一口径。"""
+    # 1) 适配层已解析好的 verdict
     v = str(answer.meta.get("verdict", "")).strip().lower()
     if v in VALID_VERDICTS:
         return v
-    head = (answer.content or "").strip().lower()
+    text = (answer.content or "").strip()
+    # 2) 输出为 JSON（或长回答里嵌了 JSON 片段）
+    m = _VERDICT_RE.search(text)
+    if m:
+        cand = m.group(1).strip().lower()
+        if cand in VALID_VERDICTS:
+            return cand
+    # 3) 裸词开头（supported / unrelated / nonexistent）
+    head = text.lower()
     for cand in VALID_VERDICTS:
         if head.startswith(cand):
             return cand

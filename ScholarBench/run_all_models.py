@@ -1,20 +1,31 @@
-"""批量跨基座模型评测（同一套 Studio Agent 流水线，替换底层模型）。
+"""批量跨系统评测：不同基座 / 不同 Agent 放在同一套题上横向对比。
 
---mode agent（默认）：每基座跑完整 studio 流水线 → 评估不同基座在系统中的效果
---mode bare：裸模型直接生成（对照）
+三种模式：
+    --mode agent  （默认）同一套 Studio Agent 流水线，只替换底层基座
+    --mode bare   裸模型直接生成（无检索、无工具，作为对照下界）
+    --mode custom 接任意外部 Agent（HTTP / CLI / OpenAI 兼容端点），跨团队、跨语言
+
 用法：
-    python run_all_models.py                      # agent，4 基座
-    python run_all_models.py --limit 15           # 少量快速验证
+    python run_all_models.py                          # agent，3 基座
+    python run_all_models.py --limit 15               # 少量快速验证
     python run_all_models.py --mode bare --systems hy3 hy4-preview
-断点续跑：results/<name>/aggregate.json 存在即跳过。
-进度展示：终端实时显示生成/评分/失败/实时 BenchScore，且每完成一个系统
-打印一次已收集到的跨模型排行榜。
+    python run_all_models.py --mode custom \
+        --systems http:http://localhost:8000/api/bench/generate cli:"python my_agent.py"
+
+稳定性与长跑：
+    --timeout 180        单次生成超时上限（默认 180s，长任务可调到 600）
+    --retries 3          单条失败自动重试（指数退避）
+    --retry-failed       续跑增强：只重跑上次失败/超时的题，已成功的跳过
+
+断点续跑：中断后重跑同一条命令即可；每个系统的答案缓存按 task_id 复用，
+每完成一个系统打印一次已收集到的跨模型排行榜。
 """
 from __future__ import annotations
 
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -36,13 +47,21 @@ BARE_SYSTEMS = [
 ]
 
 
-def _studio_env(model: str) -> dict:
+def _safe_name(spec: str) -> str:
+    """把任意 spec 转成可做目录名的标识（http://host:8000/x → http_host_8000_x）。"""
+    return re.sub(r"[^A-Za-z0-9_.-]", "_", spec).strip("_")[:60] or "system"
+
+
+def _studio_env(model: str = "", timeout: float = 0.0) -> dict:
     env = dict(os.environ)
-    env["HY3_MODEL"] = model
+    if model:
+        env["HY3_MODEL"] = model
     # 评测检索源：仅 arXiv（其他源限流不稳定，评测期固定单源保证可控）
     env["DEFAULT_SOURCES"] = "arxiv"
-    # 评测超时：25s 未响应即失败并继续，避免单个挂起阻塞整批
-    env["HY3_TIMEOUT"] = "25"
+    # 超时：默认 180s。长任务（综述/深度报告/慢速端点）用 --timeout 调大
+    if timeout:
+        env["HY3_TIMEOUT"] = str(timeout)
+        env["SB_AGENT_TIMEOUT"] = str(timeout)
     env_file = ROOT.parent / "Hy3-Research-Studio" / ".env"
     if env_file.exists():
         for line in env_file.read_text(encoding="utf-8", errors="replace").splitlines():
@@ -99,7 +118,7 @@ def live_leaderboard(out_root: Path) -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--mode", default="agent", choices=["agent", "bare"])
+    ap.add_argument("--mode", default="agent", choices=["agent", "bare", "custom"])
     ap.add_argument("--families", default="T3,T5,T6,T7,T8")
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--tasks", nargs="*", help="指定 task_id（如 --tasks T5-001 T5-009 T5-021）")
@@ -107,6 +126,13 @@ def main() -> None:
     ap.add_argument("--regen", action="store_true", help="忽略已有结果强制重跑")
     ap.add_argument("--parallel", type=int, default=3, help="并发生成 worker 数")
     ap.add_argument("--systems", nargs="*")
+    ap.add_argument("--timeout", type=float, default=180.0,
+                    help="单次生成超时上限（秒，默认 180）。外部 Agent 端点慢就调大，"
+                         "如 --timeout 600")
+    ap.add_argument("--retries", type=int, default=2,
+                    help="单条任务生成失败的重试次数（指数退避，默认 2）")
+    ap.add_argument("--retry-failed", action="store_true",
+                    help="续跑增强：只重跑上次失败/超时的题，已成功的复用缓存")
     ap.add_argument("--out-root", default="results",
                     help="结果输出根目录。快速评测建议用独立目录（如 --out-root results_lite），"
                          "避免 --limit/--tasks 覆盖正式结果")
@@ -114,6 +140,11 @@ def main() -> None:
 
     if args.mode == "agent":
         systems = [(f"studio_{s}", s) for s in args.systems] if args.systems else AGENT_BASE
+    elif args.mode == "custom":
+        if not args.systems:
+            ap.error("--mode custom 需要 --systems，如 "
+                     "'http:http://localhost:8000/api/bench/generate' 或 'cli:python my_agent.py'")
+        systems = [(_safe_name(s), s) for s in args.systems]
     else:
         systems = [(s.split(":")[-1], f"openai_compat:{s}") for s in args.systems] \
             if args.systems else BARE_SYSTEMS
@@ -121,34 +152,41 @@ def main() -> None:
     out_root = ROOT / args.out_root
     out_root.mkdir(exist_ok=True)
     print(f"模式: {args.mode} | 族: {args.families} | limit: {args.limit or 'all'} | "
-          f"系统: {len(systems)} | 输出: {args.out_root}")
+          f"系统: {len(systems)} | 超时: {args.timeout:.0f}s | 输出: {args.out_root}")
     live_leaderboard(out_root)
 
     for name, model in systems:
         if done(name, out_root) and not args.regen:
-            print(f"[skip] {name}（已有结果）")
+            print(f"[skip] {name}（已有结果，加 --regen 强制重跑）")
             continue
-        print(f"\n========== {name} (基座: {model}) ==========")
-        spec = model if args.mode == "bare" else "studio"
+        label = "基座" if args.mode == "agent" else "系统"
+        print(f"\n========== {name} ({label}: {model}) ==========")
+        spec = model if args.mode in ("bare", "custom") else "studio"
         cmd = [sys.executable, "-m", "scholarbench.run",
                "--families", args.families, "--systems", spec,
-               "--out", str(out_root / name)]
+               "--out", str(out_root / name),
+               "--timeout", str(args.timeout),
+               "--retries", str(args.retries)]
         if args.limit:
             cmd += ["--limit", str(args.limit)]
         if args.tasks:
             cmd += ["--tasks", *args.tasks]
         if args.regen:
             cmd.append("--regen")          # 透传：忽略底层 run.py 的答案缓存
+        if args.retry_failed:
+            cmd.append("--retry-failed")   # 透传：只补跑上次失败的题
         cmd += ["--parallel", str(args.parallel)]
         if not args.judge:
             cmd.append("--no-judge")
-        env = _studio_env(model) if args.mode == "agent" else None
+        env = _studio_env(model if args.mode == "agent" else "", args.timeout) \
+            if args.mode in ("agent", "custom") else None
         t0 = time.time()
         r = subprocess.run(cmd, cwd=ROOT, env=env)
         print(f"  [{name}] 完成 {time.time() - t0:.0f}s, rc={r.returncode}")
         live_leaderboard(out_root)
 
-    print("\n全部完成。汇总：python -m scholarbench report_leaderboard --auto --root results")
+    print(f"\n全部完成。汇总：python -m scholarbench report_leaderboard "
+          f"--auto --root {args.out_root}")
 
 
 if __name__ == "__main__":

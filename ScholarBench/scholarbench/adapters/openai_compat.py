@@ -50,15 +50,18 @@ def _load_env() -> None:
 class OpenAICompatAdapter(SUT):
     name = "openai_compat"
 
-    def __init__(self, model: str | None = None, **kwargs) -> None:
+    def __init__(self, model: str | None = None, timeout: float | None = None,
+                 **kwargs) -> None:
         super().__init__(**kwargs)
         _load_env()
         from openai import OpenAI  # noqa: PLC0415
         self.model = model or os.getenv("HY3_MODEL", "hy3")
+        # 优先级：显式参数 > 环境变量 HY3_TIMEOUT > 默认 120s
+        self.timeout = float(timeout or os.getenv("HY3_TIMEOUT") or 120.0)
         self.client = OpenAI(
             api_key=os.getenv("HY3_API_KEY", ""),
             base_url=os.getenv("HY3_BASE_URL", "https://tokenhub.tencentmaas.com/v1"),
-            timeout=float(os.getenv("HY3_TIMEOUT", "120")),
+            timeout=self.timeout,
         )
         self.tokens = 0
 

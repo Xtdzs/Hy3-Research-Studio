@@ -5,6 +5,16 @@
     python -m scholarbench.run --families T5 --systems studio          # 只跑引用核对
     python -m scholarbench.run --split lite --systems studio --adversarial water
 
+接入外部 Agent（我们提供接口，对方实现 HTTP / CLI 即可）：
+
+    python -m scholarbench.run --systems http:http://localhost:8000/api/bench/generate
+    python -m scholarbench.run --systems cli:"python my_agent.py"
+
+长跑续跑（中断后重跑同一条命令即可，已成功的自动跳过）：
+
+    python -m scholarbench.run --split lite --systems studio --retry-failed
+    python -m scholarbench.run --split lite --systems studio --timeout 300 --retries 3
+
 流程：加载任务 → 各系统生成回答 → （可选）扰动 → 客观指标 + Rubric 打分 → 聚合 → 落盘
 """
 from __future__ import annotations
@@ -100,10 +110,26 @@ def _perturb(answer, kind: str):
     return perturb(answer, kind)
 
 
+def _gen_with_retry(sut, task: Task, retries: int) -> Answer:
+    """单条生成 + 失败重试（指数退避）。仅在被测系统报错/超时时才重试。"""
+    last: Answer | None = None
+    for attempt in range(max(1, retries)):
+        ans = sut.generate(task)
+        if ans.ok:
+            return ans
+        last = ans
+        if attempt < max(1, retries) - 1:
+            delay = min(2 ** attempt, 8)
+            print(f"      ↻ 重试 {task.task_id}（第 {attempt + 2} 次，{delay}s 后）"
+                  f" 上次失败：{str(ans.meta.get('error'))[:80]}", flush=True)
+            time.sleep(delay)
+    return last  # type: ignore[return-value]
+
+
 def evaluate(args) -> None:
     tasks = _resolve_tasks(args)
     if not tasks:
-        print("没有可评测的任务。请先运行：python -m scholarbench.build_dataset --offline")
+        print("没有可评测的任务。请先运行：python -m scholarbench build_dataset")
         return
 
     out_dir = Path(args.out)
@@ -125,31 +151,45 @@ def evaluate(args) -> None:
         if not spec:
             continue
         print(f"\n=== 系统 {spec} ===")
-        sut = get_adapter(spec)
+        sut = get_adapter(spec, timeout=args.timeout or None)
         cache_path = out_dir / f"answers_{spec.replace(':', '_').replace('/', '_')}.jsonl"
         cached = _load_cached(cache_path)
         answers_out: list[dict] = []
         results: list[EvalResult] = []
         prog = _Progress(len(tasks))
 
-        # ---- 生成阶段：cached 直接取，其余可并发生成 ----
+        # ---- 生成阶段：已成功的直接复用（续跑），失败的可选重跑 ----
         answers_by_id: dict[str, Answer] = {}
         cached_ids: set[str] = set()
         pending: list[tuple[int, Task]] = []
+        n_failed_cached = 0
         for i, task in enumerate(tasks, 1):
             tid = task.task_id
-            if tid in cached and not args.regen:
-                answers_by_id[tid] = _answer_from_dict(cached[tid])
-                cached_ids.add(tid)
-            else:
-                pending.append((i, task))
+            rec = cached.get(tid)
+            if rec and not args.regen:
+                prev = _answer_from_dict(rec)
+                if prev.ok or not args.retry_failed:
+                    answers_by_id[tid] = prev
+                    cached_ids.add(tid)
+                    if not prev.ok:
+                        n_failed_cached += 1
+                    continue
+            pending.append((i, task))
+
+        if cached_ids:
+            print(f"  续跑：复用已完成的 {len(cached_ids)} 条"
+                  + (f"（其中 {n_failed_cached} 条上次失败，加 --retry-failed 可重跑）"
+                     if n_failed_cached else "")
+                  + f" · 待生成 {len(pending)} 条")
+        if args.timeout:
+            print(f"  单次生成超时上限：{args.timeout:.0f}s · 失败重试 {args.retries} 次")
 
         if args.parallel > 1 and pending:
             from concurrent.futures import ThreadPoolExecutor
             print(f"  并发生成 {len(pending)} 条（workers={args.parallel}）", flush=True)
 
             def _gen(t: Task):
-                a = sut.generate(t)
+                a = _gen_with_retry(sut, t, args.retries)
                 a.system = a.system or spec
                 return t.task_id, a
 
@@ -165,7 +205,7 @@ def evaluate(args) -> None:
             for i, task in pending:
                 print(f"  [{i}/{len(tasks)}] {task.task_id} ({task.family}/{task.difficulty}) …",
                       end="", flush=True)
-                ans = sut.generate(task)
+                ans = _gen_with_retry(sut, task, args.retries)
                 ans.system = ans.system or spec
                 answers_by_id[task.task_id] = ans
                 print(f" {len(ans.content)} 字"
@@ -202,8 +242,11 @@ def evaluate(args) -> None:
             prog.add_scored(res.family, res.task_score)
 
         if answers_out:
-            write_jsonl(cache_path,
-                        (read_jsonl(cache_path) if cache_path.exists() else []) + answers_out)
+            # 覆盖式合并：本轮新生成的 task_id 替换缓存中的旧记录，避免重复累积
+            fresh_ids = {a["task_id"] for a in answers_out}
+            kept = [r for r in (read_jsonl(cache_path) if cache_path.exists() else [])
+                    if r.get("task_id") not in fresh_ids]
+            write_jsonl(cache_path, kept + answers_out)
         write_jsonl(out_dir / f"results_{spec.replace(':', '_').replace('/', '_')}.jsonl",
                     [r.to_dict() for r in results])
         sut.close()
@@ -252,7 +295,13 @@ def main() -> None:
                     help="[DeepResearchEval] 长文（T1/T2/T6）分块逐段评分，逻辑/可读性更精确")
     ap.add_argument("--adversarial", default="",
                     choices=["", "water", "term", "fake", "format", "inject", "conflict"])
-    ap.add_argument("--regen", action="store_true", help="忽略已有回答缓存")
+    ap.add_argument("--regen", action="store_true", help="忽略已有回答缓存（全部重跑）")
+    ap.add_argument("--retry-failed", action="store_true",
+                    help="续跑增强：只重跑上次失败/超时的任务，已成功的仍跳过")
+    ap.add_argument("--retries", type=int, default=2,
+                    help="单条任务生成失败时的重试次数（指数退避，默认 2）")
+    ap.add_argument("--timeout", type=float, default=0.0,
+                    help="单次生成超时上限（秒），对 HTTP / CLI / 裸模型生效；0 = 用 adapter 默认")
     ap.add_argument("--verbose", action="store_true")
     args = ap.parse_args()
 

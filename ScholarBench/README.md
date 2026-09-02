@@ -123,18 +123,108 @@ class MySystem(SUT):
                       content=text, citations=[], meta={})
 ```
 
-内置 adapter：
+### 方式二：HTTP 端点（推荐，跨语言）
+
+你的服务只要暴露一个 `POST` 端点：
+
+```http
+POST /api/bench/generate
+Content-Type: application/json
+
+{"task": {"task_id":"T5-001","family":"T5","prompt":"请核查以下论断…","context":{...}}}
+```
+
+```json
+{
+  "content": "{\"verdict\": \"supported\", \"reason\": \"摘要直接支撑该论断\"}",
+  "citations": [{"marker":"[s1]","title":"Attention Is All You Need",
+                 "doi":"10.48550/arXiv.1706.03762","year":2017}],
+  "tool_calls": [{"name":"search","args":{"query":"..."},"result":"2 hits"}],
+  "meta": {"agent": "my-agent/1.0"}
+}
+```
+
+只有 `content` 必填，其余可选。评测命令：
+
+```bash
+python -m scholarbench run --systems http:http://localhost:8000/api/bench/generate --split lite --timeout 300
+```
+
+### 方式三：命令行程序（不限语言）
+
+协议：task JSON 走 **stdin**，程序向 stdout 打印 **最后一行** Answer JSON（前面的日志会被忽略）。
+
+```bash
+python -m scholarbench run --systems "cli:python examples/agent_cli_stub.py" --split lite
+# 也支持 Node / Go / Shell
+python -m scholarbench run --systems "cli:node my_agent.js" --split lite
+```
+
+### 开箱可用的样板
+
+| 文件 | 说明 |
+|------|------|
+| [`examples/agent_server_stub.py`](examples/agent_server_stub.py) | FastAPI 端点样板，`uvicorn examples.agent_server_stub:app --port 8000` |
+| [`examples/agent_cli_stub.py`](examples/agent_cli_stub.py) | stdin/stdout 样板，任意语言照此实现即可 |
+
+需要鉴权 / 定制请求头时，用环境变量：
+
+| 变量 | 作用 |
+|------|------|
+| `SB_AGENT_TOKEN` | 以 `Authorization: Bearer <token>` 发送 |
+| `SB_AGENT_HEADERS` | 额外请求头，JSON 字符串，如 `'{"X-Team":"foo"}'` |
+| `SB_AGENT_TIMEOUT` | 单次请求超时（秒），HTTP 默认 300、CLI 默认 600 |
+
+### 内置 adapter 一览
 
 | spec | 用途 |
 |------|------|
 | `studio` / `studio:/abs/path` | Hy3 Research Studio（内部直连 8 阶段流水线 / 检索 / 论文问答） |
-| `openai_compat:model` | 任意 OpenAI 兼容端点（可做跨模型对照） |
-| `http:http://host/path` | 任意已部署的 Web 应用 |
+| `openai_compat:model` | 任意 OpenAI 兼容端点（裸模型对照下界） |
+| `http:http://host/path` | 任意已部署的 Web 应用（跨语言、跨机器） |
 | `cli:python my_agent.py` | 命令行程序（task 走 stdin，answer 走 stdout） |
 | `human:annotator_A` | 人工作答，产出**人类基线上界锚点** |
 | `mock` | 确定性假回答，用于离线冒烟与 CI |
 
+> **T5 判定的兼容口径**：三分类 `verdict` 支持三种输出形态统一计分 —— `meta.verdict` / 回答 JSON 里的 `verdict` 字段 / 裸词开头（`supported`）。不同接入方式不会因格式差异被误判。
+
 > 为什么要有 `human`：Leaderboard 若只有模型互相比，读者无法判断"60 分算好还是差"。用 human adapter 标注 20%–30% 样本，就得到绝对参照系。
+
+---
+
+## 长跑稳定性与断点续跑
+
+长批评测（跨多个系统 / 外部端点慢 / 网络抖动）常以小时计。以下机制保证**中断后不必从头再来**：
+
+| 参数 | 默认 | 作用 |
+|------|------|------|
+| `--timeout` | 180s（CLI） | 单次生成超时上限；外部端点慢就调大，如 `--timeout 600` |
+| `--retries` | 2 | 单条失败自动重试，指数退避（1s→2s→4s，上限 8s） |
+| `--retry-failed` | off | **只重跑上次失败/超时的题**，已成功的复用缓存 |
+| `--regen` | off | 忽略缓存全部重跑 |
+| 答案缓存 | — | 按 `task_id` 落盘 `answers_<system>.jsonl`，覆盖式合并，不会出现重复记录 |
+
+```bash
+# 中断后：直接重跑同一条命令即可接着测
+python -m scholarbench run --split lite --systems studio
+
+# 只补跑失败的题（成功的跳过）
+python -m scholarbench run --split lite --systems studio --retry-failed
+
+# 外部端点慢 + 偶发 5xx
+python -m scholarbench run --systems http:http://host/api/bench/generate \
+    --timeout 600 --retries 3
+```
+
+续跑时终端会明确提示复用进度：
+
+```text
+=== 系统 studio ===
+  续跑：复用已完成的 27 条（其中 2 条上次失败，加 --retry-failed 可重跑） · 待生成 3 条
+  单次生成超时上限：300s · 失败重试 3 次
+```
+
+`run_all_models.py` 同样支持透传：`--timeout` / `--retries` / `--retry-failed`，并且每完成一个系统就刷新一次跨模型排行榜。
 
 ---
 
@@ -164,6 +254,12 @@ class MySystem(SUT):
 | `python -m scholarbench run --split lite --systems studio` | 跑评测（客观 + Rubric） |
 | `python -m scholarbench run --split lite --systems studio --chunked` | 长文分块评测（[DeepResearchEval] 页级评分） |
 | `python -m scholarbench run --split lite --systems mock --no-judge` | 离线冒烟，零 API 成本 |
+| `python -m scholarbench run --split lite --systems studio --retry-failed` | 续跑：只补跑上次失败/超时的题 |
+| `python -m scholarbench run --split lite --systems studio --timeout 600 --retries 3` | 慢速端点：放大超时 + 失败自动重试 |
+| `python -m scholarbench run --systems http:http://host/api/bench/generate` | 评测外部 HTTP Agent |
+| `python -m scholarbench run --systems "cli:python my_agent.py"` | 评测命令行 Agent |
+| `python run_all_models.py --mode agent` | 多基座对照（同一流水线换底层模型） |
+| `python run_all_models.py --mode custom --systems http:... cli:...` | 多外部系统横向对比 |
 | `python -m scholarbench annotate --sample 0.3 --annotator A` | 半自动人工标注（自动分作建议分，逐维覆写） |
 | `python -m scholarbench agreement --system studio` | 一致性：QWK / Spearman / MAE |
 | `python -m scholarbench report --results results/results.jsonl --out eval_results` | 生成 results.md / csv / failures.md / 雷达图 |

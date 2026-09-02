@@ -13,23 +13,24 @@ from __future__ import annotations
 from .base import SUT
 
 
-def get_adapter(spec: str) -> SUT:
+def get_adapter(spec: str, **kwargs) -> SUT:
+    """按 spec 构造适配器；kwargs（如 timeout）透传给支持它的适配器。"""
     kind, _, arg = spec.partition(":")
     kind = kind.strip()
     arg = arg.strip()
 
     if kind == "studio":
         from .studio import StudioAdapter
-        return StudioAdapter(root=arg or None)
+        return StudioAdapter(root=arg or None, **kwargs)
     if kind == "openai_compat":
         from .openai_compat import OpenAICompatAdapter
-        return OpenAICompatAdapter(model=arg or None)
+        return OpenAICompatAdapter(model=arg or None, **kwargs)
     if kind == "http":
         from .http import HTTPAdapter
-        return HTTPAdapter(endpoint=arg)
+        return HTTPAdapter(endpoint=arg, **kwargs)
     if kind == "cli":
         from .cli import CLIAdapter
-        return CLIAdapter(command=arg)
+        return CLIAdapter(command=arg, **kwargs)
     if kind == "human":
         from .human import HumanAdapter
         return HumanAdapter(annotator=arg or "human")
