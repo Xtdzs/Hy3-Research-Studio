@@ -109,23 +109,18 @@ Powered by [Tencent Hy3-preview](https://github.com/Tencent-Hunyuan/Hy3-preview)
 
 <!-- LEADERBOARD:START -->
 
-### 主榜（v0.1 · Lite · 客观指标）
+### Leaderboard（v0.1 · Lite）
 
 | 排名 | 系统 | BenchScore | T3 检索 | T5 引用核对 | T6 写作 | T7 Agent | T8 工具链 | 样本 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | `studio`（Hy3 应用流水线） | **74.3** | 74.2 | 82.9 | 38.7 | 85.0 | 90.8 | 60 |
-| 2 | `mock`（链路参照） | 51.5 | 0.0 | 100.0 | 36.8 | 70.0 | 65.0 | 64 |
+| 2 | `studio_ds`（deepseek-v4-flash） | 58.25 | 0.0 | 100.0 | 42.56 | 100.0 | 40.0 | 10 |
+| 3 | `studio_hy3`（hy3） | 40.72 | 0.0 | 20.0 | 19.87 | 100.0 | 90.0 | 10 |
+| 4 | `studio_glm`（glm-5.3-flash） | 35.19 | 0.0 | 100.0 | 0.0 | 50.0 | 0.0 | 10 |
+| — | `mock`（链路参照） | 51.5 | 0.0 | 100.0 | 36.8 | 70.0 | 65.0 | 64 |
 
-### 多基座对照（同一套流水线，只换底层模型 · 10 条/系统）
-
-| 排名 | 系统（基座） | BenchScore | T3 检索 | T5 引用核对 | T6 写作 | T7 Agent | T8 工具链 | 样本 |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | `studio_ds`（deepseek-v4-flash） | **58.25** | 0.0 | 100.0 | 42.56 | 100.0 | 40.0 | 10 |
-| 2 | `studio_hy3`（hy3） | 40.72 | 0.0 | 20.0 | 19.87 | 100.0 | 90.0 | 10 |
-| 3 | `studio_glm`（glm-5.3-flash） | 35.19 | 0.0 | 100.0 | 0.0 | 50.0 | 0.0 | 10 |
-
-> - 多基座对照 = 同一套 Hy3 Research Studio 流水线，仅替换底层基座；轻量子集（每族 1 easy + 1 medium）。
-> - 该轮 T3 因检索源不稳定未召回（`RETRIEVAL_MISS`）记 0 —— 这正说明评测能真实暴露工程短板；**当前评测检索源已固定为仅 arXiv**。
+> - `studio` 为 Hy3 Research Studio 应用流水线的正式结果（60 样本）；`studio_*` 为多基座对照 —— 同一套流水线仅替换底层模型（每系统 10 条）。
+> - 该轮 T3 因检索源不稳定未召回（`RETRIEVAL_MISS`）记 0 —— 评测能真实暴露工程短板；**当前评测检索源已固定为仅 arXiv**。
 > - 短板分析：**T6 学术写作 38.7** —— 写作工具未对齐参考摘要（ROUGE-L 低）。
 > - `mock` 为确定性假回答，仅用于验证评测链路，**不代表任何模型**。
 <!-- LEADERBOARD:END -->
@@ -275,7 +270,6 @@ python -m scholarbench run --split lite --systems studio --retry-failed --timeou
 │   ├── data/v0.1/              # 数据集（题目公开，keys 不公开）
 │   └── SCHEMA.md               # 数据契约规格
 ├── 设计方案.md                  # 学术方法映射（11 篇前沿研究的逐点落地）
-└── 任务一实施规划.md             # Benchmark 三层架构、四组验证实验、里程碑
 ```
 
 ---
@@ -292,13 +286,6 @@ python -m scholarbench run --split lite --systems studio --retry-failed --timeou
 - [ ] 跨系统 Leaderboard（欢迎 PR 提交你的系统结果）
 
 ---
-
-## 📄 声明
-
-- 本项目为**腾讯犀牛鸟开源人才培养计划实战任务作品**，与腾讯官方无隶属关系。
-- 全程通过 API 调用 Hy3-preview，**未进行任何训练 / 微调 / 本地推理部署**。
-- **严禁硬编码密钥**：所有密钥经 `.env` 注入（已 gitignore），提交前请执行 `git grep -n "sk-"` 自查。
-- 评测所用文献元数据来自 Crossref / arXiv 等公开接口，检索源可配置。
 
 ## 📜 许可证
 
