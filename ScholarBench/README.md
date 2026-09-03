@@ -280,11 +280,11 @@ python -m scholarbench run --systems http:http://host/api/bench/generate \
   [2/60] T3-002 976 字
   ...
   生成完成 60/60（失败 0）
-  评分中 36/60 (60%) · 失败 0 · 实时 BenchScore 95.1        ← 单行实时刷新
+  评分中 36/60 (60%) · 失败 0 · 实时 BenchScore 75.4        ← 单行实时刷新
   ...
-  BenchScore = 96.88  (样本 60，失败 0)
-  [当前排行榜] studio_hy4 96.88 | studio_glm 96.51 | studio_ds 95.05 | studio 93.80
-                                     ← 每完成一个系统刷新跨模型对比（T3 纯检索不计分，权重口径见根 README）
+  BenchScore = 77.96  (样本 60，失败 0)
+  [当前排行榜] studio 77.96 | studio_glm 70.27 | studio_hy4 65.94 | studio_ds 59.87
+                                     ← 每完成一个系统刷新跨模型对比（默认方法论权重，仅对已评测族归一化）
 ```
 
 - **生成阶段**：每完成一条任务立即打印 `[i/N] 任务ID 字数`，可实时看到进展
