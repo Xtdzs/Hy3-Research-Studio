@@ -77,7 +77,7 @@ python -m scholarbench run --tasks T5-021,T5-022 --systems studio
 
 ```
 TaskScore(T_i) = α_i · Objective_i + (1 - α_i) · Rubric_i      # α 按任务可调
-BenchScore     = Σ w_i · TaskScore(T_i)   （按已评测族归一化）
+BenchScore     = Σ w_i · TaskScore(T_i)   （仅模型相关族：T3 纯检索 w=0 不计分，只对有任务且 w>0 的族归一化）
 Capability(C_j)= 依赖 C_j 的任务族得分均值  → 8 维能力画像
 ```
 
@@ -282,9 +282,9 @@ python -m scholarbench run --systems http:http://host/api/bench/generate \
   生成完成 60/60（失败 0）
   评分中 36/60 (60%) · 失败 0 · 实时 BenchScore 75.4        ← 单行实时刷新
   ...
-  BenchScore = 77.96  (样本 60，失败 0)
-  [当前排行榜] studio 77.96 | studio_glm 70.27 | studio_hy4 65.94 | studio_ds 59.87
-                                     ← 每完成一个系统刷新跨模型对比（默认方法论权重，仅对已评测族归一化）
+  BenchScore = 79.04  (样本 60，失败 0)
+  [当前排行榜] studio_glm 86.82 | studio_hy4 83.22 | studio 79.04 | studio_ds 75.78
+                                     ← 每完成一个系统刷新跨模型对比（仅模型相关族加权：T3 纯检索不计分仅诊断）
 ```
 
 - **生成阶段**：每完成一条任务立即打印 `[i/N] 任务ID 字数`，可实时看到进展
