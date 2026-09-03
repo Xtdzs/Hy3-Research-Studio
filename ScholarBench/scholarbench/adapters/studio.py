@@ -215,6 +215,17 @@ class StudioAdapter(SUT):
         except Exception:  # noqa: BLE001
             return ""
 
+    @staticmethod
+    def _clip_citations(text: str, max_n: int) -> str:
+        """删除回答中越界的 [sN] 引用标记（模型幻觉出的、检索池中不存在的编号）。
+
+        仅移除标记本身，保留其前后文，避免把"引用了不存在的文献"判定为
+        引用伪造/无支撑。越界通常出现在检索不足时模型补号。
+        """
+        return re.sub(r"\[s(\d+)\]",
+                      lambda m: "" if int(m.group(1)) > max_n else m.group(0),
+                      text)
+
     # -- T5 引用核对 --------------------------------------------------------
     def _run_citation_verify(self, task: Task) -> Answer:
         """判定：给定论断 + 引用文献，判断引用是否真实存在、是否支撑该论断。
@@ -273,13 +284,26 @@ class StudioAdapter(SUT):
     def _run_writing(self, task: Task) -> Answer:
         kind = task.context.get("writing_type", "abstract")
         guide = {
-            "abstract": "撰写结构化摘要（背景/方法/结果/结论），200-300 字，不添加原文没有的信息。",
+            "abstract": (
+                "撰写结构化摘要，须包含背景/方法/结果/结论四要素。"
+                "必须覆盖材料中全部关键方法、数值与结论，不得遗漏核心要点；"
+                "控制在 200-300 字，信息密集、不重复、不添加原文没有的内容。"
+            ),
             "outline": "生成层级大纲，使用 markdown 多级列表，覆盖背景、方法、实验、结论。",
-            "expand": "将给定要点扩写为连贯学术段落，不引入新的事实性断言。",
-            "survey": "基于给定材料撰写综述片段，关键结论标注 [sN] 引用。",
+            "expand": "将给定要点扩写为连贯学术段落，仅展开已有信息，不引入新的事实性断言。",
+            "survey": (
+                "基于给定材料撰写综述片段。关键结论须标注 [sN] 且指向材料中"
+                "确实支撑该结论的文献；无材料支撑的观点不要加引号标注。"
+            ),
         }.get(kind, "按要求完成学术写作任务。")
+        discipline = (
+            "\n写作纪律：① 覆盖任务的每一个要点，禁止遗漏关键信息；"
+            "② 删除重复与空泛表述，行文紧凑；"
+            "③ 除明确要求外不得虚构数据、引用或材料之外的事实。"
+        )
         content = self.client.chat(
-            [{"role": "system", "content": f"你是学术写作助手。{guide}"},
+            [{"role": "system",
+              "content": f"你是学术写作助手。{guide}{discipline}"},
              {"role": "user", "content": task.prompt}],
             temperature=0.4,
         )
@@ -294,13 +318,23 @@ class StudioAdapter(SUT):
             f"[s{i+1}] {d.title} ({d.year or 'n/a'})\n{(d.abstract or d.snippet)[:500]}"
             for i, d in enumerate(docs)
         )
+        sys_prompt = (
+            "你是研究教练，为研究者提炼可执行的研究思路。回答规则：\n"
+            "1. 只能引用【文献】中确实出现的内容；每条结论旁的 [sN] 必须指向"
+            "能实际支撑该结论的文献。\n"
+            "2. 宁可少引、不可错引：论点没有文献直接支持时，不要编造 [sN]。\n"
+            "3. 覆盖问题的全部要点，按结构作答；结尾列出实际使用的 [sN] 对应文献。\n"
+            "4. 文献不足以逐条支撑时不要拒绝作答：可给出该领域常规方法论层面的"
+            "结构化分析，但须明确标注“（一般性建议，非本次文献结论）”；"
+            "带 [sN] 的表述仍必须严格限于文献内容。\n"
+            "5. 结尾说明哪些要点缺乏文献证据、建议如何补检。"
+        )
         content = self.client.chat(
-            [{"role": "system", "content":
-              "你是研究教练。必须基于给定文献回答，关键结论标注 [sN]；"
-              "文献不足时明确指出，不得编造。"},
+            [{"role": "system", "content": sys_prompt},
              {"role": "user", "content": f"文献：\n{ctx}\n\n问题：{task.prompt}"}],
             temperature=0.4,
         )
+        content = self._clip_citations(content, len(docs))
         citations = [
             Citation(marker=f"[s{i+1}]", title=d.title, url=d.url or "",
                      source="studio_search") for i, d in enumerate(docs)
@@ -319,20 +353,31 @@ class StudioAdapter(SUT):
             docs = m["gather_sources"]([q], use_paper=True, per_query=5)[:5]
             tool_calls.append({"name": "retrieve_papers", "args": {"query": q},
                                "result_count": len(docs)})
-            for d in docs:
-                cites.append(Citation(marker=f"[s{len(cites)+1}]", title=d.title,
+            base = len(cites)
+            for j, d in enumerate(docs):
+                cites.append(Citation(marker=f"[s{base + j + 1}]", title=d.title,
                                       url=d.url or "", source="studio_search"))
-            blocks.append(
-                f"【步骤 {i+1}】{q}\n" + "\n".join(
-                    f"[s{len(cites)-len(docs)+j+1}] {d.title}" for j, d in enumerate(docs)
-                )
-            )
+            lines = [
+                f"[s{base + j + 1}] {d.title} ({d.year or 'n/a'})\n"
+                f"{(d.abstract or d.snippet)[:400]}"
+                for j, d in enumerate(docs)
+            ]
+            blocks.append(f"【步骤 {i+1}】{q}\n" + "\n".join(lines))
+        sys_prompt = (
+            "你是研究分析师，基于多步检索到的文献内容完成任务。规则：\n"
+            "1. 每条文献性结论用 [sN] 标注，且只能来自上述步骤给出的文献内容；"
+            "不得把无关文献标到结论上。\n"
+            "2. 对任务必需但检索未直接覆盖的部分，可基于该领域通用方法给出分析，"
+            "但须明确标注“（基于一般认识，非本次检索结论）”，不得伪造成文献结论。\n"
+            "3. 覆盖任务的全部要求：先分步给出检索到的事实，再补必要的通用分析，"
+            "最后给出整合性结论。"
+        )
         summary = self.client.chat(
-            [{"role": "system", "content":
-              "基于多步检索结果，整合为结构化结论，关键处标注 [sN] 引用。"},
+            [{"role": "system", "content": sys_prompt},
              {"role": "user", "content": "\n\n".join(blocks) + f"\n\n任务：{task.prompt}"}],
             temperature=0.3,
         )
+        summary = self._clip_citations(summary, len(cites))
         return Answer(task_id=task.task_id, system=self.name, content=summary,
                       citations=cites, tool_calls=tool_calls,
                       meta={"steps": len(steps[:3])})
