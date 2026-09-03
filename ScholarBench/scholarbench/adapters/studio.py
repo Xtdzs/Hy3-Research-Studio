@@ -62,6 +62,9 @@ class StudioAdapter(SUT):
         root = str(self.root)
         if root not in sys.path:
             sys.path.insert(0, root)
+        # 评测固定 arXiv 单源：必须在 backend.config 首次导入前设置
+        #（backend.settings.default_sources 在导入时读取环境变量）。环境可覆盖。
+        os.environ.setdefault("DEFAULT_SOURCES", "arxiv")
         try:
             from backend.config import settings as studio_settings  # type: ignore
             from backend.hy3_client import Hy3Client  # type: ignore

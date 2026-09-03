@@ -282,9 +282,9 @@ python -m scholarbench run --systems http:http://host/api/bench/generate \
   生成完成 60/60（失败 0）
   评分中 36/60 (60%) · 失败 0 · 实时 BenchScore 95.1        ← 单行实时刷新
   ...
-  BenchScore = 96.87  (样本 60，失败 0)
-  [当前排行榜] studio_hy4 96.87 | studio_glm 96.37 | studio_ds 95.02 | studio 94.95
-                                     ← 每完成一个系统刷新跨模型对比（分数按当前演示权重口径，见根 README）
+  BenchScore = 96.88  (样本 60，失败 0)
+  [当前排行榜] studio_hy4 96.88 | studio_glm 96.51 | studio_ds 95.05 | studio 93.80
+                                     ← 每完成一个系统刷新跨模型对比（T3 纯检索不计分，权重口径见根 README）
 ```
 
 - **生成阶段**：每完成一条任务立即打印 `[i/N] 任务ID 字数`，可实时看到进展
