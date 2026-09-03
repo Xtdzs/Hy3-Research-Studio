@@ -198,8 +198,11 @@ python -m scholarbench run --systems "cli:node my_agent.js" --split lite
 
 | 参数 | 默认 | 作用 |
 |------|------|------|
-| `--timeout` | 180s（CLI） | 单次生成超时上限；外部端点慢就调大，如 `--timeout 600` |
+| `--timeout` | 300s（CLI） | 单次生成超时上限；thinking 模型慢就调大，如 `--timeout 600` |
 | `--retries` | 2 | 单条失败自动重试，指数退避（1s→2s→4s，上限 8s） |
+| `--no-thinking` | off | 关闭思考链：hy3/hy4/deepseek 单题约 50x 提速、省 token，且减少撞 429 限流；glm 等强制思考模型自动忽略 |
+| `--parallel` | 1 | 并发生成 worker 数。**TokenHub 网关容量有限，并行 >3 极易触发 429**，默认串行 |
+| `--rate-interval` | 0 | 两次模型请求的最小间隔秒数（0=不限）。串行 + 小间隔最稳，如 `--parallel 1 --rate-interval 2` |
 | `--retry-failed` | off | **只重跑上次失败/超时的题**，已成功的复用缓存 |
 | `--regen` | off | 忽略缓存全部重跑 |
 | 答案缓存 | — | 按 `task_id` 落盘 `answers_<system>.jsonl`，覆盖式合并，不会出现重复记录 |
@@ -271,16 +274,17 @@ python -m scholarbench run --systems http:http://host/api/bench/generate \
 长批评测（如 `run_all_models.py` 跨 4 个基座跑 T3/T5/T6/T7/T8）耗时可能以小时计。评测过程**在终端直接展示实时进度**，无需额外工具：
 
 ```text
-========== studio_hy3 (基座: hy3) ==========
-  并发生成 30 条（workers=3）
-  [1/30] T3-001 1420 字
-  [2/30] T3-002 976 字
+========== studio_hy4 (基座: hy4-preview) ==========
+  并发生成 60 条（workers=3）
+  [1/60] T3-001 1420 字
+  [2/60] T3-002 976 字
   ...
-  生成完成 30/30（失败 0）
-  评分中 18/30 (60%) · 失败 0 · 实时 BenchScore 74.5        ← 单行实时刷新
+  生成完成 60/60（失败 0）
+  评分中 36/60 (60%) · 失败 0 · 实时 BenchScore 95.1        ← 单行实时刷新
   ...
-  BenchScore = 77.52  (样本 30，失败 0)
-  [当前排行榜] studio_hy3 77.5  |  mock 51.5              ← 每完成一个系统刷新跨模型对比
+  BenchScore = 96.87  (样本 60，失败 0)
+  [当前排行榜] studio_hy4 96.87 | studio_glm 96.37 | studio_ds 95.02 | studio 94.95
+                                     ← 每完成一个系统刷新跨模型对比（分数按当前演示权重口径，见根 README）
 ```
 
 - **生成阶段**：每完成一条任务立即打印 `[i/N] 任务ID 字数`，可实时看到进展
@@ -331,7 +335,7 @@ ScholarBench/
 ## 局限与后续工作
 
 - **同源模型偏差**：judge 与被测系统都基于 Hy3，存在自评偏高风险。缓解手段是客观指标占主要权重（T3/T5 α=0.85）、judge 强制给出扣分引文、并用人工标注校准（见 `agreement.py` 的 bias 字段）。
-- **T4 需要 OA 全文**：`data/v0.1/papers/` 需自行下载 arXiv / PMC OA 论文，仓库不保存 PDF。
+- **T4 依赖语料**：运行 `scholarbench/download_papers.py` 准备评测语料即可复现；语料文件不随仓库分发（`download_papers.py` 注释中注明来源与许可）。
 - **T3 gold 池是"被引次数近似"**：以本地快照中被引次数 Top-12 作为高相关近似，非人工标注的严格 gold。
 - **创造工坊为 PoC**：T8 当前只评测检索工具链，不覆盖未完成的低代码能力。
 
@@ -341,8 +345,8 @@ ScholarBench/
 
 ## 相关学术工作（References）
 
-ScholarBench 的设计逐点引用下列前沿研究；论文全文与映射说明见
-[`设计方案.md`](../设计方案.md)（课题目录配套文档）与 `学术原文/` 文件夹。
+ScholarBench 的设计逐点引用下列前沿研究；方法映射与引用说明见
+课题目录配套文档 [`设计方案.md`](../设计方案.md)。
 
 **应用侧（Hy3 Research Studio）**
 
