@@ -9,7 +9,8 @@
 通过 HTTP 端点 ``/api/citation/verify`` 供其他系统复用。
 
 注：已移除 OpenAlex 外部核查（限流风险高、不稳定），
-核查完全基于 LLM 对被引摘要与论断的语义一致性，lookup 标记为 skipped。
+核查完全基于 LLM 对被引摘要与论断的语义一致性（lookup 仅为占位，
+不再注入提示词，避免将「未检索」误引导为「文献不存在」）。
 """
 from __future__ import annotations
 

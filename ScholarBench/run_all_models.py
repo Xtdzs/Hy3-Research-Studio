@@ -13,8 +13,10 @@
         --systems http:http://localhost:8000/api/bench/generate cli:"python my_agent.py"
 
 稳定性与长跑：
-    --timeout 180        单次生成超时上限（默认 180s，长任务可调到 600）
+    --timeout 300        单次生成超时上限（默认 300s，长任务可调到 600）
     --retries 3          单条失败自动重试（指数退避）
+    --no-thinking        关闭思考链（hy3/hy4/deepseek 提速约 5x；glm 等强制思考自动忽略）
+    --rate-interval 2    两次模型请求最小间隔秒数（配合默认串行大幅降低 429）
     --retry-failed       续跑增强：只重跑上次失败/超时的题，已成功的跳过
 
 断点续跑：中断后重跑同一条命令即可；每个系统的答案缓存按 task_id 复用，
@@ -34,8 +36,10 @@ from pathlib import Path
 sys.stdout.reconfigure(encoding="utf-8")
 ROOT = Path(__file__).resolve().parent
 
+# 多基座对照名单。注：hy3 是 Hy3 应用流水线的默认基座，
+# 其正式结果即 Leaderboard 中的 `studio` 行，此处不再重复对照。
 AGENT_BASE = [
-    ("studio_hy3", "hy3"),
+    ("studio_hy4", "hy4-preview"),
     ("studio_glm", "glm-5.3-flash"),
     ("studio_ds", "deepseek-v4-flash-0731"),
 ]
@@ -52,13 +56,20 @@ def _safe_name(spec: str) -> str:
     return re.sub(r"[^A-Za-z0-9_.-]", "_", spec).strip("_")[:60] or "system"
 
 
-def _studio_env(model: str = "", timeout: float = 0.0) -> dict:
+def _studio_env(model: str = "", timeout: float = 0.0,
+                no_thinking: bool = False, rate_interval: float = 0.0) -> dict:
     env = dict(os.environ)
     if model:
         env["HY3_MODEL"] = model
-    # 评测检索源：仅 arXiv（其他源限流不稳定，评测期固定单源保证可控）
-    env["DEFAULT_SOURCES"] = "arxiv"
-    # 超时：默认 180s。长任务（综述/深度报告/慢速端点）用 --timeout 调大
+    if no_thinking:
+        env["HY3_DISABLE_THINKING"] = "1"
+    if rate_interval > 0:
+        env["HY3_REQUEST_INTERVAL"] = str(rate_interval)
+    # 评测检索源：Crossref + arXiv 双源。曾强制 arxiv-only，但实测 arXiv 对
+    # 多道 T3 题返回 0 命中（如 "retrieval augmented generation survey"），
+    # Crossref 稳定命中——单源会大面积空结果，故改回双源互补。
+    env["DEFAULT_SOURCES"] = "crossref,arxiv"
+    # 超时：默认 300s（thinking 模型推理慢，单请求可达 1-3 分钟；429 另有长退避）
     if timeout:
         env["HY3_TIMEOUT"] = str(timeout)
         env["SB_AGENT_TIMEOUT"] = str(timeout)
@@ -124,15 +135,23 @@ def main() -> None:
     ap.add_argument("--tasks", nargs="*", help="指定 task_id（如 --tasks T5-001 T5-009 T5-021）")
     ap.add_argument("--judge", action="store_true")
     ap.add_argument("--regen", action="store_true", help="忽略已有结果强制重跑")
-    ap.add_argument("--parallel", type=int, default=3, help="并发生成 worker 数")
+    ap.add_argument("--parallel", type=int, default=1,
+                    help="并发生成 worker 数（1=串行，推荐；TokenHub 网关容量有限，"
+                         "并行 >3 极易触发 429）")
+    ap.add_argument("--rate-interval", type=float, default=0.0,
+                    help="两次模型请求的最小间隔秒数（0=不限）。串行 + 小间隔最稳，"
+                         "如 --parallel 1 --rate-interval 2；429 会自动进入指数冷却")
     ap.add_argument("--systems", nargs="*")
-    ap.add_argument("--timeout", type=float, default=180.0,
-                    help="单次生成超时上限（秒，默认 180）。外部 Agent 端点慢就调大，"
+    ap.add_argument("--timeout", type=float, default=300.0,
+                    help="单次生成超时上限（秒，默认 300）。thinking 模型/外部端点慢就调大，"
                          "如 --timeout 600")
     ap.add_argument("--retries", type=int, default=2,
                     help="单条任务生成失败的重试次数（指数退避，默认 2）")
     ap.add_argument("--retry-failed", action="store_true",
                     help="续跑增强：只重跑上次失败/超时的题，已成功的复用缓存")
+    ap.add_argument("--no-thinking", action="store_true",
+                    help="关闭思考链（hy3/hy4/deepseek 提速约 5x、省 token；"
+                         "glm 等始终思考的模型会自动忽略该设置）")
     ap.add_argument("--out-root", default="results",
                     help="结果输出根目录。快速评测建议用独立目录（如 --out-root results_lite），"
                          "避免 --limit/--tasks 覆盖正式结果")
@@ -176,10 +195,23 @@ def main() -> None:
         if args.retry_failed:
             cmd.append("--retry-failed")   # 透传：只补跑上次失败的题
         cmd += ["--parallel", str(args.parallel)]
+        if args.rate_interval > 0:
+            cmd += ["--rate-interval", str(args.rate_interval)]  # 透传：全局限速
+        if args.no_thinking:
+            cmd.append("--no-thinking")       # 透传：关闭思考链
         if not args.judge:
             cmd.append("--no-judge")
-        env = _studio_env(model if args.mode == "agent" else "", args.timeout) \
-            if args.mode in ("agent", "custom") else None
+        if args.mode in ("agent", "custom"):
+            env = _studio_env(model if args.mode == "agent" else "",
+                              args.timeout, args.no_thinking, args.rate_interval)
+        elif args.no_thinking or args.rate_interval > 0:
+            env = dict(os.environ)
+            if args.no_thinking:
+                env["HY3_DISABLE_THINKING"] = "1"
+            if args.rate_interval > 0:
+                env["HY3_REQUEST_INTERVAL"] = str(args.rate_interval)
+        else:
+            env = None
         t0 = time.time()
         r = subprocess.run(cmd, cwd=ROOT, env=env)
         print(f"  [{name}] 完成 {time.time() - t0:.0f}s, rc={r.returncode}")

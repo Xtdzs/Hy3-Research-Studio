@@ -56,13 +56,18 @@ class OpenAICompatAdapter(SUT):
         _load_env()
         from openai import OpenAI  # noqa: PLC0415
         self.model = model or os.getenv("HY3_MODEL", "hy3")
-        # 优先级：显式参数 > 环境变量 HY3_TIMEOUT > 默认 120s
-        self.timeout = float(timeout or os.getenv("HY3_TIMEOUT") or 120.0)
+        # 优先级：显式参数 > 环境变量 HY3_TIMEOUT > 默认 300s
+        #（thinking 模型推理慢，120s 常不够；429 由 SDK 重试 + run.py 外层退避兜底）
+        self.timeout = float(timeout or os.getenv("HY3_TIMEOUT") or 300.0)
         self.client = OpenAI(
             api_key=os.getenv("HY3_API_KEY", ""),
             base_url=os.getenv("HY3_BASE_URL", "https://tokenhub.tencentmaas.com/v1"),
             timeout=self.timeout,
         )
+        # HY3_DISABLE_THINKING=1 时关闭思考链（hy3/hy4/deepseek 提速约 5x）。
+        # glm 等"始终思考"模型发送该参数会 400，已在 generate 内自动降级。
+        self.disable_thinking = os.getenv("HY3_DISABLE_THINKING", "0").lower() \
+            in ("1", "true", "yes", "on")
         self.tokens = 0
 
     def generate(self, task: Task) -> Answer:
@@ -86,10 +91,24 @@ class OpenAICompatAdapter(SUT):
             else:
                 messages.append({"role": "user", "content": task.prompt})
 
-            resp = self.client.chat.completions.create(
-                model=self.model, messages=messages,
-                temperature=0.0 if task.family == "T5" else 0.4,
-            )
+            kw: dict = {
+                "model": self.model,
+                "messages": messages,
+                "temperature": 0.0 if task.family == "T5" else 0.4,
+            }
+            if self.disable_thinking:
+                kw["extra_body"] = {"thinking": {"type": "disabled"}}
+            while True:
+                try:
+                    resp = self.client.chat.completions.create(**kw)
+                    break
+                except Exception as exc:  # noqa: BLE001
+                    if kw.get("extra_body") and any(
+                        k in str(exc) for k in ("始终思考", "不支持关闭")
+                    ):
+                        kw.pop("extra_body", None)  # glm 等强制思考模型：降级
+                        continue
+                    raise
             if resp.usage:
                 self.tokens += resp.usage.total_tokens
             content = (resp.choices[0].message.content or "").strip()

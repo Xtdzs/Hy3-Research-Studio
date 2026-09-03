@@ -14,7 +14,9 @@ import os
 import re
 from collections import defaultdict
 from pathlib import Path
+from typing import Any
 
+from .. import rate_limit
 from ..env import load_dotenv
 from ..schema import Answer, RubricScore, Task
 from . import rubric
@@ -104,14 +106,43 @@ class Judge:
         self.client = OpenAI(
             api_key=os.getenv("HY3_API_KEY", ""),
             base_url=os.getenv("HY3_BASE_URL", "https://tokenhub.tencentmaas.com/v1"),
-            timeout=float(os.getenv("HY3_TIMEOUT", "120")),
+            timeout=float(os.getenv("HY3_TIMEOUT", "300")),
         )
+        # 关闭思考链（HY3_DISABLE_THINKING=1）：7 维评分更快更省；
+        # glm 等"始终思考"模型发送该参数会 400，_chat_create 内自动降级。
+        self.disable_thinking = os.getenv("HY3_DISABLE_THINKING", "0").lower() \
+            in ("1", "true", "yes", "on")
         self.cache_dir = Path(cache_dir) if cache_dir else None
         self.verbose = verbose
         self.chunked = chunked                      # [DeepResearchEval] 分块评测
         self.max_chunks = max_chunks
         self.calls = 0
         self.tokens = 0
+
+    def _chat_create(self, kw: dict) -> Any:
+        """带 thinking 关闭与全局节拍的模型调用。
+
+        - 请求前过全局限速器（间隔 + 429 冷却，与生成阶段同一节拍）；
+        - 429 交给外层 score 的 retries 重试，每次重试前会自动等待冷却；
+        - 模型不支持 thinking 关闭（如 glm）时去掉参数重试一次。
+        """
+        while True:
+            rate_limit.wait_before_request()
+            try:
+                return self.client.chat.completions.create(**kw)
+            except Exception as exc:  # noqa: BLE001
+                err = str(exc)
+                if rate_limit.is_rate_error(err):
+                    cool = rate_limit.on_429()
+                    if self.verbose:
+                        print(f"  [judge] 429，全局冷却约 {cool:.0f}s")
+                    raise
+                if kw.get("extra_body") and any(
+                    k in err for k in ("始终思考", "不支持关闭")
+                ):
+                    kw.pop("extra_body", None)  # 强制思考模型：去掉参数重试
+                    continue
+                raise
 
     # -- 缓存 ---------------------------------------------------------------
     def _cache_key(self, task: Task, answer: Answer) -> str:
@@ -157,18 +188,21 @@ class Judge:
                       retries: int, ck: str) -> list[RubricScore]:
         """单次（单块）评分的核心逻辑。"""
         prompt = rubric.build_judge_prompt(task, answer, key or {})
+        kw: dict = {
+            "model": self.model,
+            "messages": [
+                {"role": "system", "content": rubric.JUDGE_SYSTEM},
+                {"role": "user", "content":
+                 f"{self._rubric_block(task)}\n\n{prompt}"},
+            ],
+            "temperature": 0.0,
+        }
+        if self.disable_thinking:
+            kw["extra_body"] = {"thinking": {"type": "disabled"}}
         last_err = ""
         for attempt in range(retries + 1):
             try:
-                resp = self.client.chat.completions.create(
-                    model=self.model,
-                    messages=[
-                        {"role": "system", "content": rubric.JUDGE_SYSTEM},
-                        {"role": "user", "content":
-                         f"{self._rubric_block(task)}\n\n{prompt}"},
-                    ],
-                    temperature=0.0,
-                )
+                resp = self._chat_create(kw)
                 if resp.usage:
                     self.tokens += resp.usage.total_tokens
                 self.calls += 1

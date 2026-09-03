@@ -979,22 +979,27 @@ CITATION_VERIFY_SYSTEM = (
     "你是学术引用核查员。给定一条论断和一条被引文献，判断二者关系。\n"
     "只输出 JSON：{\"verdict\": \"supported\"|\"unrelated\"|\"nonexistent\", "
     "\"reason\": \"≤40字理由\", \"confidence\": 0.0-1.0}\n"
-    "- supported：文献真实存在，且其摘要/结论能支撑该论断\n"
-    "- unrelated：文献可能存在，但与该论断无关\n"
-    "- nonexistent：文献标题/DOI 疑似伪造，或明显不存在\n"
-    "外部检索无任何命中记录时，优先判为 nonexistent。"
+    "- supported：该文献确实存在，且其摘要能支撑该论断\n"
+    "- unrelated：该文献确实存在，但与论断无关\n"
+    "- nonexistent：标题或 DOI 明显伪造（如 DOI 以 10.0000/ 开头，"
+    "或标题不像真实论文）\n"
+    "判定依据：优先使用给定摘要与论断做语义比对；"
+    "只有标题/DOI 明显伪造时才判 nonexistent。"
 )
 
 
-def citation_verify_messages(claim: str, reference: dict, lookup: dict) -> list[dict[str, str]]:
-    """引用核对 prompt：注入外部核查证据（[FactCheck] 检索增强核查）。"""
+def citation_verify_messages(claim: str, reference: dict, lookup: dict | None = None) -> list[dict[str, str]]:
+    """引用核对 prompt。
+
+    注：外部核查已停用（lookup 仅为占位、不触发网络请求），
+    因此不再把占位数据注入为「外部核查结果」，避免误导模型判为不存在。
+    """
     user = (
         f"论断：{claim}\n\n"
         f"被引文献标题：{reference.get('title', '')}\n"
         f"DOI：{reference.get('doi', '')}\n"
         f"年份：{reference.get('year', '')}\n"
-        f"摘要：{(reference.get('abstract') or '')[:1200]}\n\n"
-        f"外部核查结果：{json.dumps(lookup, ensure_ascii=False)}"
+        f"摘要：{(reference.get('abstract') or '')[:1200]}"
     )
     return [{"role": "system", "content": CITATION_VERIFY_SYSTEM},
             {"role": "user", "content": user}]

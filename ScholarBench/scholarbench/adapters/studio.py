@@ -231,18 +231,19 @@ class StudioAdapter(SUT):
             "你是学术引用核查员。给定一条论断和一条被引文献，判断二者关系。\n"
             "只输出 JSON：{\"verdict\": \"supported\"|\"unrelated\"|\"nonexistent\", "
             "\"reason\": \"≤40字理由\"}\n"
-            "- supported：文献真实存在，且其摘要/结论能支撑该论断\n"
-            "- unrelated：文献可能存在，但与该论断无关\n"
-            "- nonexistent：文献标题/DOI 疑似伪造，或明显不存在\n"
-            "外部检索无任何命中记录时，优先判为 nonexistent。"
+            "- supported：该文献确实存在，且其摘要能支撑该论断\n"
+            "- unrelated：该文献确实存在，但与论断无关\n"
+            "- nonexistent：标题或 DOI 明显伪造（如 DOI 以 10.0000/ 开头，"
+            "或标题不像真实论文）\n"
+            "判定依据：优先使用给定摘要与论断做语义比对；"
+            "只有标题/DOI 明显伪造时才判 nonexistent。"
         )
         user = (
             f"论断：{claim}\n\n"
             f"被引文献标题：{ref.get('title', '')}\n"
             f"DOI：{ref.get('doi', '')}\n"
             f"年份：{ref.get('year', '')}\n"
-            f"摘要：{(ref.get('abstract') or '')[:1200]}\n\n"
-            f"外部核查结果：{json.dumps(lookup, ensure_ascii=False)}"
+            f"摘要：{(ref.get('abstract') or '')[:1200]}"
         )
         try:
             data = self.client.chat_json(

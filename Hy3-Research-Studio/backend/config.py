@@ -41,8 +41,16 @@ class Settings:
         )
     )
     model: str = field(default_factory=lambda: os.getenv("HY3_MODEL", "hy3"))
+    # thinking 模型单次推理常达 1-3 分钟，默认给足 300s（评测/应用可用 --timeout 覆盖）
     request_timeout: float = field(
-        default_factory=lambda: float(os.getenv("HY3_TIMEOUT", "120"))
+        default_factory=lambda: float(os.getenv("HY3_TIMEOUT", "300"))
+    )
+    # 关闭思考链：HY3_DISABLE_THINKING=1 时请求带 thinking={"type":"disabled"}。
+    # hy3/hy4-preview/deepseek 支持关闭（实测提速约 5x、token 省 ~80%）；
+    # glm 等"始终思考"的模型会自动降级（去掉该参数按平台默认重试一次）。
+    disable_thinking: bool = field(
+        default_factory=lambda: os.getenv("HY3_DISABLE_THINKING", "0").lower()
+        in ("1", "true", "yes", "on")
     )
 
     # --- Retrieval ---------------------------------------------------------
